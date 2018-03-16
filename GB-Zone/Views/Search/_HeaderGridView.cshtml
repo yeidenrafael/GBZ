@@ -1,0 +1,33 @@
+﻿<div class="hpanel">
+    <div class="panel-heading hbuilt">
+        <div class="panel-tools">
+            <a class="showhide"><i class="fa fa-chevron-up"></i></a>
+        </div>
+        @Model.ExtendedProperties["title"].ToString()
+    </div>
+
+    <div class="panel-body">
+        <div class="row">
+
+            @foreach (System.Data.DataColumn col in Model.Columns)
+            {
+                if (col.ColumnMapping != System.Data.MappingType.Hidden && col.ExtendedProperties["is_header"] != null)
+                {
+                    if (col.ExtendedProperties["is_header"].Equals(true))
+                    {
+                        <div class="col-lg-3">
+                            <span class="font-extra-bold">@col.Caption: </span>
+                            @if (Model.Rows.Count > 0)
+                            {@Model.Rows[0][col].ToString().Trim()}
+                        </div>
+                    }
+                }
+            }
+            <div class="col-lg-3">
+                <span class="font-extra-bold">Total numbre of records: </span>
+                @Model.Rows.Count
+            </div>
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,35 @@
+﻿@using System.Web.UI.WebControls
+
+@Html.DevExpress().PopupControl( settings => {
+    settings.Name = "ClientTimeoutPopup";
+    settings.HeaderText = "Session Expiring";
+    settings.Modal = true;
+    settings.ShowFooter = true;
+    settings.AllowDragging = true;
+    settings.ShowCloseButton = false;
+    settings.CloseAction = CloseAction.None;
+    settings.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+    settings.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+    settings.Width = Unit.Pixel(250);
+
+    settings.SetContent(() => {
+        ViewContext.Writer.Write(
+            "Your session is about to expire!" +
+            "<br /><br />" +
+            "<span id=\"CountDownHolder\"></span>" +
+            "<br /><br />" +
+            "Click OK to continue your session."
+        );
+    });
+
+    settings.SetFooterTemplateContent(c => {
+        Html.DevExpress().Button(btnSettings => {
+            btnSettings.Name = "OkButton";
+            btnSettings.Text = "OK";
+            btnSettings.ClientSideEvents.Click = "function(s, e) { SessionTimeout.sendKeepAlive(); }";
+        }).Render();
+    });
+
+    settings.Styles.Footer.Paddings.Padding = Unit.Pixel(5);
+    settings.ClientSideEvents.Init = "function(s, e) { SessionTimeout.schedulePopup(); }";
+}).GetHtml()

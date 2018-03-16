@@ -1,0 +1,208 @@
+﻿@using System.Data
+
+@{
+
+    var grid = Html.DevExpress().GridView(st =>
+    {
+
+        st.Name = "gvSearch";
+        st.CallbackRouteValues = new { Controller = "Search", Action = "GridViewSearch", crop = ViewData["crop"].ToString(), value = ViewData["value"].ToString(), viewName = ViewData["viewName"].ToString(), moduleId = ViewData["moduleId"].ToString() };
+
+        st.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+        st.SettingsPager.PageSize = 10;
+        st.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCells;
+        st.ControlStyle.Paddings.Padding = System.Web.UI.WebControls.Unit.Pixel(0);
+        st.ControlStyle.Border.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(0);
+        st.ControlStyle.BorderBottom.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(1);
+
+        //st.SettingsEditing.AddNewRowRouteValues = new { Controller = "Home", Action = "GridViewPartialAddNew" };
+        //st.SettingsEditing.DeleteRowRouteValues = new { Controller = "Home", Action = "GridViewPartialDelete" };
+        st.SettingsEditing.UpdateRowRouteValues = new { Controller = "Search", Action = "GridViewPartialUpdate", crop = ViewData["crop"].ToString(), value = ViewData["value"].ToString(), viewName = ViewData["viewName"].ToString(), moduleId = ViewData["moduleId"].ToString() };
+        //st.SettingsEditing.UpdateRowRouteValues = new { Controller = "Search", Action = "InlineEditingUpdatePartial" };
+        st.SettingsEditing.Mode = GridViewEditingMode.Inline;
+
+        //st.SettingsEditing.BatchUpdateRouteValues = new { Controller = "Search", Action = "GridViewSearchUpdate", crop = ViewData["crop"].ToString(), value = ViewData["value"].ToString(), viewName = ViewData["viewName"].ToString()};
+        //st.SettingsEditing.Mode = GridViewEditingMode.Batch;
+        //st.SettingsEditing.BatchEditSettings.StartEditAction = GridViewBatchStartEditAction.Click;
+
+        //st.SettingsBehavior.ConfirmDelete = true;
+
+        st.CommandColumn.Visible = true;
+        st.CommandColumn.ShowEditButton = true;
+        //st.CommandColumn.ShowNewButton = false;
+        //st.CommandColumn.ShowDeleteButton = false;
+
+        //st.ClientSideEvents.RowClick = "function(s, e) { s.StartEditRow(e.visibleIndex); }";
+        /*
+        st.HtmlDataCellPrepared = (s, e) =>
+        {
+            e.Cell.Attributes.Add("onclick", "s.StartEditRow(" + e.VisibleIndex + ")");
+        };
+        */
+        st.KeyFieldName = "inventory_id";
+
+        st.SettingsPager.Visible = true;
+        st.Settings.ShowGroupPanel = true;
+        st.Settings.ShowFilterRow = true;
+        st.SettingsBehavior.AllowSelectByRowClick = true;
+
+        st.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCells;
+        st.SettingsAdaptivity.AdaptiveColumnPosition = GridViewAdaptiveColumnPosition.Right;
+        st.SettingsAdaptivity.AdaptiveDetailColumnCount = 1;
+        st.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = false;
+        st.SettingsAdaptivity.HideDataCellsAtWindowInnerWidth = 0;
+
+        st.Settings.ShowHeaderFilterButton = true;
+
+        st.TotalSummary.Add(DevExpress.Data.SummaryItemType.Count, "inventory_id");
+        st.Settings.ShowFooter = true;
+
+        foreach (System.Data.DataColumn dc in Model.Columns)
+        {
+            if (dc.ColumnMapping != System.Data.MappingType.Hidden && dc.ExtendedProperties["is_header"] == null)
+            {
+
+                st.Columns.Add(col =>
+                {
+                    col.FieldName = dc.ColumnName;
+                    col.Name = dc.ColumnName;
+                    col.Caption = dc.Caption;
+
+                    //create a link column
+                    if (dc.ExtendedProperties["view_reference"] != null)
+
+                    {
+                        col.SetDataItemTemplateContent(container =>
+                        {
+                            //var categoryID = (string)DataBinder.Eval(container.DataItem, dc.ExtendedProperties["col_reference"].ToString());
+                            var categoryID = Convert.ToString(DataBinder.Eval(container.DataItem, dc.ExtendedProperties["col_reference"].ToString()));
+                            Html.DevExpress().HyperLink(hyperlink =>
+                            {
+                                hyperlink.Name = "hl" + container.VisibleIndex;
+                                hyperlink.Properties.Text = (string)DataBinder.Eval(container.DataItem, dc.ColumnName);
+                                hyperlink.NavigateUrl = DevExpressHelper.GetUrl(new
+                                {
+                                    Controller = "Search",
+                                    Action = "Index2",
+                                    crop = ViewData["crop"].ToString(),
+                                    value = categoryID,
+                                    viewName = dc.ExtendedProperties["view_reference"],
+                                    moduleId = ViewData["moduleId"].ToString()
+                                });
+                            }).Render();
+                        });
+                    }
+
+                    if (col.FieldName == "quantity_on_hand")
+                    {
+                        col.Settings.FilterMode = ColumnFilterMode.DisplayText;
+                        col.ColumnType = MVCxGridViewColumnType.SpinEdit;
+                        var spinEditProps = col.PropertiesEdit as SpinEditProperties;
+                        if (spinEditProps != null) spinEditProps.SpinButtons.ShowIncrementButtons = false;
+                    }
+
+                    if (col.FieldName == "storage_location")
+                    {
+                        var prty = col.PropertiesEdit as TextBoxProperties;
+                        prty.MaskSettings.Mask = "CC##CC##C##-###";
+
+                    }
+                });
+
+
+
+            }
+        }
+        /*
+        st.Columns.Add(column =>
+        {
+            column.Caption = "View";
+            column.SetDataItemTemplateContent(container =>
+            {
+                var categoryID = (string)DataBinder.Eval(container.DataItem, "inventory_number_part1");
+                Html.DevExpress().HyperLink(hyperlink =>
+                {
+                    hyperlink.Name = "hl" + container.VisibleIndex;
+                    hyperlink.Properties.Text = categoryID;
+                    hyperlink.NavigateUrl = DevExpressHelper.GetUrl(new { Controller = "Search", Action = "Index2",
+                        crop = ViewData["crop"].ToString(),
+                        value = categoryID,
+                        viewName = "03"});
+                }).Render();
+            });
+        });
+        */
+
+        /*
+                st.Columns.Add(column =>
+                {
+                    // "FieldName" contains a unique value that does not refer to any field in the GridView's data model.
+                    column.FieldName = "StorageLocation";
+                    // The column contains string values.
+                    column.UnboundType = DevExpress.Data.UnboundColumnType.String;
+                    var prty = column.PropertiesEdit as TextBoxProperties;
+                    prty.MaskSettings.Mask = "CC##CC##C##-###";
+                });*/
+        /*
+        // A delegate method that allows you to generate data for an unbound column.
+        st.CustomUnboundColumnData = (s, e) =>
+        {
+            if (e.Column.FieldName == "storage_location")
+            {
+                string storagelocation1 = (e.GetListSourceFieldValue("storage_location_part1")) != null ? (e.GetListSourceFieldValue("storage_location_part1")).ToString() : "";//(e.GetListSourceFieldValue("storage_location_part1")).ToString();
+                string storagelocation2 = (e.GetListSourceFieldValue("storage_location_part2")) != null ? "-" + (e.GetListSourceFieldValue("storage_location_part2")).ToString() : "";//(e.GetListSourceFieldValue("storage_location_part2")).ToString();
+                string storagelocation3 = (e.GetListSourceFieldValue("storage_location_part3")) != null ? "-" + (e.GetListSourceFieldValue("storage_location_part3")).ToString() : "";//(e.GetListSourceFieldValue("storage_location_part3")).ToString();
+                string storagelocation4 = (e.GetListSourceFieldValue("storage_location_part4")) != null ? "-" + (e.GetListSourceFieldValue("storage_location_part4")).ToString() : "";//(e.GetListSourceFieldValue("storage_location_part4")).ToString();
+
+                e.Value = storagelocation1 + storagelocation2 + storagelocation3 + storagelocation4;
+            };
+        };
+*/
+
+
+        st.Styles.Cell.Wrap = DefaultBoolean.False;
+        st.HtmlRowPrepared = (s, e) =>
+        {
+            if (e.VisibleIndex != -1)
+            {
+                ASPxGridView oGrid = s as ASPxGridView;
+                DataRow dr = oGrid.GetDataRow(e.VisibleIndex);
+                string[] HexColor = new String[] { "#fff3cd", "#f8d7da" };
+                if (dr != null)
+                {
+                    if (dr.Table.Columns.Contains("backup_location1_site_id") && dr.Table.Columns.Contains("backup_location2_site_id"))
+                    {
+                        if (dr["backup_location1_site_id"].ToString() != "" && dr["backup_location2_site_id"].ToString() == "")
+                        {
+                            e.Row.BackColor = System.Drawing.ColorTranslator.FromHtml(HexColor[0].ToString());
+                        }
+                        else
+                        if (dr["backup_location1_site_id"].ToString() == "" && dr["backup_location2_site_id"].ToString() != "")
+                        {
+                            e.Row.BackColor = System.Drawing.ColorTranslator.FromHtml(HexColor[0].ToString());
+                        }
+                        else
+                        if (dr["backup_location1_site_id"].ToString() == "" && dr["backup_location2_site_id"].ToString() == "")
+                        {
+                            e.Row.BackColor = System.Drawing.ColorTranslator.FromHtml(HexColor[1].ToString());
+                        }
+                    }
+
+                }
+
+
+
+                //#e74c3c danger
+            }
+
+        };
+
+    });
+    if (ViewData["EditError"] != null)
+    {
+
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+
+    grid.Bind(Model).GetHtml();
+}

@@ -1,0 +1,19 @@
+﻿@model System.Web.Mvc.HandleErrorInfo
+
+@{
+    ViewBag.Title = "Error";
+}
+
+<div class="error-container">
+    <i class="pe-7s-way text-success big-icon"></i>
+    <strong>oops!!!<!--@String.Format("Source Controller:{0} - View:{1}", Model.ControllerName, Model.ActionName)--></strong>
+    <div class="alert alert-error">
+        <h1>
+            Something were wrong!!
+            Please contact your system administrator.
+            <!--@Model.Exception.Message.Trim();-->
+        </h1>
+    </div>
+
+    <a href="@Url.Action("Index", "Home")" class="btn btn-xs btn-success">Go back</a>
+</div>

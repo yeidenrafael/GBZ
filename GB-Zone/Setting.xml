@@ -1,0 +1,268 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Settings>
+
+  <crop id="01" name="Wheat" url="http://localhost/gringlobal/gui.asmx">
+    <modules id="Inventory" title="Inventory" description="You can search information about Inventories by Order Id, Storage location, Inventory number or Accession number" icon="pe-7s-note2" action="Index" controller="Search">
+      <form layout="vertical" cssClass="form-group">
+        
+        <field id="02" type="text" placeholder="CAR-SEC-BOX" visible="true">
+          <actions>
+            <parameters>
+              <suppressExceptions>false</suppressExceptions>
+              <dataviewName>gbz_get_inventories_by_storage</dataviewName>
+              <delimitedParameterList>:storage_part1={0};:storage_part2={0};:storage_part3={0};</delimitedParameterList>
+              <offset>0</offset>
+              <limit>0</limit>
+              <options>1</options>
+            </parameters>
+            <columns>
+              <column link="true" colreference="inventory_number_part1" viewreference="03" >accession_number</column>
+            </columns>
+          </actions>
+        </field>
+
+        <field id="04" type="text"  placeholder="Inventory Number" visible="true">
+          <actions>
+            <parameters>
+              <suppressExceptions>false</suppressExceptions>
+              <dataviewName>gbz_get_inventory</dataviewName>
+              <delimitedParameterList>:inventory_number={0};</delimitedParameterList>
+              <offset>0</offset>
+              <limit>0</limit>
+              <options>1</options>
+            </parameters>
+            <columns>
+              <column link="true" colreference="inventory_number_part1" viewreference="03" >accession_number</column>
+            </columns>
+          </actions>
+        </field>
+
+        <field id="01" type="number" placeholder="OrderId" visible="true">
+          <actions>
+            <parameters>
+              <suppressExceptions>false</suppressExceptions>
+              <dataviewName>gbz_get_order_request_item</dataviewName>
+              <delimitedParameterList>:orderrequestid={0};</delimitedParameterList>
+              <offset>0</offset>
+              <limit>0</limit>
+              <options>1</options>
+            </parameters>
+            <columns>
+              <column header="true">order_request_id</column>
+              <column header="true">local_number</column>
+              <column header="true">web_order_request_id</column>
+              <column header="true">order_type</column>
+              <column header="true">cooperator_name</column>
+              <column header="true">organization</column>
+              <column header="true">final_country</column>
+              <column link="true" colreference="inventory_number_part1" viewreference="03" >accession_number</column>
+            </columns>
+          </actions>
+        </field>
+
+        <field id="03" type="text" placeholder="INTRID" visible="true">
+          <actions>
+            <parameters>
+              <suppressExceptions>false</suppressExceptions>
+              <dataviewName>gbz_get_inventory_by_intrid</dataviewName>
+              <delimitedParameterList>:intrid={0};</delimitedParameterList>
+              <offset>0</offset>
+              <limit>0</limit>
+              <options>1</options>
+            </parameters>
+            <columns>
+              <column header="true">accession_number</column>
+              <column header="true">gid</column>
+              <column header="true">plant_name</column>
+              <column header="true">taxonomy</column>
+              <column header="true">country</column>
+            </columns>
+          </actions>
+        </field>
+
+      </form>
+    </modules>
+
+    <modules id="Viability" title="Viability" description="Viability test" icon="pe-7s-note" action="Index" controller="Search">
+      <form layout="vertical" cssClass="form-group">
+
+        <field id="01" type="number" placeholder="Order Id" visible="true">
+          <actions>
+            <parameters>
+              <suppressExceptions>false</suppressExceptions>
+              <dataviewName>get_order_request_item_mobile</dataviewName>
+              <delimitedParameterList>:orderrequestid={0};</delimitedParameterList>
+              <offset>0</offset>
+              <limit>0</limit>
+              <options>1</options>
+            </parameters>
+            <columns>
+              <column header="true">order_request_id</column>
+              <column header="true">local_number</column>
+              <column header="true">web_order_request_id</column>
+              <column header="true">order_type</column>
+              <column header="true">cooperator_name</column>
+              <column header="true">organization</column>
+              <column header="true">final_country</column>
+              <column link="true" colreference="accession_id" viewreference="02" >accession</column>
+            </columns>
+          </actions>
+        </field>
+
+        <field id="02" type="number" placeholder="Accession Id" visible="false">
+          <actions>
+            <parameters>
+              <suppressExceptions>false</suppressExceptions>
+              <dataviewName>get_inventory_mobile</dataviewName>
+              <delimitedParameterList>:accessionid={0};</delimitedParameterList>
+              <offset>0</offset>
+              <limit>0</limit>
+              <options>1</options>
+            </parameters>
+            <columns>
+              <column header="true">accession_number</column>
+              <column header="true">gid</column>
+              <column header="true">plant_name</column>
+              <column header="true">taxonomy</column>
+              <column header="true">country</column>
+            </columns>
+          </actions>
+        </field>
+
+      </form>
+    </modules>
+    
+    <modules id="Orders" title="Orders" description="You can search information about Orders" icon="pe-7s-box1" action="Index" controller="Search">
+      <form layout="vertical" cssClass="form-group">
+
+        <field id="01" type="number" placeholder="Order Id" visible="true">
+          <actions>
+            <parameters>
+              <suppressExceptions>false</suppressExceptions>
+              <dataviewName>get_order_request_item_mobile</dataviewName>
+              <delimitedParameterList>:orderrequestid={0};</delimitedParameterList>
+              <offset>0</offset>
+              <limit>0</limit>
+              <options>1</options>
+            </parameters>
+            <columns>
+              <column header="true">order_request_id</column>
+              <column header="true">local_number</column>
+              <column header="true">web_order_request_id</column>
+              <column header="true">order_type</column>
+              <column header="true">cooperator_name</column>
+              <column header="true">organization</column>
+              <column header="true">final_country</column>
+              <column link="true" colreference="accession_id" viewreference="02" >accession</column>
+            </columns>
+          </actions>
+        </field>
+
+        <field id="02" type="number" placeholder="Accession Id" visible="false">
+          <actions>
+            <parameters>
+              <suppressExceptions>false</suppressExceptions>
+              <dataviewName>get_inventory_mobile</dataviewName>
+              <delimitedParameterList>:accessionid={0};</delimitedParameterList>
+              <offset>0</offset>
+              <limit>0</limit>
+              <options>1</options>
+            </parameters>
+            <columns>
+              <column header="true">accession_number</column>
+              <column header="true">gid</column>
+              <column header="true">plant_name</column>
+              <column header="true">taxonomy</column>
+              <column header="true">country</column>
+            </columns>
+          </actions>
+        </field>
+
+      </form>
+    </modules>
+  </crop>
+
+  <crop id="02" name="Maize" url="http://localhost:81/gringlobal/gui.asmx">
+    <modules id="Inventory" title="Inventory" description="You can search information about Inventories by Order Id, Storage location, Inventory number or Accession number" icon="pe-7s-note2" action="Index" controller="Search">
+      <form layout="vertical" cssClass="form-group">
+
+        <field id="01" type="number" placeholder="Order Id" visible="true">
+          <actions>
+            <parameters>
+              <suppressExceptions>false</suppressExceptions>
+              <dataviewName>gbz_get_order_request_item</dataviewName>
+              <delimitedParameterList>:orderrequestid={0};</delimitedParameterList>
+              <offset>0</offset>
+              <limit>0</limit>
+              <options>1</options>
+            </parameters>
+            <columns>
+              <column header="true">order_request_id</column>
+              <column header="true">local_number</column>
+              <column header="true">web_order_request_id</column>
+              <column header="true">order_type</column>
+              <column header="true">cooperator_name</column>
+              <column header="true">organization</column>
+              <column header="true">final_country</column>
+              <column link="true" colreference="accession_number" viewreference="03" >accession_number</column>
+            </columns>
+          </actions>
+        </field>
+
+        <field id="04" type="text"  placeholder="Inventory Number" visible="false">
+          <actions>
+            <parameters>
+              <suppressExceptions>false</suppressExceptions>
+              <dataviewName>gbz_get_inventory</dataviewName>
+              <delimitedParameterList>:inventory_number={0};</delimitedParameterList>
+              <offset>0</offset>
+              <limit>0</limit>
+              <options>1</options>
+            </parameters>
+            <columns>
+              <column link="true" colreference="accession_number" viewreference="03" >accession_number</column>
+            </columns>
+          </actions>
+        </field>
+
+        <field id="02" type="text" placeholder="CAR-SEC-BOX" visible="true">
+          <actions>
+            <parameters>
+              <suppressExceptions>false</suppressExceptions>
+              <dataviewName>gbz_get_inventories_by_storage</dataviewName>
+              <delimitedParameterList>:storage_part1={0};:storage_part2={0};:storage_part3={0};</delimitedParameterList>
+              <offset>0</offset>
+              <limit>0</limit>
+              <options>1</options>
+            </parameters>
+            <columns>
+              <column link="true" colreference="accession_number" viewreference="03" >accession_number</column>
+            </columns>
+          </actions>
+        </field>
+
+        <field id="03" type="text" placeholder="Accession Number" visible="true">
+          <actions>
+            <parameters>
+              <suppressExceptions>false</suppressExceptions>
+              <dataviewName>gbz_get_inventories_by_accession</dataviewName>
+              <delimitedParameterList>:accessionnumber={0};</delimitedParameterList>
+              <offset>0</offset>
+              <limit>0</limit>
+              <options>1</options>
+            </parameters>
+            <columns>
+              <column header="true">accession_number</column>
+              <column header="true">gid</column>
+              <column header="true">plant_name</column>
+              <column header="true">taxonomy</column>
+              <column header="true">country</column>
+            </columns>
+          </actions>
+        </field>
+
+      </form>
+    </modules>
+  </crop>
+  
+</Settings>

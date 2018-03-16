@@ -1,0 +1,10 @@
+@if(!Request.IsAuthenticated) {
+    @Html.ActionLink("Register", "Register", "Account") 
+    @: | 
+    @Html.ActionLink("Login", "Login", "Account")
+}
+else {
+ 
+    //@: Welcome @User.Identity.Name
+    @Html.ActionLink("Sign out", "Logout", "Account")
+}
