@@ -1,6 +1,7 @@
 ﻿using DevExpress.Web.Mvc;
 using GrinGlobal.Zone.Helpers;
 using GrinGlobal.Zone.Models;
+using IO.Swagger.Model;
 using System;
 using System.Data;
 using System.Linq;
@@ -209,6 +210,21 @@ namespace GrinGlobal.Zone.Classes
             return ds.Tables[dataviewName];
             */
             return result.Tables[dataviewName];
+        }
+
+        public BrapiResponseBrGermplasmV2TO GetGermplasmDetails(string cropId, int germplasmDbId)
+        {
+            XElement service = Settings.CropInfo(cropId);
+
+            //extract settings from Setting.xml
+            string crop = service.Attribute("name").Value.ToString();
+
+
+            GGZoneModel ggZoneModel = new GGZoneModel();
+
+            var result = ggZoneModel.GetGermplasmDetails(crop, germplasmDbId);
+
+            return result;
         }
     }
 }

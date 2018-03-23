@@ -3,7 +3,8 @@ using System.Web;
 using GrinGlobal.Zone.GGService;
 using System.Data;
 using System.ServiceModel;
-
+using IO.Swagger.Api;
+using IO.Swagger.Model;
 
 namespace GrinGlobal.Zone.Models
 {
@@ -54,6 +55,16 @@ namespace GrinGlobal.Zone.Models
 
                 return result;
             }
+        }
+
+        public BrapiResponseBrGermplasmV2TO GetGermplasmDetails(string crop, int germplasmDbId)
+        {
+            //test brapi
+            GermplasmApi gmApi = new GermplasmApi("http://172.17.61.7:8280/brapi/v1");
+            
+            var result = gmApi.GetGermplasmDetails(crop.ToLower(), germplasmDbId);
+         
+            return result;
         }
 
         /*

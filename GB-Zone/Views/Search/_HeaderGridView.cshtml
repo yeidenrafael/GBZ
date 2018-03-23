@@ -18,7 +18,37 @@
                         <div class="col-lg-3">
                             <span class="font-extra-bold">@col.Caption: </span>
                             @if (Model.Rows.Count > 0)
-                            {@Model.Rows[0][col].ToString().Trim()}
+                            {
+
+                                if (col.ColumnName == "gid")
+                                {
+                                    /*Html.DevExpress().Button(
+                                    settings =>
+                                    {
+                                        settings.Name = "btnLinkImageAndText";
+                                        //settings.Width = 90;
+                                        //settings.Height = 25;
+                                        settings.RenderMode = ButtonRenderMode.Link;
+                                        settings.Text = @Model.Rows[0][col].ToString().Trim();
+                                        //settings.ImagePosition = ImagePosition.Right;
+                                        //settings.Images.Image.IconID = IconID.ActionsRefresh16x16gray;
+                                        settings.ClientSideEvents.Click = "OnTest";
+                                    }).GetHtml();*/
+
+                                    
+                                    Html.DevExpress().HyperLink(hlSettings =>
+                                    {
+                                        hlSettings.Name = "gid";
+                                        hlSettings.NavigateUrl = "javascript:void(0)";
+                                        hlSettings.Properties.ClientSideEvents.Click = string.Format("function(s, e) {{ ShowDetailPopup('{0}'); }}", Url.Action("GetGermplasmDetails", "Search", new { crop = ViewData["crop"].ToString(), germplasmDbId = @Model.Rows[0][col].ToString().Trim() }));
+                                        hlSettings.Properties.Text = @Model.Rows[0][col].ToString().Trim();
+                                    }).Render();
+                                }
+                                else
+                                {
+                                    @Model.Rows[0][col].ToString().Trim()
+                                }
+                            }
                         </div>
                     }
                 }

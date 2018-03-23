@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using GrinGlobal.Zone.Classes;
 using DevExpress.Web.Mvc;
+using GrinGlobal.Zone.Models;
 
 namespace GrinGlobal.Zone.Controllers
 {
@@ -55,6 +56,8 @@ namespace GrinGlobal.Zone.Controllers
             ViewData["value"] = value;
             ViewData["crop"] = crop;
             ViewData["moduleId"] = moduleId;
+
+            ViewData["germplasmDbId"] = 0;
 
             return PartialView("_GridViewSearch", search.GetData(value, crop, viewName, moduleId));
         }
@@ -139,5 +142,16 @@ namespace GrinGlobal.Zone.Controllers
             return GridViewSearch(crop, value, viewName, moduleId);
         }
         */
+        public ActionResult GetGermplasmDetails(string crop, string germplasmDbId)
+        {
+            DataViewsSearch search = new DataViewsSearch();
+
+            ViewData["crop"] = crop;
+            ViewData["germplasmDbId"] = germplasmDbId;
+
+            ViewData["otherModel"] = search.GetGermplasmDetails(crop, Int32.Parse(germplasmDbId));
+
+            return PartialView("_LoadOnDemand", ViewData["otherModel"]);
+        }
     }
 }

@@ -53,6 +53,10 @@
       <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Cimmyt_BrAPI_dotNetClient, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Cimmyt_BrAPI_Clients\Cimmyt_BrAPI_dotNetClient\bin\Debug\Cimmyt_BrAPI_dotNetClient.dll</HintPath>
+    </Reference>
     <Reference Include="DevExpress.Data.v17.1, Version=17.1.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
     <Reference Include="DevExpress.PivotGrid.v17.1.Core, Version=17.1.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
     <Reference Include="DevExpress.Printing.v17.1.Core, Version=17.1.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
@@ -70,12 +74,6 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
-    </Reference>
-    <Reference Include="GrinGlobal.AdditionalDataTriggers">
-      <HintPath>..\GrinGlobal.AdditionalDataTriggers\bin\Debug\GrinGlobal.AdditionalDataTriggers.dll</HintPath>
-    </Reference>
-    <Reference Include="GrinGlobal.Interface">
-      <HintPath>..\GrinGlobal.Interface\bin\Debug\GrinGlobal.Interface.dll</HintPath>
     </Reference>
     <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
@@ -322,8 +320,12 @@
       <HintPath>..\packages\Microsoft.Win32.Primitives.4.3.0\lib\net46\Microsoft.Win32.Primitives.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.10.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="RestSharp, Version=106.3.0.0, Culture=neutral, PublicKeyToken=598062e77f915f75, processorArchitecture=MSIL">
+      <HintPath>..\packages\RestSharp.106.3.0-alpha0002\lib\net452\RestSharp.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Swashbuckle.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cd1bb07a5ac7c7bc, processorArchitecture=MSIL">
@@ -459,8 +461,8 @@
       <HintPath>..\packages\System.Threading.Thread.4.3.0\lib\net46\System.Threading.Thread.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.ValueTuple, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.ValueTuple.4.3.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
+    <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.4.0\lib\net461\System.ValueTuple.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Web.ApplicationServices" />
@@ -895,6 +897,7 @@
     <Content Include="Views\Search\_SearchFields.cshtml" />
     <Content Include="Views\Shared\_TimeoutPartial.cshtml" />
     <Content Include="Views\Shared\_LogOnPartialView.cshtml" />
+    <Content Include="Views\Search\_LoadOnDemand.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -932,16 +935,6 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadataStorage Include="Service References\GGService\" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\GrinGlobal.Business\GrinGlobal.Business.csproj">
-      <Project>{b851ef11-4ab8-49a0-9500-3da3ceba26da}</Project>
-      <Name>GrinGlobal.Business</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\GrinGlobal.Core\GrinGlobal.Core.csproj">
-      <Project>{3d5a6988-05ff-47cf-aba2-79483a9aca3a}</Project>
-      <Name>GrinGlobal.Core</Name>
-    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
