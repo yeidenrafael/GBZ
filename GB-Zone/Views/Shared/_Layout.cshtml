@@ -30,6 +30,13 @@
     @Scripts.Render("~/bundles/jquery/js")
     @Scripts.Render("~/bundles/jqueryval")
 
+
+    @Scripts.Render("~/bundles/bootstrap/js")
+    @Scripts.Render("~/bundles/homer/js")
+    @Scripts.Render("~/bundles/GBZone/js")
+    @Scripts.Render("~/bundles/jqueryMask/js")
+
+
     @Html.DevExpress().GetScripts(
         new Script { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
         new Script { ExtensionSuite = ExtensionSuite.CardView },
@@ -51,59 +58,20 @@
     @Styles.Render("~/bundles/homer/css")
 
 
-</head>
-<body class="landing-page">
-
-    <!-- Simple splash screen-->
-    <div class="splash"> <div class="color-line"></div><div class="splash-title"><h1>GRIN-Global GB-Zone</h1><p>WebApp mobile</p><div class="spinner"> <div class="rect1"></div> <div class="rect2"></div> <div class="rect3"></div> <div class="rect4"></div> <div class="rect5"></div> </div> </div> </div>
-    <!--[if lt IE 7]>
-    <p class="alert alert-danger">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-    <![endif]-->
-    <!-- Header -->
-    <div>
-        @Html.Partial("_Header")
-    </div>
 
 
 
-    <!-- Main view  -->
+    @RenderSection("scriptsHeader", required: false)
+    @functions {
 
-    <section id="features2" class="bg-light">
-        <div class="container">
-            @RenderBody()
-        </div>
-    </section>
+        public int PopupShowDelay
+        {
+            get { return 60000 * (Session.Timeout - 1); }
+        }
 
-
-
-    <!-- Section for main scripts render -->
-
-
-
-    @Scripts.Render("~/bundles/bootstrap/js")
-    @Scripts.Render("~/bundles/homer/js")
-    @Scripts.Render("~/bundles/GBZone/js")
-    @Scripts.Render("~/bundles/jqueryMask/js")
-
-
-
-
-    <!-- Handler for local scripts -->
-    @RenderSection("scripts", required: false)
-
-    @Html.Partial("_TimeoutPartial")
-</body>
-</html>
-@functions {
-
-    public int PopupShowDelay
-    {
-        get { return 60000 * (Session.Timeout - 1); }
     }
 
-}
-
-<script type="text/javascript">
+    <script type="text/javascript">
     window.SessionTimeout = (function() {
         var _timeLeft, _popupTimer, _countDownTimer;
 
@@ -152,4 +120,42 @@
 
     })();
 
-</script>
+    </script>
+</head>
+<body class="landing-page">
+
+    <!-- Simple splash screen-->
+    <div class="splash"> <div class="color-line"></div><div class="splash-title"><h1>GRIN-Global GB-Zone</h1><p>WebApp mobile</p><div class="spinner"> <div class="rect1"></div> <div class="rect2"></div> <div class="rect3"></div> <div class="rect4"></div> <div class="rect5"></div> </div> </div> </div>
+    <!--[if lt IE 7]>
+    <p class="alert alert-danger">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+    <!-- Header -->
+    <div>
+        @Html.Partial("_Header")
+    </div>
+
+
+
+    <!-- Main view  -->
+
+    <section id="features2" class="bg-light">
+        <div class="container">
+            @RenderBody()
+        </div>
+    </section>
+
+
+
+    <!-- Section for main scripts render -->
+
+
+
+
+
+
+    <!-- Handler for local scripts -->
+    @RenderSection("scripts", required: false)
+
+    @Html.Partial("_TimeoutPartial")
+</body>
+</html>

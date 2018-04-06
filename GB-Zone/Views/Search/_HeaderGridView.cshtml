@@ -1,4 +1,6 @@
-﻿<div class="hpanel">
+﻿@model System.Data.DataTable
+
+<div class="hpanel">
     <div class="panel-heading hbuilt">
         <div class="panel-tools">
             <a class="showhide"><i class="fa fa-chevron-up"></i></a>
@@ -22,6 +24,7 @@
 
                                 if (col.ColumnName == "gid")
                                 {
+
                                     /*Html.DevExpress().Button(
                                     settings =>
                                     {
@@ -35,7 +38,6 @@
                                         settings.ClientSideEvents.Click = "OnTest";
                                     }).GetHtml();*/
 
-                                    
                                     Html.DevExpress().HyperLink(hlSettings =>
                                     {
                                         hlSettings.Name = "gid";
@@ -57,7 +59,6 @@
                 <span class="font-extra-bold">Total numbre of records: </span>
                 @Model.Rows.Count
             </div>
-
         </div>
     </div>
 </div>

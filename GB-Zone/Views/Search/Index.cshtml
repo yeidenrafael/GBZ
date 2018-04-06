@@ -1,31 +1,45 @@
 ﻿@model System.Data.DataTable
+
 @{
     ViewBag.ViewTitle = "";
 }
-    
-<script type="text/javascript">
-    function OnTest(s, e) {
-        PopupControl.Show();
-    }
-    function ShowDetailPopup(url) {
-        PopupControl.SetContentUrl(url);
-        PopupControl.Show()
-    }
-</script>
+
+
+@section scriptsHeader {
+
+    <script type="text/javascript">
+        function OnTest(s, e) {
+            PopupControl.Show();
+        }
+        function ShowDetailPopup(url) {
+            PopupControl.SetContentUrl(url);
+            PopupControl.Show();
+        }
+    </script>
+
+}
+
 
 @Html.Partial("_SearchFields")
 
-@{
-    if (ViewData["viewName"] != null)
-    {
-        Html.RenderPartial("_HeaderGridView");
-        Html.RenderPartial("_GridViewSearch", Model, new ViewDataDictionary { { "viewName", ViewData["viewName"] }, { "value", ViewData["value"] }, { "crop", ViewData["crop"] }, { "moduleId", ViewData["moduleId"] } });
-        //Html.RenderPartial("_LoadOnDemand");
-        @Html.DevExpress().PopupControl(settings =>
-        {
-            settings.Name = "PopupControl";
-            settings.Width = System.Web.UI.WebControls.Unit.Pixel(800);
-            settings.Height = System.Web.UI.WebControls.Unit.Pixel(300);
-        }).GetHtml()
-    }
+@if (ViewData["viewName"] != null)
+{
+    Html.RenderPartial("_HeaderGridView");
+    Html.RenderPartial("_GridViewSearch", Model, new ViewDataDictionary { { "viewName", ViewData["viewName"] }, { "value", ViewData["value"] }, { "crop", ViewData["crop"] }, { "moduleId", ViewData["moduleId"] } });
 }
+
+@Html.DevExpress().PopupControl(settings =>
+{
+    settings.Name = "PopupControl";
+    settings.Width = System.Web.UI.WebControls.Unit.Pixel(800);
+    settings.Height = System.Web.UI.WebControls.Unit.Pixel(800);
+    settings.CloseAction = CloseAction.OuterMouseClick;
+    settings.PopupVerticalAlign = PopupVerticalAlign.Middle;
+    settings.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+    settings.ShowFooter = false;
+    settings.AllowDragging = true;
+    //settings.EnableHotTrack = true;
+    settings.HeaderText = "Germplasm detail";
+    settings.Modal = true;
+
+}).GetHtml()
