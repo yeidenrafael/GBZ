@@ -149,8 +149,6 @@ namespace GrinGlobal.Zone.Controllers
             ViewData["crop"] = crop;
             ViewData["germplasmDbId"] = germplasmDbId;
             
-            //ViewData["otherModel"] = search.GetGermplasmDetails(crop, Int32.Parse(germplasmDbId));
-
             return PartialView("_LoadOnDemand", search.GetGermplasmDetails(crop, Int32.Parse(germplasmDbId)));
         }
     }

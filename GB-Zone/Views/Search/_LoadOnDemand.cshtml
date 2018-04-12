@@ -8,6 +8,8 @@
             {
                 s.Name = "germplasmForm";
                 s.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+                //s.Styles.LayoutItem.Caption.Font.Size = 10;
+                s.Styles.LayoutItem.Caption.Font.Bold = true;
                 //s.SettingsAdaptivity.AdaptivityMode = FormLayoutAdaptivityMode.SingleColumnWindowLimit;
                 //s.SettingsAdaptivity.SwitchToSingleColumnAtWindowInnerWidth = 700;
                 //s.UseDefaultPaddings = false;
@@ -309,12 +311,23 @@
                         settings.Text = Model.Result.SubtaxonAuthority;
                     });
                 });
-                s.Items.Add(m => m.Result.Synonyms, i =>
+                s.Items.Add(i =>
                 {
-                    i.NestedExtension().Label(settings =>
+                    i.Caption = "Synonyms";
+
+                    System.Text.StringBuilder sb = new System.Text.StringBuilder();
+
+                    foreach (string str in Model.Result.Synonyms)
                     {
-                        settings.Text = Model.Result.Synonyms.ToString();
-                    });
+                        TagBuilder tag = new TagBuilder("span");
+                        tag.InnerHtml = str;
+                        tag.AddCssClass("stringitem");
+                        sb.AppendFormat("{0}<br />", tag.ToString());
+                        //sb.Append(str);
+                    }
+                    i.CssClass = "font-extra-bold";
+
+                    i.SetNestedContent(sb.ToString());
                 });
                 s.Items.Add(m => m.Result.TypeOfGermplasmStorage, i =>
                 {

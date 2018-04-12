@@ -61,7 +61,7 @@ namespace GrinGlobal.Zone.Controllers
                     return RedirectToAction("Index", "Home");
                 }
                 else {
-                    ModelState.AddModelError("", "The user is disabled in GrinGlobal application");
+                    ModelState.AddModelError("", "The user is disabled in GRIN-Global server");
                     return View(model);
                 }
             }
