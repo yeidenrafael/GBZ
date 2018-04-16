@@ -1,4 +1,5 @@
 ﻿@using IO.Swagger.Model
+@using System.Web.UI.WebControls
 @model BrapiResponseBrGermplasmV2TO
 
     @{
@@ -7,9 +8,9 @@
             Html.DevExpress().FormLayout(s =>
             {
                 s.Name = "germplasmForm";
-                s.Width = System.Web.UI.WebControls.Unit.Percentage(100);
-                //s.Styles.LayoutItem.Caption.Font.Size = 10;
                 s.Styles.LayoutItem.Caption.Font.Bold = true;
+                s.Width = Unit.Percentage(100);
+                //s.Styles.LayoutItem.Caption.Font.Size = 10;
                 //s.SettingsAdaptivity.AdaptivityMode = FormLayoutAdaptivityMode.SingleColumnWindowLimit;
                 //s.SettingsAdaptivity.SwitchToSingleColumnAtWindowInnerWidth = 700;
                 //s.UseDefaultPaddings = false;
@@ -25,6 +26,7 @@
                 {
                     i.NestedExtension().Label(settings =>
                     {
+                        settings.ControlStyle.CssClass = "font-extra-bold";
                         settings.Text = Model.Result.AccessionNumber;
                     });
                 });
@@ -159,7 +161,6 @@
                     i.NestedExtension().Label(settings =>
                     {
                         settings.Text = Model.Result.DefaultDisplayName;
-                        settings.ControlStyle.CssClass = "font-extra-bold";
                     });
                 });
                 s.Items.Add(m => m.Result.DonorAccessionNumber, i =>

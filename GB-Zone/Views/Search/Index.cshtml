@@ -31,15 +31,14 @@
 @Html.DevExpress().PopupControl(settings =>
 {
     settings.Name = "PopupControl";
-    settings.Width = System.Web.UI.WebControls.Unit.Pixel(800);
-    settings.Height = System.Web.UI.WebControls.Unit.Pixel(800);
+    //settings.Width = System.Web.UI.WebControls.Unit.Pixel(800);//Percentage(100);
+    //settings.Height = System.Web.UI.WebControls.Unit.Percentage(100);//Unit.Pixel(800);
     settings.CloseAction = CloseAction.OuterMouseClick;
     settings.PopupVerticalAlign = PopupVerticalAlign.Middle;
     settings.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
     settings.ShowFooter = false;
     settings.AllowDragging = true;
-    //settings.EnableHotTrack = true;
     settings.HeaderText = "Germplasm detail";
-    settings.Modal = true;
-
+    settings.Modal = false;
+    settings.ClientSideEvents.PopUp = "function(s, e) { s.SetWidth(document.documentElement.clientWidth-20); s.SetHeight(document.documentElement.clientHeight-20); s.UpdatePosition(); }";
 }).GetHtml()
