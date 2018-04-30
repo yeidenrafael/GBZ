@@ -12,7 +12,7 @@
 <div class="row text-center">
     @foreach (var elm in Settings.CropInfo(Session["crop"].ToString()).Elements("modules"))
     {
-        <div id="@elm.Attribute("id").Value" class="col-md-4">
+        <div id="@elm.Attribute("id").Value" > <!--class="col-md-4"-->
             <a class="@elm.Attribute("icon").Value text-success icon-big" href="@Url.Action(elm.Attribute("action").Value, elm.Attribute("controller").Value, new { moduleId = elm.Attribute("id").Value })"></a>
             <h4>@elm.Attribute("title").Value</h4>
             <p>@elm.Attribute("description").Value</p>

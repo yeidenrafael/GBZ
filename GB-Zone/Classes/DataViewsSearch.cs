@@ -47,8 +47,9 @@ namespace GrinGlobal.Zone.Classes
 
             //put the value in the delimitedParameterList
             string delimitedParams = service.Element("actions").Element("parameters").Element("delimitedParameterList").Value;
-
-            var arrValue = value.Split(new char[] { '-' });
+            Char separator = (char) Convert.ToInt32(service.Element("actions").Element("parameters").Element("separator").Value);
+                        
+            var arrValue = value.Split(separator);
 
             while ((nBracket = delimitedParams.IndexOf("{0}", nBracket)) != -1)
             {
@@ -128,8 +129,9 @@ namespace GrinGlobal.Zone.Classes
 
             //put the value in the delimitedParameterList
             string delimitedParams = service.Element("actions").Element("parameters").Element("delimitedParameterList").Value;
+            Char separator = (char)Convert.ToInt32(service.Element("actions").Element("parameters").Element("separator").Value);
 
-            var arrValue = value.Split(new char[] { '-' });
+            var arrValue = value.Split(separator);
 
             while ((nBracket = delimitedParams.IndexOf("{0}", nBracket)) != -1)
             {

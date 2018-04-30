@@ -23,16 +23,16 @@ namespace GrinGlobal.Zone.Controllers
         {
             DataViewsSearch search = new DataViewsSearch();
 
-            string viewName = formdata["radios"];
-            string value = formdata[String.Format("text {0}", viewName)];
             string crop = Session["crop"].ToString();
             string moduleId = formdata["moduleId"];// "Module1";
-
-            ViewData["viewName"] = viewName;
-            ViewData["value"] = value;
+            string viewName = formdata["radios"];
+            string value = formdata[String.Format("text {0}", viewName)];
+            
             ViewData["crop"] = crop;
             ViewData["moduleId"] = moduleId;
-
+            ViewData["viewName"] = viewName;
+            ViewData["value"] = value;
+            
             return View(search.GetData(value, crop, viewName, moduleId));
         }
 
@@ -40,10 +40,10 @@ namespace GrinGlobal.Zone.Controllers
         {
             DataViewsSearch search = new DataViewsSearch();
 
-            ViewData["viewName"] = viewName;
-            ViewData["value"] = value;
             ViewData["crop"] = crop;
             ViewData["moduleId"] = moduleId;
+            ViewData["viewName"] = viewName;
+            ViewData["value"] = value;
 
             return View("Index", search.GetData(value, crop, viewName, moduleId));
         }
@@ -52,10 +52,10 @@ namespace GrinGlobal.Zone.Controllers
         {
             DataViewsSearch search = new DataViewsSearch();
 
-            ViewData["viewName"] = viewName;
-            ViewData["value"] = value;
             ViewData["crop"] = crop;
             ViewData["moduleId"] = moduleId;
+            ViewData["viewName"] = viewName;
+            ViewData["value"] = value;
 
             ViewData["germplasmDbId"] = 0;
 
@@ -67,10 +67,10 @@ namespace GrinGlobal.Zone.Controllers
         {
             DataViewsSearch search = new DataViewsSearch();
 
-            ViewData["viewName"] = viewName;
-            ViewData["value"] = value;
             ViewData["crop"] = crop;
             ViewData["moduleId"] = moduleId;
+            ViewData["viewName"] = viewName;
+            ViewData["value"] = value;
 
             try
             {
@@ -82,7 +82,7 @@ namespace GrinGlobal.Zone.Controllers
                 Guid d = Guid.NewGuid();
                 log.Fatal(Guid.NewGuid(),e);
                 
-                ViewData["EditError"] = String.Format("Something were wrong!!\nPlease contact your system administrator.");
+                ViewData["EditError"] = String.Format(e.Message); //"Something were wrong!!\nPlease contact your system administrator." +
             }
 
             return PartialView("_GridViewSearch", search.GetData(value, crop, viewName, moduleId));

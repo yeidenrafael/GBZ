@@ -60,8 +60,9 @@ namespace GrinGlobal.Zone.Models
         public BrapiResponseBrGermplasmV2TO GetGermplasmDetails(string crop, int germplasmDbId)
         {
             //test brapi
-            GermplasmApi gmApi = new GermplasmApi("http://asdev.cimmyt.org:8280/brapi/v1");
-            
+            //GermplasmApi gmApi = new GermplasmApi("http://asdev.cimmyt.org:8280/brapi/v1");
+            GermplasmApi gmApi = new GermplasmApi("http://172.17.61.7:8280/brapi/v1");
+
             var result = gmApi.GetGermplasmDetails(crop.ToLower(), germplasmDbId);
          
             return result;

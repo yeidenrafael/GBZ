@@ -78,7 +78,7 @@
                             var categoryID = Convert.ToString(DataBinder.Eval(container.DataItem, dc.ExtendedProperties["col_reference"].ToString()));
                             Html.DevExpress().HyperLink(hyperlink =>
                             {
-                                hyperlink.Name = "hl" + container.VisibleIndex;
+                                //hyperlink.Name = "hl" + container.VisibleIndex;
                                 hyperlink.Properties.Text = (string)DataBinder.Eval(container.DataItem, dc.ColumnName);
                                 hyperlink.NavigateUrl = DevExpressHelper.GetUrl(new
                                 {
