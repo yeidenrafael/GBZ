@@ -67,7 +67,7 @@
                     col.FieldName = dc.ColumnName;
                     col.Name = dc.ColumnName;
                     col.Caption = dc.Caption;
-
+                    
                     //create a link column
                     if (dc.ExtendedProperties["view_reference"] != null)
 
@@ -79,7 +79,7 @@
                             Html.DevExpress().HyperLink(hyperlink =>
                             {
                                 //hyperlink.Name = "hl" + container.VisibleIndex;
-                                hyperlink.Properties.Text = (string)DataBinder.Eval(container.DataItem, dc.ColumnName);
+                                hyperlink.Properties.Text = Convert.ToString(DataBinder.Eval(container.DataItem, dc.ColumnName));
                                 hyperlink.NavigateUrl = DevExpressHelper.GetUrl(new
                                 {
                                     Controller = "Search",
@@ -100,12 +100,12 @@
                         var spinEditProps = col.PropertiesEdit as SpinEditProperties;
                         if (spinEditProps != null) spinEditProps.SpinButtons.ShowIncrementButtons = false;
                     }
-
+                    
                     if (col.FieldName == "storage_location")
                     {
                         var prty = col.PropertiesEdit as TextBoxProperties;
                         prty.MaskSettings.Mask = "CC##CC##C##-###";
-
+                        //prty.MaskSettings.ShowHints = false;
                     }
                 });
 
