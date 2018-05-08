@@ -9,11 +9,17 @@
         st.CallbackRouteValues = new { Controller = "Search", Action = "GridViewSearch", crop = ViewData["crop"].ToString(), value = ViewData["value"].ToString(), viewName = ViewData["viewName"].ToString(), moduleId = ViewData["moduleId"].ToString() };
 
         st.Width = System.Web.UI.WebControls.Unit.Percentage(100);
-        st.SettingsPager.PageSize = 10;
         st.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCells;
         st.ControlStyle.Paddings.Padding = System.Web.UI.WebControls.Unit.Pixel(0);
         st.ControlStyle.Border.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(0);
         st.ControlStyle.BorderBottom.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(1);
+
+        //st.SettingsPager.PageSize = 10;
+        //st.SettingsPager.Position = PagerPosition.TopAndBottom;
+        st.SettingsPager.FirstPageButton.Visible = true;
+        st.SettingsPager.LastPageButton.Visible = true;
+        st.SettingsPager.PageSizeItemSettings.Visible = true;
+        st.SettingsPager.PageSizeItemSettings.Items = new string[] { "10", "20", "50", "100"};
 
         //st.SettingsEditing.AddNewRowRouteValues = new { Controller = "Home", Action = "GridViewPartialAddNew" };
         //st.SettingsEditing.DeleteRowRouteValues = new { Controller = "Home", Action = "GridViewPartialDelete" };
@@ -67,7 +73,7 @@
                     col.FieldName = dc.ColumnName;
                     col.Name = dc.ColumnName;
                     col.Caption = dc.Caption;
-                    
+
                     //create a link column
                     if (dc.ExtendedProperties["view_reference"] != null)
 
@@ -100,7 +106,7 @@
                         var spinEditProps = col.PropertiesEdit as SpinEditProperties;
                         if (spinEditProps != null) spinEditProps.SpinButtons.ShowIncrementButtons = false;
                     }
-                    
+
                     if (col.FieldName == "storage_location")
                     {
                         var prty = col.PropertiesEdit as TextBoxProperties;
