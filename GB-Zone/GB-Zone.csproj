@@ -614,10 +614,10 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
-    <None Include="Properties\PublishProfiles\CIM-GG-STY-SRV.pubxml" />
+    <None Include="Properties\PublishProfiles\CIM-GG-STG-SRV.pubxml" />
     <None Include="Properties\PublishProfiles\Default.pubxml" />
     <None Include="Properties\PublishProfiles\Dev Azure.pubxml" />
-    <None Include="Properties\PublishProfiles\DevServer.pubxml" />
+    <None Include="Properties\PublishProfiles\ITU-DEV-SRV.pubxml" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\gbzone.js" />
