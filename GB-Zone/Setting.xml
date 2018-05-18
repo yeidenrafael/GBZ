@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Settings>
 
-  <crop id="01" name="Wheat" url="http://172.17.61.7:81/gringlobal/gui.asmx">
+  <crop id="01" name="Wheat" url="http://localhost/gringlobal/gui.asmx">
     <modules id="Inventory" title="Inventory" description="You can search information about Inventories by Order Id, Storage location, Inventory number or Accession number" icon="pe-7s-note2" action="Index" controller="Search">
       <form layout="vertical" cssClass="form-group">
 
@@ -205,7 +205,7 @@
 -->
   </crop>
 
-  <crop id="02" name="Maize" url="http://172.17.61.7:82/gringlobal/gui.asmx">
+  <crop id="02" name="Maize" url="http://localhost:81/gringlobal/gui.asmx">
     <modules id="Inventory" title="Inventory" description="You can search information about Inventories by Order Id, Storage location, Inventory number or Accession number" icon="pe-7s-note2" action="Index" controller="Search">
       <form layout="vertical" cssClass="form-group">
 
