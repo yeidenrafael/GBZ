@@ -317,5 +317,32 @@
         
       </form>
     </modules>
-  </crop>
+    
+    <modules id="Client" title="Client" description="" icon="pe-7s-note2" action="Index" controller="Search">
+        <form layout="vertical" cssClass="form-group">
+
+          <field id="03" type="text" placeholder="Accession Number" visible="true">
+            <actions>
+              <parameters>
+                <suppressExceptions>false</suppressExceptions>
+                <dataviewName>gbz_get_inventory_active</dataviewName>
+                <delimitedParameterList>:inventoryid=;:car=;:sec=;:inventory_number1=;:inventory_number2=;:inventory_number3=;:accession_number1={0};:accession_number2={0};</delimitedParameterList>
+                <offset>0</offset>
+                <limit>0</limit>
+                <options>1</options>
+                <separator>32</separator>
+              </parameters>
+              <columns>
+                <column header="true">accession_number</column>
+                <column header="true">gid</column>
+                <column header="true">plant_name</column>
+                <column header="true">taxonomy</column>
+                <column header="true">country</column>
+              </columns>
+            </actions>
+          </field>
+
+        </form>
+      </modules>
+    </crop>
 </Settings>

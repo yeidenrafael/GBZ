@@ -622,6 +622,7 @@
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\gbzone.js" />
     <Content Include="Scripts\homer.js" />
+    <None Include="Properties\PublishProfiles\localhost.pubxml" />
     <None Include="Scripts\jquery-3.2.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.2.1.js" />
     <Content Include="Scripts\jquery-3.2.1.min.js" />
