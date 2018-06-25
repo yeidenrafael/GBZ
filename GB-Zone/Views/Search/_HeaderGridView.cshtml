@@ -21,22 +21,9 @@
                             <span class="font-extra-bold">@col.Caption: </span>
                             @if (Model.Rows.Count > 0)
                             {
-
+                                /*
                                 if (col.ColumnName == "gid")
                                 {
-
-                                    /*Html.DevExpress().Button(
-                                    settings =>
-                                    {
-                                        settings.Name = "btnLinkImageAndText";
-                                        //settings.Width = 90;
-                                        //settings.Height = 25;
-                                        settings.RenderMode = ButtonRenderMode.Link;
-                                        settings.Text = @Model.Rows[0][col].ToString().Trim();
-                                        //settings.ImagePosition = ImagePosition.Right;
-                                        //settings.Images.Image.IconID = IconID.ActionsRefresh16x16gray;
-                                        settings.ClientSideEvents.Click = "OnTest";
-                                    }).GetHtml();*/
 
                                     Html.DevExpress().HyperLink(hlSettings =>
                                     {
@@ -50,6 +37,8 @@
                                 {
                                     @Model.Rows[0][col].ToString().Trim()
                                 }
+                                */
+                                @Model.Rows[0][col].ToString().Trim()
                             }
                         </div>
                     }
