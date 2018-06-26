@@ -115,6 +115,7 @@
   </crop>
 
   <crop id="02" name="Maize" url="http://localhost:81/gringlobal/gui.asmx">
+    <!--
     <modules id="Inventory" title="Inventory" description="You can search information about Inventory items by Accession number or Inventory number" icon="pe-7s-note2" action="Index" controller="Search">
       <form layout="vertical" cssClass="form-group">
         <field id="05" type="text" placeholder="Accession Number" visible="true">
@@ -226,5 +227,6 @@
         </field>
       </form>
     </modules>
+    -->
   </crop>
 </Settings>
