@@ -145,6 +145,10 @@
       <HintPath>..\packages\DevExpress.Web.Office.18.1.4\lib\net40\DevExpress.Web.ASPxSpreadsheet.v18.1.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="DevExpress.Web.ASPxThemes.v18.1, Version=18.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Web.Themes.18.1.4\lib\net40\DevExpress.Web.ASPxThemes.v18.1.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="DevExpress.Web.ASPxTreeList.v18.1, Version=18.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <HintPath>..\packages\DevExpress.Web.18.1.4\lib\net40\DevExpress.Web.ASPxTreeList.v18.1.dll</HintPath>
       <Private>True</Private>
