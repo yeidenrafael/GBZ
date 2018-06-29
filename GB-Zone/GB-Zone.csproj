@@ -54,8 +54,8 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Cimmyt_BrAPI_dotNetClient, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Cimmyt_BrAPI_Clients\Cimmyt_BrAPI_dotNetClient\bin\Debug\Cimmyt_BrAPI_dotNetClient.dll</HintPath>
+      <HintPath>..\packages\Cimmyt_BrAPI_dotNetClient.1.0.0\lib\net461\Cimmyt_BrAPI_dotNetClient.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="DevExpress.Charts.v18.1.Core, Version=18.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <HintPath>..\packages\DevExpress.Charts.Core.18.1.4\lib\net40\DevExpress.Charts.v18.1.Core.dll</HintPath>
