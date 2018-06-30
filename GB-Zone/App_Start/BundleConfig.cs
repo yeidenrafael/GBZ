@@ -12,9 +12,6 @@ namespace GrinGlobal.Zone
             // Homer style
             bundles.Add(new StyleBundle("~/bundles/homer/css").Include(
                       "~/Content/style.css", new CssRewriteUrlTransform()));
-            
-
-          
             // Animate.css
             bundles.Add(new StyleBundle("~/bundles/animate/css").Include(
                       "~/Vendor/animate.css/animate.min.css"));

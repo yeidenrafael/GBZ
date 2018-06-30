@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Settings>
-  <crop id="01" name="Wheat" url="http://localhost/gringlobal/gui.asmx">
+  <crop id="01" name="Wheat" url="http://asdev.cimmyt.org:81/gringlobal/gui.asmx">
     <modules id="Inventory" title="Inventory" description="You can search information about Inventory items by Storage location, Inventory number or INTRID" icon="pe-7s-note2" action="Index" controller="Search">
       <form layout="vertical" cssClass="form-group">
         <field id="01" type="text" placeholder="CAR-SEC-BOX" visible="true">
