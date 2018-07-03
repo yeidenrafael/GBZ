@@ -10,26 +10,17 @@ namespace GrinGlobal.Zone
         {
 
             // Homer style
-            bundles.Add(new StyleBundle("~/bundles/homer/css").Include(
-                      "~/Content/style.css", new CssRewriteUrlTransform()));
-            // Animate.css
-            bundles.Add(new StyleBundle("~/bundles/animate/css").Include(
-                      "~/Vendor/animate.css/animate.min.css"));
+            var bundlesContent = new StyleBundle("~/Content/css")
+                                .Include("~/Content/style.css", new CssRewriteUrlTransform())
+                                .Include("~/Content/bootstrap.min.css", new CssRewriteUrlTransform());
 
-            // Pe-icon-7-stroke
-            bundles.Add(new StyleBundle("~/bundles/peicon7stroke/css").Include(
-                      "~/Icons/pe-icon-7-stroke/css/pe-icon-7-stroke.css", new CssRewriteUrlTransform()));
+            var bundlesVendor = new StyleBundle("~/Vendor/css")
+                                 .Include("~/Vendor/animate.css/animate.min.css", new CssRewriteUrlTransform())
+                                 .Include("~/Vendor/pe-icon-7-stroke/css/pe-icon-7-stroke.css", new CssRewriteUrlTransform())
+                                 .Include("~/Vendor/fontawesome/css/font-awesome.min.css", new CssRewriteUrlTransform());
 
-            // Font Awesome icons style
-            bundles.Add(new StyleBundle("~/bundles/font-awesome/css").Include(
-                      "~/Vendor/fontawesome/css/font-awesome.min.css", new CssRewriteUrlTransform()));
-
-
-            // Bootstrap style
-            bundles.Add(new StyleBundle("~/bundles/bootstrap/css")
-                .Include("~/Content/bootstrap.min.css",new CssRewriteUrlTransform())
-                );
-
+            bundles.Add(bundlesContent);
+            bundles.Add(bundlesVendor);
 
             // Homer script
             bundles.Add(new ScriptBundle("~/bundles/homer/js").Include(

@@ -7,14 +7,13 @@
 
     <title>GB-Zone @ViewBag.ViewTitle</title>
 
-  <!--  <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700' rel='stylesheet' type='text/css'>-->
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700' rel='stylesheet' type='text/css'>
 
     <!-- Primary vendor style -->
 
-    @Styles.Render("~/bundles/font-awesome/css")
-    @Styles.Render("~/bundles/animate/css")
-    @Styles.Render("~/bundles/bootstrap/css")
-    @Styles.Render("~/bundles/peicon7stroke/css")
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Vendor/css")
+   
 
 
     @Html.DevExpress().GetStyleSheets(
@@ -52,13 +51,7 @@
 
     <!-- Add local styles, mostly for plugins css file -->
     @if (IsSectionDefined("Styles"))
-    {@RenderSection("Styles", required: false)}
-
-    <!-- Primary HOMER style -->
-    @Styles.Render("~/bundles/homer/css")
-
-
-
+    {@RenderSection("Styles", required: false)} 
 
 
     @RenderSection("scriptsHeader", required: false)
