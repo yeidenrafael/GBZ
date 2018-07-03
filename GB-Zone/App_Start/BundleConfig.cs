@@ -16,7 +16,7 @@ namespace GrinGlobal.Zone
 
             var bundlesVendor = new StyleBundle("~/Vendor/css")
                                  .Include("~/Vendor/animate.css/animate.min.css", new CssRewriteUrlTransform())
-                                 .Include("~/Vendor/pe-icon-7-stroke/css/pe-icon-7-stroke.css", new CssRewriteUrlTransform())
+                                 .Include("~/Vendor/pe-icon-7-stroke/css/pe-icon-7-stroke.css")
                                  .Include("~/Vendor/fontawesome/css/font-awesome.min.css", new CssRewriteUrlTransform());
 
             bundles.Add(bundlesContent);
