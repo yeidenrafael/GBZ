@@ -55,6 +55,8 @@ namespace GrinGlobal.Zone
             bundles.Add(new ScriptBundle("~/bundles/jqueryMask/js").Include(
                       "~/vendor/jqueryMask/jquery.mask.js",
                       "~/vendor/jqueryMask/jquery.mask.min.js"));
+
+            BundleTable.EnableOptimizations = true;
         }
 
     }
