@@ -9,7 +9,7 @@ namespace GrinGlobal.Zone
         public static void RegisterBundles(BundleCollection bundles)
         {
 
-            // Homer style
+            // Homer styleboostrap
             var bundlesContent = new StyleBundle("~/Content/css")
                                 .Include("~/Content/style.css", new CssRewriteUrlTransform())
                                 .Include("~/Content/bootstrap.min.css", new CssRewriteUrlTransform());
