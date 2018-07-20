@@ -9,13 +9,14 @@
         st.CallbackRouteValues = new { Controller = "Search", Action = "GridViewSearch", crop = ViewData["crop"].ToString(), value = ViewData["value"].ToString(), viewName = ViewData["viewName"].ToString(), moduleId = ViewData["moduleId"].ToString() };
 
         st.Width = System.Web.UI.WebControls.Unit.Percentage(100);
-        st.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCells;
+
         st.ControlStyle.Paddings.Padding = System.Web.UI.WebControls.Unit.Pixel(0);
         st.ControlStyle.Border.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(0);
         st.ControlStyle.BorderBottom.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(1);
 
         //st.SettingsPager.PageSize = 10;
         //st.SettingsPager.Position = PagerPosition.TopAndBottom;
+        st.SettingsPager.Visible = true;
         st.SettingsPager.FirstPageButton.Visible = true;
         st.SettingsPager.LastPageButton.Visible = true;
         st.SettingsPager.PageSizeItemSettings.Visible = true;
@@ -32,10 +33,11 @@
         //st.SettingsEditing.BatchEditSettings.StartEditAction = GridViewBatchStartEditAction.Click;
 
         //st.SettingsBehavior.ConfirmDelete = true;
+        st.SettingsBehavior.AllowSelectByRowClick = true;
 
         st.CommandColumn.Visible = true;
         st.CommandColumn.ShowEditButton = true;
-        //st.CommandColumn.ShowNewButton = false;
+        //st.CommandColumn.ShowNewButton = true;
         //st.CommandColumn.ShowDeleteButton = false;
         //st.CommandColumn.ShowSelectCheckbox = true;
 
@@ -48,10 +50,10 @@
         */
         st.KeyFieldName = "inventory_id";
 
-        st.SettingsPager.Visible = true;
-        st.Settings.ShowGroupPanel = true;
+        //st.Settings.ShowGroupPanel = true;
         st.Settings.ShowFilterRow = true;
-        st.SettingsBehavior.AllowSelectByRowClick = true;
+        st.Settings.ShowHeaderFilterButton = true;
+        st.Settings.ShowFooter = true;
 
         st.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCells;
         st.SettingsAdaptivity.AdaptiveColumnPosition = GridViewAdaptiveColumnPosition.Right;
@@ -59,10 +61,7 @@
         st.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = false;
         st.SettingsAdaptivity.HideDataCellsAtWindowInnerWidth = 0;
 
-        st.Settings.ShowHeaderFilterButton = true;
-
         st.TotalSummary.Add(DevExpress.Data.SummaryItemType.Count, "inventory_id");
-        st.Settings.ShowFooter = true;
 
         foreach (System.Data.DataColumn dc in Model.Columns)
         {

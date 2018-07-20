@@ -13,19 +13,19 @@
 
     @System.Web.Optimization.Styles.Render("~/Content/css")
     @System.Web.Optimization.Styles.Render("~/Vendor/css")
-   
+
     <link rel="stylesheet" href="~/Vendor/pe-icon-7-stroke/css/pe-icon-7-stroke.css" />
- 
+
 
     @Html.DevExpress().GetStyleSheets(
-        new StyleSheet { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
-        new StyleSheet { ExtensionSuite = ExtensionSuite.CardView },
-        new StyleSheet { ExtensionSuite = ExtensionSuite.PivotGrid },
-        new StyleSheet { ExtensionSuite = ExtensionSuite.HtmlEditor },
-        new StyleSheet { ExtensionSuite = ExtensionSuite.Editors },
-        new StyleSheet { ExtensionSuite = ExtensionSuite.VerticalGrid },
-        new StyleSheet { ExtensionSuite = ExtensionSuite.GridView }
-    )
+            new StyleSheet { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+            new StyleSheet { ExtensionSuite = ExtensionSuite.CardView },
+            new StyleSheet { ExtensionSuite = ExtensionSuite.PivotGrid },
+            new StyleSheet { ExtensionSuite = ExtensionSuite.HtmlEditor },
+            new StyleSheet { ExtensionSuite = ExtensionSuite.Editors },
+            new StyleSheet { ExtensionSuite = ExtensionSuite.VerticalGrid },
+            new StyleSheet { ExtensionSuite = ExtensionSuite.GridView }
+        )
 
     @Scripts.Render("~/bundles/jquery/js")
     @Scripts.Render("~/bundles/jqueryval")
@@ -38,88 +38,103 @@
 
 
     @Html.DevExpress().GetScripts(
-        new Script { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
-        new Script { ExtensionSuite = ExtensionSuite.CardView },
-        new Script { ExtensionSuite = ExtensionSuite.PivotGrid },
-        new Script { ExtensionSuite = ExtensionSuite.HtmlEditor },
-        new Script { ExtensionSuite = ExtensionSuite.Editors },
-        new Script { ExtensionSuite = ExtensionSuite.VerticalGrid },
-        new Script { ExtensionSuite = ExtensionSuite.GridView }
-    )
+            new Script { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+            new Script { ExtensionSuite = ExtensionSuite.CardView },
+            new Script { ExtensionSuite = ExtensionSuite.PivotGrid },
+            new Script { ExtensionSuite = ExtensionSuite.HtmlEditor },
+            new Script { ExtensionSuite = ExtensionSuite.Editors },
+            new Script { ExtensionSuite = ExtensionSuite.VerticalGrid },
+            new Script { ExtensionSuite = ExtensionSuite.GridView }
+        )
 
 
 
 
     <!-- Add local styles, mostly for plugins css file -->
     @if (IsSectionDefined("Styles"))
-    {@RenderSection("Styles", required: false)} 
+        {@RenderSection("Styles", required: false)}
 
 
     @RenderSection("scriptsHeader", required: false)
     @functions {
 
-        public int PopupShowDelay
-        {
-            get { return 60000 * (Session.Timeout - 1); }
-        }
+            public int PopupShowDelay
+            {
+                get { return 60000 * (Session.Timeout - 1); }
+            }
 
     }
 
     <script type="text/javascript">
-    window.SessionTimeout = (function() {
-        var _timeLeft, _popupTimer, _countDownTimer;
+            window.SessionTimeout = (function() {
+                var _timeLeft, _popupTimer, _countDownTimer;
 
-        var stopTimers = function() {
-            window.clearTimeout(_popupTimer);
-            window.clearTimeout(_countDownTimer);
-        };
+                var stopTimers = function() {
+                    window.clearTimeout(_popupTimer);
+                    window.clearTimeout(_countDownTimer);
+                };
 
-        var updateCountDown = function() {
-            var min = Math.floor(_timeLeft / 60);
-            var sec = _timeLeft % 60;
-            if(sec < 10)
-                sec = "0" + sec;
+                var updateCountDown = function() {
+                    var min = Math.floor(_timeLeft / 60);
+                    var sec = _timeLeft % 60;
+                    if(sec < 10)
+                        sec = "0" + sec;
 
-            document.getElementById("CountDownHolder").innerHTML = min + ":" + sec;
+                    document.getElementById("CountDownHolder").innerHTML = min + ":" + sec;
 
-            if(_timeLeft > 0) {
-                _timeLeft--;
-                _countDownTimer = window.setTimeout(updateCountDown, 1000);
-            } else  {
-                document.location = "@Url.Content("~/")";
-            }
-        };
+                    if(_timeLeft > 0) {
+                        _timeLeft--;
+                        _countDownTimer = window.setTimeout(updateCountDown, 1000);
+                    } else  {
+                        document.location = "@Url.Content("~/")";
+                    }
+                };
 
-        var showPopup = function() {
-            _timeLeft = 60;
-            updateCountDown();
-            ClientTimeoutPopup.Show();
-        };
+                var showPopup = function() {
+                    _timeLeft = 60;
+                    updateCountDown();
+                    ClientTimeoutPopup.Show();
+                };
 
-        var schedulePopup = function() {
-            stopTimers();
-            _popupTimer = window.setTimeout(showPopup, @PopupShowDelay);
-        };
+                var schedulePopup = function() {
+                    stopTimers();
+                    _popupTimer = window.setTimeout(showPopup, @PopupShowDelay);
+                };
 
-        var sendKeepAlive = function() {
-            stopTimers();
-            ClientTimeoutPopup.Hide();
-            SessionTimeout.schedulePopup();
-        };
+                var sendKeepAlive = function() {
+                    stopTimers();
+                    ClientTimeoutPopup.Hide();
+                    SessionTimeout.schedulePopup();
+                };
 
-        return {
-            schedulePopup: schedulePopup,
-            sendKeepAlive: sendKeepAlive
-        };
+                return {
+                    schedulePopup: schedulePopup,
+                    sendKeepAlive: sendKeepAlive
+                };
 
-    })();
+            })();
 
     </script>
 </head>
+
 <body class="landing-page">
 
     <!-- Simple splash screen-->
-    <div class="splash"> <div class="color-line"></div><div class="splash-title"><h1>GRIN-Global GB-Zone</h1><p>WebApp mobile</p><div class="spinner"> <div class="rect1"></div> <div class="rect2"></div> <div class="rect3"></div> <div class="rect4"></div> <div class="rect5"></div> </div> </div> </div>
+    <div class="splash">
+        <div class="color-line"></div>
+        <div class="splash-title">
+            <h1>GB-Zone</h1>
+            <p>GRIN-Global</p>
+            <div class="spinner">
+                <div class="rect1"></div>
+                <div class="rect2"></div>
+                <div class="rect3"></div>
+                <div class="rect4"></div>
+                <div class="rect5"></div>
+            </div>
+        </div>
+    </div>
+
     <!--[if lt IE 7]>
     <p class="alert alert-danger">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
@@ -141,15 +156,11 @@
 
 
     <!-- Section for main scripts render -->
-
-
-
-
-
-
     <!-- Handler for local scripts -->
     @RenderSection("scripts", required: false)
 
     @Html.Partial("_TimeoutPartial")
+
 </body>
+
 </html>

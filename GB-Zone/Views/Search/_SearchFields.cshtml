@@ -1,37 +1,37 @@
 ﻿@using GrinGlobal.Zone.Helpers
 
-@using (Html.BeginForm("Index", "Search", FormMethod.Post, new { id = "formFilter"}))
+@using (Html.BeginForm("Index", "Search", FormMethod.Post, new { id = "formFilter" }))
 {
-        <div class="hpanel">
-            
+    <div class="hpanel">
+        <div class="panel-heading hbuilt">
+            <div class="panel-tools">
+                <a class="showhide"><i class="fa fa-chevron-up"></i></a>
+                <a class="closebox"><i class="fa fa-times"></i></a>
+            </div>
+            Filters
+        </div>
+
+        <div class="panel-body">
             <div class="row">
+                <input type="hidden" name="moduleId" value="@ViewData["moduleId"].ToString()">
 
-                <div class="panel-heading hbuilt">
-                    <div class="panel-tools">
-                        <a class="showhide"><i class="fa fa-chevron-up"></i></a>
-                    </div>
-                    Filters
-                </div>
-                <div class="panel-body">
-                    <input type="hidden" name="moduleId" value="@ViewData["moduleId"].ToString()">
-
-                    @foreach (var elm in Settings.Fields(Session["crop"].ToString(), ViewData["moduleId"].ToString()))
+                @foreach (var elm in Settings.Fields(Session["crop"].ToString(), ViewData["moduleId"].ToString()))
+                {
+                    if (elm.Attribute("visible").Value == "true")
                     {
-                        if (elm.Attribute("visible").Value == "true")
-                        {
-                            <div class="col-sm-3">
-                                <div class="form-group">
-                                    <div class="input-group">
-                                        <span class="input-group-addon">
-                                            <input id="radio @elm.Attribute("id").Value" type="radio" name="radios" value="@elm.Attribute("id").Value" />
-                                        </span>
-                                        <input type="@elm.Attribute("type").Value" class="form-control" placeholder="@elm.Attribute("placeholder").Value" id="text @elm.Attribute("id").Value" name="text @elm.Attribute("id").Value" onfocus="getElementById('radio @elm.Attribute("id").Value').checked = true" />
-                                    </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon">
+                                        <input id="radio @elm.Attribute("id").Value" type="radio" name="radios" value="@elm.Attribute("id").Value" />
+                                    </span>
+                                    <input type="@elm.Attribute("type").Value" class="form-control" placeholder="@elm.Attribute("placeholder").Value" id="text @elm.Attribute("id").Value" name="text @elm.Attribute("id").Value" onfocus="getElementById('radio @elm.Attribute("id").Value').checked = true" />
                                 </div>
                             </div>
-                        }
+                        </div>
                     }
-                    <!--
+                }
+                <!--
                  <div class="col-sm-3">
                      <div class="form-group">
                          <div class="input-group">
@@ -73,12 +73,11 @@
                      </div>
                  </div>
                  -->
-                    <div class="col-sm-3">
-                        <button class="btn btn-success btn-circle" type="submit"><i class="fa fa-search"></i></button>
-                    </div>
+                <div class="col-sm-3">
+                    <button class="btn btn-success btn-circle" type="submit"><i class="fa fa-search"></i></button>
                 </div>
             </div>
         </div>
-
+    </div>
 }
 
