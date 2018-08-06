@@ -5,8 +5,8 @@
     var grid = Html.DevExpress().GridView(st =>
     {
 
-        st.Name = "gvSearch";
-        st.CallbackRouteValues = new { Controller = "Search", Action = "GridViewSearch", server = ViewData["server"].ToString(), value = ViewData["value"].ToString(), viewName = ViewData["viewName"].ToString(), moduleId = ViewData["moduleId"].ToString() };
+        st.Name = "gvSearchDetail";
+        st.CallbackRouteValues = new { Controller = "Search", Action = "GridViewSearchDetail", server = ViewData["server"].ToString(), value = ViewData["value"].ToString(), viewName = ViewData["viewName"].ToString(), moduleId = ViewData["moduleId"].ToString() };
 
         st.Width = System.Web.UI.WebControls.Unit.Percentage(100);
 
@@ -24,7 +24,7 @@
 
         //st.SettingsEditing.AddNewRowRouteValues = new { Controller = "Home", Action = "GridViewPartialAddNew" };
         //st.SettingsEditing.DeleteRowRouteValues = new { Controller = "Home", Action = "GridViewPartialDelete" };
-        st.SettingsEditing.UpdateRowRouteValues = new { Controller = "Search", Action = "GridViewPartialUpdate", server = ViewData["server"].ToString(), value = ViewData["value"].ToString(), viewName = ViewData["viewName"].ToString(), moduleId = ViewData["moduleId"].ToString(), viewNameRen = "_GridViewSearch" };
+        st.SettingsEditing.UpdateRowRouteValues = new { Controller = "Search", Action = "GridViewPartialUpdate", server = ViewData["server"].ToString(), value = ViewData["value"].ToString(), viewName = ViewData["viewName"].ToString(), moduleId = ViewData["moduleId"].ToString(), viewNameRen = "_GridViewSearchDetail" };
         //st.SettingsEditing.UpdateRowRouteValues = new { Controller = "Search", Action = "InlineEditingUpdatePartial" };
         st.SettingsEditing.Mode = GridViewEditingMode.Inline;
 
@@ -34,12 +34,13 @@
 
         //st.SettingsBehavior.ConfirmDelete = true;
         st.SettingsBehavior.AllowSelectByRowClick = true;
+        st.SettingsBehavior.AllowSelectSingleRowOnly = true;
 
         st.CommandColumn.Visible = true;
         st.CommandColumn.ShowEditButton = true;
         //st.CommandColumn.ShowNewButton = true;
         //st.CommandColumn.ShowDeleteButton = false;
-        //st.CommandColumn.ShowSelectCheckbox = true;
+        st.CommandColumn.ShowSelectCheckbox = true;
 
         //st.ClientSideEvents.RowClick = "function(s, e) { s.StartEditRow(e.visibleIndex); }";
         /*
@@ -60,6 +61,8 @@
         st.SettingsAdaptivity.AdaptiveDetailColumnCount = 1;
         st.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = false;
         st.SettingsAdaptivity.HideDataCellsAtWindowInnerWidth = 0;
+
+        st.TotalSummary.Add(DevExpress.Data.SummaryItemType.Sum, "quantity_on_hand");
 
         foreach (System.Data.DataColumn dc in Model.Columns)
         {
@@ -127,59 +130,7 @@
 
             }
         }
-
-        st.SettingsDetail.AllowOnlyOneMasterRowExpanded = true;
-        st.SettingsDetail.ShowDetailRow = true;
-        st.SetDetailRowTemplateContent(c =>
-        {
-            Html.RenderAction("GridViewSearchDetail", new { server = ViewData["server"].ToString(), value = DataBinder.Eval(c.DataItem, "inventory_number_part1"), viewName = "intrid", moduleId = ViewData["moduleId"].ToString() });
-        });
-        /*
-        st.Columns.Add(column =>
-        {
-            column.Caption = "View";
-            column.SetDataItemTemplateContent(container =>
-            {
-                var categoryID = (string)DataBinder.Eval(container.DataItem, "inventory_number_part1");
-                Html.DevExpress().HyperLink(hyperlink =>
-                {
-                    hyperlink.Name = "hl" + container.VisibleIndex;
-                    hyperlink.Properties.Text = categoryID;
-                    hyperlink.NavigateUrl = DevExpressHelper.GetUrl(new { Controller = "Search", Action = "Index2",
-                        crop = ViewData["crop"].ToString(),
-                        value = categoryID,
-                        viewName = "03"});
-                }).Render();
-            });
-        });
-        */
-
-        /*
-                st.Columns.Add(column =>
-                {
-                    // "FieldName" contains a unique value that does not refer to any field in the GridView's data model.
-                    column.FieldName = "StorageLocation";
-                    // The column contains string values.
-                    column.UnboundType = DevExpress.Data.UnboundColumnType.String;
-                    var prty = column.PropertiesEdit as TextBoxProperties;
-                    prty.MaskSettings.Mask = "CC##CC##C##-###";
-                });*/
-        /*
-        // A delegate method that allows you to generate data for an unbound column.
-        st.CustomUnboundColumnData = (s, e) =>
-        {
-            if (e.Column.FieldName == "storage_location")
-            {
-                string storagelocation1 = (e.GetListSourceFieldValue("storage_location_part1")) != null ? (e.GetListSourceFieldValue("storage_location_part1")).ToString() : "";//(e.GetListSourceFieldValue("storage_location_part1")).ToString();
-                string storagelocation2 = (e.GetListSourceFieldValue("storage_location_part2")) != null ? "-" + (e.GetListSourceFieldValue("storage_location_part2")).ToString() : "";//(e.GetListSourceFieldValue("storage_location_part2")).ToString();
-                string storagelocation3 = (e.GetListSourceFieldValue("storage_location_part3")) != null ? "-" + (e.GetListSourceFieldValue("storage_location_part3")).ToString() : "";//(e.GetListSourceFieldValue("storage_location_part3")).ToString();
-                string storagelocation4 = (e.GetListSourceFieldValue("storage_location_part4")) != null ? "-" + (e.GetListSourceFieldValue("storage_location_part4")).ToString() : "";//(e.GetListSourceFieldValue("storage_location_part4")).ToString();
-
-                e.Value = storagelocation1 + storagelocation2 + storagelocation3 + storagelocation4;
-            };
-        };
-*/
-
+        
 
         st.Styles.Cell.Wrap = DefaultBoolean.False;
         st.HtmlRowPrepared = (s, e) =>

@@ -1,0 +1,52 @@
+﻿@using GrinGlobal.Zone.Helpers
+
+<!-- Navigation -->
+<aside id="menu">
+    <div id="navigation">
+        <div class="profile-picture">
+            <a href="~/">
+                <img src="~/images/profile.png" class="img-circle m-b" alt="logo">
+            </a>
+
+            <div class="stats-label text-color">
+                <span class="font-extra-bold font-uppercase">@Html.Encode(User.Identity.Name)</span>
+
+                <div class="dropdown">
+                    <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+                        <small class="text-muted">Options <b class="caret"></b></small>
+                    </a>
+                    <ul class="dropdown-menu animated flipInX m-t-xs">
+                        <li><a href="">Profile</a></li>
+                        <li><a href="">Contacts</a></li>
+                        <li><a href="http://servicedesk.cimmyt.org/otrs/customer.pl" target="_blank">Service Desk</a></li>
+                        <li class="divider"></li>
+                        <li>@Html.Partial("_LogOnPartialView")</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <ul class="nav" id="side-menu">
+            <li class="active">
+                <a href="~/"> <span class="nav-label">Modules</span><span class="label label-success pull-right">v.1</span></a>
+            </li>
+            @foreach (var elm in Settings.Server(Session["server"].ToString()).Elements("modules"))
+            {
+                <li>
+                    <a href="@Url.Action(elm.Attribute("action").Value, elm.Attribute("controller").Value, new { moduleId = elm.Attribute("id").Value })"> <span class="nav-label">@elm.Attribute("title").Value</span></a>
+                </li>
+            }
+            <!--
+            <li>
+                <a href="#"><span class="nav-label">Client</span><span class="fa arrow"></span> </a>
+                <ul class="nav nav-second-level">
+                    <li><a href="typography.html">Get Accession</a></li>
+                    <li><a href="buttons.html">Get Inventory</a></li>
+                    <li><a href="components.html">Get Order Request Item</a></li>
+                    <li><a href="">Get Accession Passport Data</a></li>
+                </ul>
+            </li>
+                -->
+        </ul>
+    </div>
+</aside>

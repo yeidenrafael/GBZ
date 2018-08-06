@@ -147,28 +147,33 @@ namespace GrinGlobal.Zone.Classes
 
             DataTable model = oldds.Tables[dataviewName];
 
-            DataRow[] dr = model.Select("inventory_id = " + EditorExtension.GetValue<object>("inventory_id").ToString().Replace("\"", ""));
+            var primaryKey = model.PrimaryKey[0].ColumnName;
+
+            DataRow[] dr = model.Select(primaryKey + " = " + GridViewExtension.GetEditValue<dynamic>(primaryKey));// EditorExtension.GetValue<object>(primaryKey).ToString().Replace("\"", ""));
 
             foreach (DataColumn col in model.Columns)
             {
                 if (!col.ReadOnly)
                 {
-                    string val = EditorExtension.GetValue<object>(col.ColumnName) as String;
+                    //dr[0][col.ColumnName] = GridViewExtension.GetEditValue<dynamic>(col.ColumnName);
+                    
+                    var val = GridViewExtension.GetEditValue<dynamic>(col.ColumnName);
 
                     if (val != null)
                     {
-                        val = val.Replace("\"", "");
                         dr[0][col.ColumnName] = val;
                     }
+                    
                 }
             }
 
             //parsing storage location
-            string val2 = EditorExtension.GetValue<object>("storage_location") as String;
+            string val2 = GridViewExtension.GetEditValue<dynamic>("storage_location");
+            //string val2 = EditorExtension.GetValue<object>("storage_location") as String;
 
             if (val2 != null)
             {
-                val2 = val2.Replace("\"", "");
+                //val2 = val2.Replace("\"", "");
 
                 var arrValue2 = val2.Split(new char[] { '-' });
 
@@ -216,7 +221,7 @@ namespace GrinGlobal.Zone.Classes
 
         public BrapiResponseBrGermplasmV2TO GetGermplasmDetails(string cropId, int germplasmDbId)
         {
-            XElement service = Settings.CropInfo(cropId);
+            XElement service = Settings.Server(cropId);
 
             //extract settings from Setting.xml
             string crop = service.Attribute("name").Value.ToString();

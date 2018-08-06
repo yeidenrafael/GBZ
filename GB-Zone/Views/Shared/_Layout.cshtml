@@ -14,7 +14,17 @@
     @System.Web.Optimization.Styles.Render("~/Content/css")
     @System.Web.Optimization.Styles.Render("~/Vendor/css")
 
+    <!-- Vendor styles -->
+    <link rel="stylesheet" href="~/Vendor/fontawesome/css/font-awesome.css" />
     <link rel="stylesheet" href="~/Vendor/pe-icon-7-stroke/css/pe-icon-7-stroke.css" />
+    <link rel="stylesheet" href="~/Vendor/pe-icon-7-stroke/css/helper.css">
+
+    @Scripts.Render("~/bundles/jquery/js")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/bootstrap/js")
+    @Scripts.Render("~/bundles/homer/js")
+    @Scripts.Render("~/bundles/GBZone/js")
+    @Scripts.Render("~/bundles/jqueryMask/js")
 
 
     @Html.DevExpress().GetStyleSheets(
@@ -27,16 +37,6 @@
             new StyleSheet { ExtensionSuite = ExtensionSuite.GridView }
         )
 
-    @Scripts.Render("~/bundles/jquery/js")
-    @Scripts.Render("~/bundles/jqueryval")
-
-
-    @Scripts.Render("~/bundles/bootstrap/js")
-    @Scripts.Render("~/bundles/homer/js")
-    @Scripts.Render("~/bundles/GBZone/js")
-    @Scripts.Render("~/bundles/jqueryMask/js")
-
-
     @Html.DevExpress().GetScripts(
             new Script { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
             new Script { ExtensionSuite = ExtensionSuite.CardView },
@@ -48,20 +48,18 @@
         )
 
 
-
-
     <!-- Add local styles, mostly for plugins css file -->
     @if (IsSectionDefined("Styles"))
-        {@RenderSection("Styles", required: false)}
+    {@RenderSection("Styles", required: false)}
 
 
     @RenderSection("scriptsHeader", required: false)
     @functions {
 
-            public int PopupShowDelay
-            {
-                get { return 60000 * (Session.Timeout - 1); }
-            }
+        public int PopupShowDelay
+        {
+            get { return 60000 * (Session.Timeout - 1); }
+        }
 
     }
 
@@ -117,7 +115,7 @@
     </script>
 </head>
 
-<body class="landing-page">
+<body class="fixed-navbar fixed-sidebar">
 
     <!-- Simple splash screen-->
     <div class="splash">
@@ -134,24 +132,26 @@
             </div>
         </div>
     </div>
-
     <!--[if lt IE 7]>
     <p class="alert alert-danger">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
+
     <!-- Header -->
-    <div>
-        @Html.Partial("_Header")
-    </div>
+    @Html.Partial("_Header")
+
+    <!-- Navigation -->
+    @Html.Partial("_Navigation")
 
 
-
-    <!-- Main view  -->
-
-    <section id="features2" class="bg-light">
-        <div class="container-fluid">
+    <!-- Main Wrapper -->
+    <div id="wrapper">
+        <div class="content animate-panel">
             @RenderBody()
         </div>
-    </section>
+
+        <!-- Footer -->
+        @Html.Partial("_Footer")
+    </div>
 
 
 
