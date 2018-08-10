@@ -139,6 +139,32 @@ namespace GrinGlobal.Zone.Controllers
 
         }
 
+        [HttpPost, ValidateInput(false)]
+        public ActionResult GridViewPartialUpdateInv(string server, string value, string viewName, string moduleId, string viewNameRen, string newInventory)
+        {
+            DataViewsSearch search = new DataViewsSearch();
+
+            ViewData["server"] = server;
+            ViewData["moduleId"] = moduleId;
+            ViewData["viewName"] = viewName;
+            ViewData["value"] = value;
+
+            try
+            {
+                //throw new NotImplementedException();
+                search.UpdateInventorySource(value, server, viewName, moduleId, newInventory);
+            }
+            catch (Exception e)
+            {
+                Guid d = Guid.NewGuid();
+                log.Fatal(Guid.NewGuid(), e);
+
+                ViewData["EditError"] = String.Format(e.Message); //"Something were wrong!!\nPlease contact your system administrator." +
+            }
+
+            return PartialView(viewNameRen, search.GetData(value, server, viewName, moduleId));
+        }
+
         /*
         [HttpPost, ValidateInput(false)]
         public ActionResult GridViewSearchUpdate(MVCxGridViewBatchUpdateValues<object, object> values, string crop, string value, string viewName, string moduleId)

@@ -128,12 +128,21 @@
             }
         }
 
-        st.SettingsDetail.AllowOnlyOneMasterRowExpanded = true;
-        st.SettingsDetail.ShowDetailRow = true;
-        st.SetDetailRowTemplateContent(c =>
+        if (Model.ExtendedProperties["masterDetail"]!= null)
         {
-            Html.RenderAction("GridViewSearchDetail", new { server = ViewData["server"].ToString(), value = DataBinder.Eval(c.DataItem, "inventory_number_part1"), viewName = "intrid", moduleId = ViewData["moduleId"].ToString() });
-        });
+            string actionName = Model.ExtendedProperties["actionName"];
+            string colreference = Model.ExtendedProperties["colreference"];
+            string viewreference = Model.ExtendedProperties["viewreference"];
+
+            st.SettingsDetail.AllowOnlyOneMasterRowExpanded = true;
+            st.SettingsDetail.ShowDetailRow = true;
+            st.SetDetailRowTemplateContent(c =>
+            {
+                //Html.RenderAction("GridViewSearchDetail", new { server = ViewData["server"].ToString(), value = DataBinder.Eval(c.DataItem, "inventory_number_part1"), viewName = "intrid", moduleId = ViewData["moduleId"].ToString() });
+                Html.RenderAction(actionName, new { server = ViewData["server"].ToString(), value = DataBinder.Eval(c.DataItem, colreference), viewName = viewreference, moduleId = ViewData["moduleId"].ToString() });
+            });
+        }
+
         /*
         st.Columns.Add(column =>
         {

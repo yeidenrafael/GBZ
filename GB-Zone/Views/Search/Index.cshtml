@@ -1,7 +1,7 @@
 ﻿@model System.Data.DataTable
 
 @{
-    ViewBag.ViewTitle = "";
+    ViewBag.ViewTitle = "| " + ViewData["moduleId"];
 }
 
 
@@ -15,8 +15,31 @@
             PopupControl.SetContentUrl(url);
             PopupControl.Show();
         }
-    </script>
+        function CustomButtonClick(s, e, acurl) {
+            var key = s.GetRowKey(e.visibleIndex);
+            //alert("Inventory Id " + key);
 
+            if (e.buttonID === "btnGetKey") {
+                //var destUrl = url + "/" + key;
+                //alert("Destination Url is: " + destUrl);
+
+                //window.location.href = destUrl;
+
+                $.ajax({
+                    type: "POST",
+                    url: acurl,
+                    data: { newInventory: key },
+                    success: function (response) {
+                        $("#container").html(response);
+                        //alert("Inventory source changed");
+                    }
+                });
+                gvSearch.Refresh();
+                //ASPx.GVHideDetailRow('gvSearch', e.visibleIndex, event);
+                //event.cancelBubble = true;
+            }
+        }
+    </script>
 }
 
 @Html.Partial("_SearchFields")
