@@ -1030,9 +1030,12 @@
     <Content Include="Views\Shared\_TimeoutPartial.cshtml" />
     <Content Include="Views\Shared\_LogOnPartialView.cshtml" />
     <Content Include="Views\Search\_LoadOnDemand.cshtml" />
+    <Content Include="Views\Search\_GridViewSearchDetail.cshtml" />
+    <Content Include="Views\Shared\_Navigation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="images\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">

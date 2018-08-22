@@ -1,27 +1,48 @@
-﻿<div class="color-line">
-</div>
-<nav class="navbar navbar-default navbar-fixed-top">
-    <div class="container">
-        <div class="navbar-header">
-            <button aria-controls="navbar" aria-expanded="false" data-target="#navbar" data-toggle="collapse" class="navbar-toggle collapsed" type="button">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
+﻿<!-- Header -->
+<div id="header">
+    <div class="color-line">
+    </div>
+    <div id="logo" class="light-version">
+        <span>
+            GB-Zone
+        </span>
+    </div>
+    <nav role="navigation">
+        <div class="header-link hide-menu"><i class="fa fa-bars"></i></div>
+        <div class="small-logo">
+            <span class="text-primary">GB-Zone</span>
+        </div>
+        <div class="mobile-menu">
+            <button type="button" class="navbar-toggle mobile-menu-toggle" data-toggle="collapse" data-target="#mobile-collapse">
+                <i class="fa fa-chevron-down"></i>
             </button>
-            
-            <div id="logo" class="light-version small-logo">
-                <img src="~/Content/img/Cimmyt.png" class="top" />
+            <div class="collapse mobile-navbar" id="mobile-collapse">
+                <ul class="nav navbar-nav">
+                    <li><a class="" href="~/">Modules</a></li>
+                    <li><a class="" href="http://servicedesk.cimmyt.org/otrs/customer.pl" target="_blank">Support</a></li>
+                    <li>@Html.Partial("_LogOnPartialView")</li>
+                </ul>
             </div>
         </div>
-        
-        <div id="navbar" class="navbar-collapse collapse">
-            <ul class="nav navbar-nav navbar-right">
-                <li class="active"><a class="page-scroll" href="~/">Modules</a></li>
-                <!--<li><a class="page-scroll" page-scroll href="#features">Settings</a></li>-->
-                <li><a class="page-scroll" page-scroll href="http://servicedesk.cimmyt.org/otrs/customer.pl" target="_blank">Support</a></li>
-                <li>@Html.Partial("_LogOnPartialView")</li>
+
+        <div class="navbar-right">
+            <ul class="nav navbar-nav no-borders">
+                <li>
+                    <a href="~/">
+                        <i class="pe-7s-keypad"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="http://servicedesk.cimmyt.org/otrs/customer.pl" target="_blank">
+                        <i class="pe-7s-comment"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="@Url.Action("Logout","Account")">
+                        <i class="pe-7s-upload pe-rotate-90"></i>
+                    </a>
+                </li>
             </ul>
         </div>
-    </div>
-</nav>
+    </nav>
+</div>

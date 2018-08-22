@@ -1,52 +1,56 @@
 ﻿@model System.Data.DataTable
 
-<div class="hpanel collapsed">
-    <div class="panel-heading hbuilt">
-        <div class="panel-tools">
-            <a class="showhide"><i class="fa fa-chevron-up"></i></a>
-        </div>
-        @Model.ExtendedProperties["title"].ToString()
-    </div>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="hpanel">
+            <div class="panel-heading hbuilt">
+                <div class="panel-tools">
+                    <a class="showhide"><i class="fa fa-chevron-up"></i></a>
+                </div>
+                @Model.ExtendedProperties["title"].ToString()
+            </div>
 
-    <div class="panel-body">
-        <div class="row">
+            <div class="panel-body">
+                <div class="row">
 
-            @foreach (System.Data.DataColumn col in Model.Columns)
-            {
-                if (col.ColumnMapping != System.Data.MappingType.Hidden && col.ExtendedProperties["is_header"] != null)
-                {
-                    if (col.ExtendedProperties["is_header"].Equals(true))
+                    @foreach (System.Data.DataColumn col in Model.Columns)
                     {
-                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-                            <span class="font-extra-bold">@col.Caption: </span>
-                            @if (Model.Rows.Count > 0)
+                        if (col.ColumnMapping != System.Data.MappingType.Hidden && col.ExtendedProperties["is_header"] != null)
+                        {
+                            if (col.ExtendedProperties["is_header"].Equals(true))
                             {
-                                /*
-                                if (col.ColumnName == "gid")
-                                {
-
-                                    Html.DevExpress().HyperLink(hlSettings =>
+                                <div class="col-sm-3">
+                                    <span class="font-extra-bold">@col.Caption: </span>
+                                    @if (Model.Rows.Count > 0)
                                     {
-                                        hlSettings.Name = "gid";
-                                        hlSettings.NavigateUrl = "javascript:void(0)";
-                                        hlSettings.Properties.ClientSideEvents.Click = string.Format("function(s, e) {{ ShowDetailPopup('{0}'); }}", Url.Action("GetGermplasmDetails", "Search", new { crop = ViewData["crop"].ToString(), germplasmDbId = @Model.Rows[0][col].ToString().Trim() }));
-                                        hlSettings.Properties.Text = @Model.Rows[0][col].ToString().Trim();
-                                    }).Render();
-                                }
-                                else
-                                {
-                                    @Model.Rows[0][col].ToString().Trim()
-                                }
-                                */
-                                @Model.Rows[0][col].ToString().Trim()
+                                        /*
+                                        if (col.ColumnName == "gid")
+                                        {
+
+                                            Html.DevExpress().HyperLink(hlSettings =>
+                                            {
+                                                hlSettings.Name = "gid";
+                                                hlSettings.NavigateUrl = "javascript:void(0)";
+                                                hlSettings.Properties.ClientSideEvents.Click = string.Format("function(s, e) {{ ShowDetailPopup('{0}'); }}", Url.Action("GetGermplasmDetails", "Search", new { crop = ViewData["crop"].ToString(), germplasmDbId = @Model.Rows[0][col].ToString().Trim() }));
+                                                hlSettings.Properties.Text = @Model.Rows[0][col].ToString().Trim();
+                                            }).Render();
+                                        }
+                                        else
+                                        {
+                                            @Model.Rows[0][col].ToString().Trim()
+                                        }
+                                        */
+                                        @Model.Rows[0][col].ToString().Trim()
+                                    }
+                                </div>
                             }
-                        </div>
+                        }
                     }
-                }
-            }
-            <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-                <span class="font-extra-bold">Total numbre of records: </span>
-                @Model.Rows.Count
+                    <div class="col-sm-3">
+                        <span class="font-extra-bold">Total numbre of records: </span>
+                        @Model.Rows.Count
+                    </div>
+                </div>
             </div>
         </div>
     </div>
