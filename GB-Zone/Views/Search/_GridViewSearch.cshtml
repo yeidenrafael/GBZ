@@ -114,7 +114,13 @@
                         var spinEditProps = col.PropertiesEdit as SpinEditProperties;
                         if (spinEditProps != null) spinEditProps.SpinButtons.ShowIncrementButtons = false;
                     }
-
+                    if (col.FieldName == "quantity_shipped")
+                    {
+                        col.Settings.FilterMode = ColumnFilterMode.DisplayText;
+                        col.ColumnType = MVCxGridViewColumnType.SpinEdit;
+                        var spinEditProps = col.PropertiesEdit as SpinEditProperties;
+                        if (spinEditProps != null) spinEditProps.SpinButtons.ShowIncrementButtons = false;
+                    }
                     if (col.FieldName == "storage_location")
                     {
                         var prty = col.PropertiesEdit as TextBoxProperties;

@@ -51,13 +51,13 @@
 }
 <div class="row">
     <div class="col-lg-12">
-        <div class="hpanel">
+        
             @if (ViewData["viewName"] != null)
             {
                 //Html.RenderPartial("_HeaderGridView");
                 Html.RenderPartial("_GridViewSearch", Model, new ViewDataDictionary { { "viewName", ViewData["viewName"] }, { "value", ViewData["value"] }, { "server", ViewData["server"] }, { "moduleId", ViewData["moduleId"] } });
             }
-        </div>
+        
     </div>
 </div>
 

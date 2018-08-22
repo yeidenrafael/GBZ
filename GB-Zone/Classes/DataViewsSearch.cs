@@ -40,9 +40,9 @@ namespace GrinGlobal.Zone.Classes
             //extract settings from Setting.xml
             string urlService = service.Parent.Parent.Parent.Attribute("url").Value.ToString();
             string dataviewName = service.Element("actions").Element("parameters").Element("dataviewName").Value;
-            Boolean suppressExceptions = bool.Parse(service.Element("actions").Element("parameters").Element("suppressExceptions").Value);
-            Int32 offset = int.Parse(service.Element("actions").Element("parameters").Element("offset").Value);
-            Int32 limit = int.Parse(service.Element("actions").Element("parameters").Element("limit").Value);
+            bool suppressExceptions = bool.Parse(service.Element("actions").Element("parameters").Element("suppressExceptions").Value);
+            int offset = int.Parse(service.Element("actions").Element("parameters").Element("offset").Value);
+            int limit = int.Parse(service.Element("actions").Element("parameters").Element("limit").Value);
             string options = service.Element("actions").Element("parameters").Element("options").Value;
 
             //put the value in the delimitedParameterList
@@ -131,9 +131,9 @@ namespace GrinGlobal.Zone.Classes
             //extract settings from Setting.xml
             string urlService = service.Parent.Parent.Parent.Attribute("url").Value.ToString();
             string dataviewName = service.Element("actions").Element("parameters").Element("dataviewName").Value;
-            Boolean suppressExceptions = bool.Parse(service.Element("actions").Element("parameters").Element("suppressExceptions").Value);
-            Int32 offset = int.Parse(service.Element("actions").Element("parameters").Element("offset").Value);
-            Int32 limit = int.Parse(service.Element("actions").Element("parameters").Element("limit").Value);
+            bool suppressExceptions = bool.Parse(service.Element("actions").Element("parameters").Element("suppressExceptions").Value);
+            int offset = int.Parse(service.Element("actions").Element("parameters").Element("offset").Value);
+            int limit = int.Parse(service.Element("actions").Element("parameters").Element("limit").Value);
             string options = service.Element("actions").Element("parameters").Element("options").Value;
 
             //put the value in the delimitedParameterList
@@ -231,10 +231,10 @@ namespace GrinGlobal.Zone.Classes
         internal void UpdateInventorySource(string value, string server, string viewName, string moduleId, string inventoryId)
         {
             string urlService = "http://itu-dev-srv:81/gringlobal/gui.asmx";//service.Parent.Parent.Parent.Attribute("url").Value.ToString();
-            string dataviewName = "gbz_get_order_request_item_v2";// service.Element("actions").Element("parameters").Element("dataviewName").Value;
-            Boolean suppressExceptions = false;// bool.Parse(service.Element("actions").Element("parameters").Element("suppressExceptions").Value);
-            Int32 offset = 0;// int.Parse(service.Element("actions").Element("parameters").Element("offset").Value);
-            Int32 limit = 0;// int.Parse(service.Element("actions").Element("parameters").Element("limit").Value);
+            string dataviewName = "gbz_get_order_request_item";// service.Element("actions").Element("parameters").Element("dataviewName").Value;
+            bool suppressExceptions = false;// bool.Parse(service.Element("actions").Element("parameters").Element("suppressExceptions").Value);
+            int offset = 0;// int.Parse(service.Element("actions").Element("parameters").Element("offset").Value);
+            int limit = 0;// int.Parse(service.Element("actions").Element("parameters").Element("limit").Value);
             string options = "1";// service.Element("actions").Element("parameters").Element("options").Value;
             string delimitedParams = ":orderrequestid=;:orderrequestitemid=" + value;// service.Element("actions").Element("parameters").Element("delimitedParameterList").Value;
 
