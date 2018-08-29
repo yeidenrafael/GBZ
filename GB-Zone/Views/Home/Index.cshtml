@@ -6,7 +6,7 @@
 <div class="row">
     <div class="col-lg-12 text-center m-t-md">
         <h2>
-            Welcome to <span class="text-info">GB-Zone</span>
+            Welcome to <span class="text-success">GB-Zone</span>
         </h2>
 
         <p>
@@ -19,13 +19,15 @@
     @foreach (var elm in Settings.Server(Session["server"].ToString()).Elements("modules"))
     {
         <div class="col-lg-4">
-            <div class="hpanel hblue">
+            <div class="hpanel hgreen">
+                <div class="panel-heading">                   
+                </div>
                 <div class="panel-body h-200">
                     <div class="stats-icon pull-right">
-                        <i class="@elm.Attribute("icon").Value fa-4x text-info"></i>
+                        <i class="@elm.Attribute("icon").Value fa-4x text-success"></i>
                     </div>
                     <div class="m-t-xl">
-                        <h1 class="text-success"><a href="@Url.Action(elm.Attribute("action").Value, elm.Attribute("controller").Value, new { moduleId = elm.Attribute("id").Value })">@elm.Attribute("title").Value</a></h1>
+                        <a href="@Url.Action(elm.Attribute("action").Value, elm.Attribute("controller").Value, new { moduleId = elm.Attribute("id").Value })" class="text-success fa-3x">@elm.Attribute("title").Value</a>
                         <p>@elm.Attribute("description").Value</p>
                     </div>
                 </div>
