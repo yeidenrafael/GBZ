@@ -6,7 +6,7 @@
     {
 
         st.Name = "gvSearch";
-        st.CallbackRouteValues = new { Controller = "Search", Action = "GridViewSearch", server = ViewData["server"].ToString(), value = ViewData["value"].ToString(), viewName = ViewData["viewName"].ToString(), moduleId = ViewData["moduleId"].ToString() };
+        st.CallbackRouteValues = new { Controller = "Search", Action = "GridView", serverId = ViewData["server"].ToString(), moduleId = ViewData["moduleId"].ToString(), formId = ViewData["formId"].ToString(), fieldId = ViewData["viewName"].ToString(), value = ViewData["value"].ToString(), viewName = "_GridViewSearch" };
 
         st.Width = System.Web.UI.WebControls.Unit.Percentage(100);
 
@@ -24,7 +24,7 @@
 
         //st.SettingsEditing.AddNewRowRouteValues = new { Controller = "Home", Action = "GridViewPartialAddNew" };
         //st.SettingsEditing.DeleteRowRouteValues = new { Controller = "Home", Action = "GridViewPartialDelete" };
-        st.SettingsEditing.UpdateRowRouteValues = new { Controller = "Search", Action = "GridViewPartialUpdate", server = ViewData["server"].ToString(), value = ViewData["value"].ToString(), viewName = ViewData["viewName"].ToString(), moduleId = ViewData["moduleId"].ToString(), viewNameRen = "_GridViewSearch" };
+        st.SettingsEditing.UpdateRowRouteValues = new { Controller = "Search", Action = "GridViewPartialUpdate", serverId = ViewData["server"].ToString(), moduleId = ViewData["moduleId"].ToString(), formId = ViewData["formId"].ToString(), fieldId = ViewData["viewName"].ToString(), value = ViewData["value"].ToString(), viewName = "_GridViewSearch" };
         //st.SettingsEditing.UpdateRowRouteValues = new { Controller = "Search", Action = "InlineEditingUpdatePartial" };
         st.SettingsEditing.Mode = GridViewEditingMode.Inline;
 
@@ -83,13 +83,13 @@
                     }
 
                     //create a link column
-                    if (dc.ExtendedProperties["view_reference"] != null)
+                    if (dc.ExtendedProperties["moduleRef"] != null)
 
                     {
                         col.SetDataItemTemplateContent(container =>
                         {
                             //var categoryID = (string)DataBinder.Eval(container.DataItem, dc.ExtendedProperties["col_reference"].ToString());
-                            var categoryID = Convert.ToString(DataBinder.Eval(container.DataItem, dc.ExtendedProperties["col_reference"].ToString()));
+                            var value = Convert.ToString(DataBinder.Eval(container.DataItem, dc.ExtendedProperties["colRef"].ToString()));
                             Html.DevExpress().HyperLink(hyperlink =>
                             {
                                 //hyperlink.Name = "hl" + container.VisibleIndex;
@@ -98,10 +98,11 @@
                                 {
                                     Controller = "Search",
                                     Action = "Index2",
-                                    server = ViewData["server"].ToString(),
-                                    value = categoryID,
-                                    viewName = dc.ExtendedProperties["view_reference"],
-                                    moduleId = ViewData["moduleId"].ToString()
+                                    serverId = ViewData["server"].ToString(),
+                                    moduleId = dc.ExtendedProperties["moduleRef"],//ViewData["moduleId"].ToString(),
+                                    formId = dc.ExtendedProperties["formRef"],//ViewData["formId"].ToString(),
+                                    fieldId = dc.ExtendedProperties["fieldRef"],//dc.ExtendedProperties["view_reference"],
+                                    value = value
                                 });
                             }).Render();
                         });
@@ -136,16 +137,19 @@
 
         if (Model.ExtendedProperties["masterDetail"]!= null)
         {
-            string actionName = Model.ExtendedProperties["actionName"];
-            string colreference = Model.ExtendedProperties["colreference"];
-            string viewreference = Model.ExtendedProperties["viewreference"];
+            string actionName = "GridView";//Model.ExtendedProperties["actionName"];
+            string moduleRef = Model.ExtendedProperties["moduleRef"];
+            string formRef = Model.ExtendedProperties["formRef"];
+            string fieldRef = Model.ExtendedProperties["fieldRef"];
+            string colRef = Model.ExtendedProperties["colRef"];
 
             st.SettingsDetail.AllowOnlyOneMasterRowExpanded = true;
             st.SettingsDetail.ShowDetailRow = true;
             st.SetDetailRowTemplateContent(c =>
             {
                 //Html.RenderAction("GridViewSearchDetail", new { server = ViewData["server"].ToString(), value = DataBinder.Eval(c.DataItem, "inventory_number_part1"), viewName = "intrid", moduleId = ViewData["moduleId"].ToString() });
-                Html.RenderAction(actionName, new { server = ViewData["server"].ToString(), value = DataBinder.Eval(c.DataItem, colreference), viewName = viewreference, moduleId = ViewData["moduleId"].ToString() });
+                //Html.RenderAction(actionName, new { serverId = ViewData["server"].ToString(), moduleId = ViewData["moduleId"].ToString(), formId = ViewData["formId"].ToString(), fieldId = fieldRef, value = DataBinder.Eval(c.DataItem, colRef), viewName = "_GridViewSearchDetail" });
+                Html.RenderAction(actionName, new { serverId = ViewData["server"].ToString(), moduleId = moduleRef, formId = formRef, fieldId = fieldRef, value = DataBinder.Eval(c.DataItem, colRef), viewName = "_GridViewSearchDetail" });
             });
         }
 
@@ -223,11 +227,7 @@
                             e.Row.BackColor = System.Drawing.ColorTranslator.FromHtml(HexColor[1].ToString());
                         }
                     }
-
                 }
-
-
-
                 //#e74c3c danger
             }
 

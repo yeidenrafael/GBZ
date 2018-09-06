@@ -9,9 +9,10 @@ namespace GrinGlobal.Zone.Controllers
 
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(SearchController));
         // GET: Search
-        public ActionResult Index(string moduleId)
+        public ActionResult Index(string moduleId, string formId)
         {
             ViewData["moduleId"] = moduleId;
+            ViewData["formId"] = formId;
 
             return View();
         }
@@ -21,171 +22,122 @@ namespace GrinGlobal.Zone.Controllers
         {
             DataViewsSearch search = new DataViewsSearch();
 
-            string server = Session["server"].ToString();
-            string moduleId = formdata["moduleId"];// "Module1";
-            string viewName = formdata["radios"];
-            string value = formdata[String.Format("text {0}", viewName)];
+            string serverId = Session["server"].ToString();
+            string moduleId = formdata["moduleId"];
+            string formId = formdata["formId"];
+            string fieldId = formdata["radios"];
+            string value = formdata[String.Format("text {0}", fieldId)];
             
-            ViewData["server"] = server;
+            ViewData["server"] = serverId;
             ViewData["moduleId"] = moduleId;
-            ViewData["viewName"] = viewName;
+            ViewData["formId"] = formId;
+            ViewData["viewName"] = fieldId;
             ViewData["value"] = value;
             
-            return View(search.GetData(value, server, viewName, moduleId));
+            return View(search.GetData(serverId, moduleId, formId, fieldId, value));
         }
 
-        public ActionResult Index2(string server, string value, string viewName, string moduleId)
+        public ActionResult Index2(string serverId, string moduleId, string formId, string fieldId, string value)
         {
             DataViewsSearch search = new DataViewsSearch();
 
-            ViewData["server"] = server;
+            ViewData["server"] = serverId;
             ViewData["moduleId"] = moduleId;
-            ViewData["viewName"] = viewName;
+            ViewData["formId"] = formId;
+            ViewData["viewName"] = fieldId;
             ViewData["value"] = value;
 
-            return View("Index", search.GetData(value, server, viewName, moduleId));
+            return View("Index", search.GetData(serverId, moduleId, formId, fieldId, value));
         }
 
-        public ActionResult GridViewSearch(string server, string value, string viewName, string moduleId)
+        public ActionResult GridView(string serverId, string moduleId, string formId, string fieldId, string value, string viewName)
         {
             DataViewsSearch search = new DataViewsSearch();
 
-            ViewData["server"] = server;
+            ViewData["server"] = serverId;
             ViewData["moduleId"] = moduleId;
-            ViewData["viewName"] = viewName;
+            ViewData["formId"] = formId;
+            ViewData["viewName"] = fieldId;
             ViewData["value"] = value;
 
             ViewData["germplasmDbId"] = 0;
 
-            return PartialView("_GridViewSearch", search.GetData(value, server, viewName, moduleId));
+            return PartialView(viewName, search.GetData(serverId, moduleId, formId, fieldId, value));
         }
-
-        public ActionResult GridViewSearchDetail(string server, string value, string viewName, string moduleId)
+        /*
+        public ActionResult GridViewSearchDetail(string serverId, string moduleId, string formId, string fieldId, string value)
         {
             DataViewsSearch search = new DataViewsSearch();
 
-            ViewData["server"] = server;
+            ViewData["server"] = serverId;
             ViewData["moduleId"] = moduleId;
-            ViewData["viewName"] = viewName;
+            ViewData["formId"] = formId;
+            ViewData["viewName"] = fieldId;
             ViewData["value"] = value;
 
-            return PartialView("_GridViewSearchDetail", search.GetData(value, server, viewName, moduleId));
+            return PartialView("_GridViewSearchDetail", search.GetData(serverId, moduleId, formId, fieldId, value));
         }
-
+        */
         [HttpPost, ValidateInput(false)]
-        public ActionResult GridViewPartialUpdate(string server, string value, string viewName, string moduleId, string viewNameRen)
+        public ActionResult GridViewPartialUpdate(string serverId, string moduleId, string formId, string fieldId, string value, string viewName)
         {
             DataViewsSearch search = new DataViewsSearch();
 
-            ViewData["server"] = server;
+            ViewData["server"] = serverId;
             ViewData["moduleId"] = moduleId;
-            ViewData["viewName"] = viewName;
+            ViewData["formId"] = formId;
+            ViewData["viewName"] = fieldId;
             ViewData["value"] = value;
 
             try
             {
-                //throw new NotImplementedException();
-                search.SaveData(value, server, viewName, moduleId);
+                search.SaveData(serverId, moduleId, formId, fieldId, value);
             }
             catch (Exception e)
             {
                 Guid d = Guid.NewGuid();
                 log.Fatal(Guid.NewGuid(),e);
                 
-                ViewData["EditError"] = String.Format(e.Message); //"Something were wrong!!\nPlease contact your system administrator." +
+                ViewData["EditError"] = String.Format(e.Message);
             }
 
-            return PartialView(viewNameRen, search.GetData(value, server, viewName, moduleId));
-            /*
-            DataTable model = search.GetData(value, crop, viewName);
-
-            DataTable updatedModel = null;
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    //foreach (DataRow dr in model.Rows)
-                    //{
-                    DataRow[] dr = model.Select("inventory_id = " + EditorExtension.GetValue<object>("inventory_id").ToString().Replace("\"", ""));
-
-                    foreach (DataColumn col in model.Columns)
-                    {
-                        if (!col.ReadOnly)
-                        {
-                            string val = EditorExtension.GetValue<object>(col.ColumnName) as String;
-
-                            if (val != null)
-                            {
-                                val = val.Replace("\"", "");
-                                dr[0][col.ColumnName] = val;
-                            }
-                        }
-                    }
-                    //}
-
-                    updatedModel = search.SaveData(model, value, crop, viewName);
-                }
-                catch (Exception e)
-                {
-                    ViewData["EditError"] = e.Message;
-                }
-            }
-            else
-                ViewData["EditError"] = "Please, correct all errors.";
-
-            return PartialView("_GridViewSearch", updatedModel);
-            */
-
+            return PartialView(viewName, search.GetData(serverId, moduleId, formId, fieldId, value));
         }
 
         [HttpPost, ValidateInput(false)]
-        public ActionResult GridViewPartialUpdateInv(string server, string value, string viewName, string moduleId, string viewNameRen, string newInventory)
+        public ActionResult GridViewPartialUpdateInv(string serverId, string moduleId, string formId, string fieldId, string value, string viewName, string newInventory)
         {
             DataViewsSearch search = new DataViewsSearch();
 
-            ViewData["server"] = server;
+            ViewData["server"] = serverId;
             ViewData["moduleId"] = moduleId;
-            ViewData["viewName"] = viewName;
+            ViewData["formId"] = formId;
+            ViewData["viewName"] = fieldId;
             ViewData["value"] = value;
 
             try
             {
-                //throw new NotImplementedException();
-                search.UpdateInventorySource(value, server, viewName, moduleId, newInventory);
+                search.UpdateInventorySource(serverId, moduleId, formId, fieldId, value, newInventory);
             }
             catch (Exception e)
             {
                 Guid d = Guid.NewGuid();
                 log.Fatal(Guid.NewGuid(), e);
 
-                ViewData["EditError"] = String.Format(e.Message); //"Something were wrong!!\nPlease contact your system administrator." +
+                ViewData["EditError"] = String.Format(e.Message);
             }
 
-            return PartialView(viewNameRen, search.GetData(value, server, viewName, moduleId));
+            return PartialView(viewName, search.GetData(serverId, moduleId, formId, fieldId, value));
         }
 
-        /*
-        [HttpPost, ValidateInput(false)]
-        public ActionResult GridViewSearchUpdate(MVCxGridViewBatchUpdateValues<object, object> values, string crop, string value, string viewName, string moduleId)
+        public ActionResult GetGermplasmDetails(string serverId, string germplasmDbId)
         {
             DataViewsSearch search = new DataViewsSearch();
 
-            ViewData["viewName"] = viewName;
-            ViewData["value"] = value;
-            ViewData["crop"] = crop;
-
-            return GridViewSearch(crop, value, viewName, moduleId);
-        }
-        */
-        public ActionResult GetGermplasmDetails(string server, string germplasmDbId)
-        {
-            DataViewsSearch search = new DataViewsSearch();
-
-            ViewData["server"] = server;
+            ViewData["server"] = serverId;
             ViewData["germplasmDbId"] = germplasmDbId;
             
-            return PartialView("_LoadOnDemand", search.GetGermplasmDetails(server, Int32.Parse(germplasmDbId)));
+            return PartialView("_LoadOnDemand", search.GetGermplasmDetails(serverId, Int32.Parse(germplasmDbId)));
         }
     }
 }

@@ -16,7 +16,7 @@
 </div>
 
 <div class="row">
-    @foreach (var elm in Settings.Server(Session["server"].ToString()).Elements("modules"))
+    @foreach (var module in Settings.Server(Session["server"].ToString()).Elements("module"))
     {
         <div class="col-lg-4">
             <div class="hpanel hgreen">
@@ -24,12 +24,18 @@
                 </div>
                 <div class="panel-body h-200">
                     <div class="stats-icon pull-right">
-                        <i class="@elm.Attribute("icon").Value fa-4x text-success"></i>
+                        <i class="@module.Attribute("icon").Value fa-4x text-success"></i>
                     </div>
                     <div class="m-t-xl">
-                        <a href="@Url.Action(elm.Attribute("action").Value, elm.Attribute("controller").Value, new { moduleId = elm.Attribute("id").Value })" class="text-success fa-3x">@elm.Attribute("title").Value</a>
-                        <p>@elm.Attribute("description").Value</p>
+                        <h3 class="text-success fa-3x">@module.Attribute("title").Value</h3>
+                        <p>@module.Attribute("description").Value</p>
                     </div>
+                    @foreach (var form in module.Elements("form"))
+                    {
+                        <h3 class="font-extra-bold">
+                            <a class="text-success" href="@Url.Action(form.Attribute("action").Value, form.Attribute("controller").Value, new { moduleId = module.Attribute("id").Value, formId = form.Attribute("id").Value })">@form.Attribute("title").Value</a>
+                        </h3>
+                    }
                 </div>
                 <div class="panel-footer">
                     
