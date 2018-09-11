@@ -61,6 +61,8 @@
         st.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = false;
         st.SettingsAdaptivity.HideDataCellsAtWindowInnerWidth = 0;
 
+        st.TotalSummary.Add(DevExpress.Data.SummaryItemType.Sum, "quantity_on_hand");
+
         foreach (System.Data.DataColumn dc in Model.Columns)
         {
             if (dc.ExtendedProperties["is_primary_key"].ToString() == "Y")

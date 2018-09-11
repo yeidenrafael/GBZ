@@ -8,7 +8,7 @@
             <parameters>
               <suppressExceptions>false</suppressExceptions>
               <dataviewName>gbz_get_inventory</dataviewName>
-              <delimitedParameterList>:car={0};:sec={0};:box={0};:inventory_number1=;:inventory_number2=;:inventory_number3=;:intrid=;:orderrequestitemid=;:orderrequestid=;</delimitedParameterList>
+              <delimitedParameterList>:car={0};:sec={0};:box={0};:inventory_number1=;:inventory_number2=;:inventory_number3=;:intrid=;:orderrequestitemid=;:orderrequestid=;:accessionnumber=;</delimitedParameterList>
               <offset>0</offset>
               <limit>0</limit>
               <options>1</options>
@@ -27,7 +27,7 @@
             <parameters>
               <suppressExceptions>false</suppressExceptions>
               <dataviewName>gbz_get_inventory</dataviewName>
-              <delimitedParameterList>:car=;:sec=;:box=;:inventory_number1={0};:inventory_number2={0};:inventory_number3={0};:intrid=;:orderrequestitemid=;:orderrequestid=;</delimitedParameterList>
+              <delimitedParameterList>:car=;:sec=;:box=;:inventory_number1={0};:inventory_number2={0};:inventory_number3={0};:intrid=;:orderrequestitemid=;:orderrequestid=;:accessionnumber=;</delimitedParameterList>
               <offset>0</offset>
               <limit>0</limit>
               <options>1</options>
@@ -50,7 +50,7 @@
             <parameters>
               <suppressExceptions>false</suppressExceptions>
               <dataviewName>gbz_get_inventory</dataviewName>
-              <delimitedParameterList>:car=;:sec=;:box=;:inventory_number1=;:inventory_number2=;:inventory_number3=;:intrid={0};:orderrequestitemid=;:orderrequestid=;</delimitedParameterList>
+              <delimitedParameterList>:car=;:sec=;:box=;:inventory_number1=;:inventory_number2=;:inventory_number3=;:intrid={0};:orderrequestitemid=;:orderrequestid=;:accessionnumber=;</delimitedParameterList>
               <offset>0</offset>
               <limit>0</limit>
               <options>1</options>
@@ -74,7 +74,7 @@
             <parameters>
               <suppressExceptions>false</suppressExceptions>
               <dataviewName>gbz_get_inventory</dataviewName>
-              <delimitedParameterList>:car=;:sec=;:box=;:inventory_number1=;:inventory_number2=;:inventory_number3=;:intrid=;:orderrequestitemid={0};:orderrequestid=;</delimitedParameterList>
+              <delimitedParameterList>:car=;:sec=;:box=;:inventory_number1=;:inventory_number2=;:inventory_number3=;:intrid=;:orderrequestitemid={0};:orderrequestid=;:accessionnumber=;</delimitedParameterList>
               <offset>0</offset>
               <limit>0</limit>
               <options>1</options>
@@ -98,7 +98,7 @@
             <parameters>
               <suppressExceptions>false</suppressExceptions>
               <dataviewName>gbz_get_inventory</dataviewName>
-              <delimitedParameterList>:car=;:sec=;:box=;:inventory_number1=;:inventory_number2=;:inventory_number3=;:intrid=;:orderrequestitemid=;:orderrequestid={0};</delimitedParameterList>
+              <delimitedParameterList>:car=;:sec=;:box=;:inventory_number1=;:inventory_number2=;:inventory_number3=;:intrid=;:orderrequestitemid=;:orderrequestid={0};:accessionnumber=;</delimitedParameterList>
               <offset>0</offset>
               <limit>0</limit>
               <options>1</options>
@@ -106,6 +106,30 @@
             </parameters>
             <columns>
               <column link="true" moduleRef="Inventory" formRef="gbz_get_inventory" fieldRef="intrid" colRef="inventory_number_part1" >accession_number</column>
+              <column link="true" moduleRef="Inventory" formRef="gbz_get_inventory" fieldRef="inventoryNumber" colRef="inventory_number" >inventory_number</column>
+              <column link="true" moduleRef="Inventory" formRef="gbz_get_inventory" fieldRef="storageLocation" colRef="storage_location" >storage_location</column>
+            </columns>
+            <extendedProperties></extendedProperties>
+          </actions>
+        </field>
+
+        <field id="accessionnumber" type="text" placeholder="Accession Number" visible="false">
+          <actions>
+            <parameters>
+              <suppressExceptions>false</suppressExceptions>
+              <dataviewName>gbz_get_inventory</dataviewName>
+              <delimitedParameterList>:car=;:sec=;:box=;:inventory_number1=;:inventory_number2=;:inventory_number3=;:intrid=;:orderrequestitemid=;:orderrequestid=;:accessionnumber={0};</delimitedParameterList>
+              <offset>0</offset>
+              <limit>0</limit>
+              <options>1</options>
+              <separator>127</separator>
+            </parameters>
+            <columns>
+              <column header="true">accession_number</column>
+              <column header="true">plant_name</column>
+              <column header="true">gid</column>
+              <column header="true">taxonomy</column>
+              <column header="true">country</column>
               <column link="true" moduleRef="Inventory" formRef="gbz_get_inventory" fieldRef="inventoryNumber" colRef="inventory_number" >inventory_number</column>
               <column link="true" moduleRef="Inventory" formRef="gbz_get_inventory" fieldRef="storageLocation" colRef="storage_location" >storage_location</column>
             </columns>
@@ -145,7 +169,6 @@
               <column link="true" moduleRef="Inventory" formRef="gbz_get_inventory" fieldRef="storageLocation" colRef="storage_location" >storage_location</column>
             </columns>
             <extendedProperties>
-              <!--<masterDetail actionName="GridViewSearchDetail" colreference="order_request_item_id" viewreference="orderrequestitemid"></masterDetail>-->
               <masterDetail actionName="GridViewSearchDetail" moduleRef="Inventory" formRef="gbz_get_inventory" fieldRef="orderrequestitemid" colRef="order_request_item_id"></masterDetail>
             </extendedProperties>
           </actions>
@@ -266,6 +289,26 @@
               <separator>127</separator>
             </parameters>
             <columns>
+              <column link="true" moduleRef="Inventory" formRef="gbz_get_inventory" fieldRef="accessionnumber" colRef="accessionnumber" >accessionnumber</column>
+            </columns>
+            <extendedProperties>
+            </extendedProperties>
+          </actions>
+        </field>
+
+        <field id="name" type="text" placeholder="Name" visible="true">
+          <actions>
+            <parameters>
+              <suppressExceptions>false</suppressExceptions>
+              <dataviewName>get_germplasm_details</dataviewName>
+              <delimitedParameterList>:germplasmDbId=;:name={0};:taxonomyspeciesid=;:inventoryid=;:orderrequestid=;:geographyid=;:cooperatorid=;:taxonomygenusid=;</delimitedParameterList>
+              <offset>0</offset>
+              <limit>0</limit>
+              <options>1</options>
+              <separator>127</separator>
+            </parameters>
+            <columns>
+              <column link="true" moduleRef="Inventory" formRef="gbz_get_inventory" fieldRef="accessionnumber" colRef="accessionnumber" >accessionnumber</column>
             </columns>
             <extendedProperties>
             </extendedProperties>
