@@ -8,7 +8,7 @@
             <parameters>
               <suppressExceptions>false</suppressExceptions>
               <dataviewName>gbz_get_inventory</dataviewName>
-              <delimitedParameterList>:car={0};:sec={0};:box={0};:inventory_number1=;:inventory_number2=;:inventory_number3=;:intrid=;:orderrequestitemid=;:orderrequestid=;</delimitedParameterList>
+              <delimitedParameterList>:car={0};:sec={0};:box={0};:inventory_number1=;:inventory_number2=;:inventory_number3=;:intrid=;:orderrequestitemid=;:orderrequestid=;:accessionnumber=;</delimitedParameterList>
               <offset>0</offset>
               <limit>0</limit>
               <options>1</options>
@@ -27,7 +27,7 @@
             <parameters>
               <suppressExceptions>false</suppressExceptions>
               <dataviewName>gbz_get_inventory</dataviewName>
-              <delimitedParameterList>:car=;:sec=;:box=;:inventory_number1={0};:inventory_number2={0};:inventory_number3={0};:intrid=;:orderrequestitemid=;:orderrequestid=;</delimitedParameterList>
+              <delimitedParameterList>:car=;:sec=;:box=;:inventory_number1={0};:inventory_number2={0};:inventory_number3={0};:intrid=;:orderrequestitemid=;:orderrequestid=;:accessionnumber=;</delimitedParameterList>
               <offset>0</offset>
               <limit>0</limit>
               <options>1</options>
@@ -51,7 +51,7 @@
             <parameters>
               <suppressExceptions>false</suppressExceptions>
               <dataviewName>gbz_get_inventory</dataviewName>
-              <delimitedParameterList>:car=;:sec=;:box=;:inventory_number1=;:inventory_number2=;:inventory_number3=;:intrid={0};:orderrequestitemid=;:orderrequestid=;</delimitedParameterList>
+              <delimitedParameterList>:car=;:sec=;:box=;:inventory_number1=;:inventory_number2=;:inventory_number3=;:intrid={0};:orderrequestitemid=;:orderrequestid=;:accessionnumber=;</delimitedParameterList>
               <offset>0</offset>
               <limit>0</limit>
               <options>1</options>
@@ -75,7 +75,7 @@
             <parameters>
               <suppressExceptions>false</suppressExceptions>
               <dataviewName>gbz_get_inventory</dataviewName>
-              <delimitedParameterList>:car=;:sec=;:box=;:inventory_number1=;:inventory_number2=;:inventory_number3=;:intrid=;:orderrequestitemid={0};:orderrequestid=;</delimitedParameterList>
+              <delimitedParameterList>:car=;:sec=;:box=;:inventory_number1=;:inventory_number2=;:inventory_number3=;:intrid=;:orderrequestitemid={0};:orderrequestid=;:accessionnumber=;</delimitedParameterList>
               <offset>0</offset>
               <limit>0</limit>
               <options>1</options>
@@ -99,7 +99,7 @@
             <parameters>
               <suppressExceptions>false</suppressExceptions>
               <dataviewName>gbz_get_inventory</dataviewName>
-              <delimitedParameterList>:car=;:sec=;:box=;:inventory_number1=;:inventory_number2=;:inventory_number3=;:intrid=;:orderrequestitemid=;:orderrequestid={0};</delimitedParameterList>
+              <delimitedParameterList>:car=;:sec=;:box=;:inventory_number1=;:inventory_number2=;:inventory_number3=;:intrid=;:orderrequestitemid=;:orderrequestid={0};:accessionnumber=;</delimitedParameterList>
               <offset>0</offset>
               <limit>0</limit>
               <options>1</options>
@@ -123,7 +123,7 @@
             <parameters>
               <suppressExceptions>false</suppressExceptions>
               <dataviewName>gbz_get_inventory</dataviewName>
-              <delimitedParameterList>:car={0};:sec={0};:box={0};:inventory_number1=;:inventory_number2=;:inventory_number3=;:intrid=;:orderrequestitemid=;:orderrequestid=;</delimitedParameterList>
+              <delimitedParameterList>:car={0};:sec={0};:box={0};:inventory_number1=;:inventory_number2=;:inventory_number3=;:intrid=;:orderrequestitemid=;:orderrequestid=;:accessionnumber=;</delimitedParameterList>
               <offset>0</offset>
               <limit>0</limit>
               <options>1</options>
@@ -142,7 +142,7 @@
             <parameters>
               <suppressExceptions>false</suppressExceptions>
               <dataviewName>gbz_get_inventory</dataviewName>
-              <delimitedParameterList>:car=;:sec=;:box=;:inventory_number1={0};:inventory_number2={0};:inventory_number3={0};:intrid=;:orderrequestitemid=;:orderrequestid=;</delimitedParameterList>
+              <delimitedParameterList>:car=;:sec=;:box=;:inventory_number1={0};:inventory_number2={0};:inventory_number3={0};:intrid=;:orderrequestitemid=;:orderrequestid=;:accessionnumber=;</delimitedParameterList>
               <offset>0</offset>
               <limit>0</limit>
               <options>1</options>
@@ -165,7 +165,7 @@
             <parameters>
               <suppressExceptions>false</suppressExceptions>
               <dataviewName>gbz_get_inventory</dataviewName>
-              <delimitedParameterList>:car=;:sec=;:box=;:inventory_number1=;:inventory_number2=;:inventory_number3=;:intrid={0};:orderrequestitemid=;:orderrequestid=;</delimitedParameterList>
+              <delimitedParameterList>:car=;:sec=;:box=;:inventory_number1=;:inventory_number2=;:inventory_number3=;:intrid={0};:orderrequestitemid=;:orderrequestid=;:accessionnumber=;</delimitedParameterList>
               <offset>0</offset>
               <limit>0</limit>
               <options>1</options>
@@ -189,7 +189,7 @@
             <parameters>
               <suppressExceptions>false</suppressExceptions>
               <dataviewName>gbz_get_inventory</dataviewName>
-              <delimitedParameterList>:car=;:sec=;:box=;:inventory_number1=;:inventory_number2=;:inventory_number3=;:intrid=;:orderrequestitemid={0};:orderrequestid=;</delimitedParameterList>
+              <delimitedParameterList>:car=;:sec=;:box=;:inventory_number1=;:inventory_number2=;:inventory_number3=;:intrid=;:orderrequestitemid={0};:orderrequestid=;:accessionnumber=;</delimitedParameterList>
               <offset>0</offset>
               <limit>0</limit>
               <options>1</options>
