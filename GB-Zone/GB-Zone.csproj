@@ -728,7 +728,7 @@
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
-    <Content Include="images\profile.png" />
+    <Content Include="Content\img\profile.png" />
     <Content Include="Vendor\pe-icon-7-stroke\css\helper.css" />
     <Content Include="Vendor\pe-icon-7-stroke\css\pe-icon-7-stroke.css" />
     <Content Include="Vendor\pe-icon-7-stroke\fonts\Pe-icon-7-stroke.svg" />
