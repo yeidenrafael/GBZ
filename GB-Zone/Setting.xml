@@ -175,7 +175,7 @@
         </field>
       </form>
     </module>
-
+<!--
     <module id="Client" title="Client" description="Curator Tool dataviews" icon="pe-7s-science">
       <form id="get_accession" title="Get Accession" layout="vertical" cssClass="form-group" action="Index" controller="Search">
         <field id="orderrequestid" type="number" placeholder="Order Number" visible="true">
@@ -316,9 +316,11 @@
         </field>
       </form>
     </module>
+-->    
   </server>
 
-  <server id="02" name="Maize" url="http://itu-dev-srv:82/gringlobal/gui.asmx">
+  <server id="02" name="Maize" url="http://localhost:81/gringlobal/gui.asmx">
+<!--
     <module id="Client" title="Client" description="Curator Tool dataviews" icon="pe-7s-science">
       <form id="get_accession" title="Get Accession" layout="vertical" cssClass="form-group" action="Index" controller="Search">
         <field id="orderrequestid" type="number" placeholder="Order Number" visible="true">
@@ -417,5 +419,6 @@
         </field>
       </form>
     </module>
+-->    
   </server>
 </Settings>
