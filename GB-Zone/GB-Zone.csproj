@@ -718,6 +718,8 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Dataviews\gbz_get_inventory.dataview" />
+    <Content Include="Content\Dataviews\gbz_get_order_request_item.dataview" />
     <Content Include="Content\img\Cimmyt.png" />
     <Content Include="Content\img\green%402x.png" />
     <Content Include="Content\img\green.png" />
