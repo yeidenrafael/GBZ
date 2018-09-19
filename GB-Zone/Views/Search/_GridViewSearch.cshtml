@@ -25,7 +25,6 @@
         //st.SettingsEditing.AddNewRowRouteValues = new { Controller = "Home", Action = "GridViewPartialAddNew" };
         //st.SettingsEditing.DeleteRowRouteValues = new { Controller = "Home", Action = "GridViewPartialDelete" };
         st.SettingsEditing.UpdateRowRouteValues = new { Controller = "Search", Action = "GridViewPartialUpdate", serverId = ViewData["server"].ToString(), moduleId = ViewData["moduleId"].ToString(), formId = ViewData["formId"].ToString(), fieldId = ViewData["viewName"].ToString(), value = ViewData["value"].ToString(), viewName = "_GridViewSearch" };
-        //st.SettingsEditing.UpdateRowRouteValues = new { Controller = "Search", Action = "InlineEditingUpdatePartial" };
         st.SettingsEditing.Mode = GridViewEditingMode.Inline;
 
         //st.SettingsEditing.BatchUpdateRouteValues = new { Controller = "Search", Action = "GridViewSearchUpdate", crop = ViewData["crop"].ToString(), value = ViewData["value"].ToString(), viewName = ViewData["viewName"].ToString()};
@@ -200,7 +199,6 @@
             };
         };
 */
-
 
         st.Styles.Cell.Wrap = DefaultBoolean.False;
         st.HtmlRowPrepared = (s, e) =>

@@ -1035,6 +1035,7 @@
     <Content Include="Views\Search\_GridViewSearchDetail.cshtml" />
     <Content Include="Views\Shared\_Navigation.cshtml" />
     <Content Include="Views\Storage\Index.cshtml" />
+    <Content Include="Views\Storage\_GridViewPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

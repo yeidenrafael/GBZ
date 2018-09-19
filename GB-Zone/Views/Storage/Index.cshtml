@@ -10,8 +10,21 @@
     <title>Index</title>
 </head>
 <body>
-    <div> 
-        Hello world!!
+    <div>
+        Inventory Numbers:
+        @Html.DevExpress().Memo(settings =>
+        {
+            settings.Name = "Memo";
+        }).GetHtml()
+
+        Box:
+
+        @Html.DevExpress().TextBox(settings =>
+        {
+            settings.Name = "TextBox";
+        }).GetHtml()
+
+
     </div>
 </body>
 </html>
