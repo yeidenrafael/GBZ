@@ -6,6 +6,7 @@ using System;
 using System.Data;
 using System.Linq;
 using System.Xml.Linq;
+using System.Collections.Generic;
 
 namespace GrinGlobal.Zone.Classes
 {
@@ -281,6 +282,89 @@ namespace GrinGlobal.Zone.Classes
             var result = ggZoneModel.GetGermplasmDetails(crop, germplasmDbId);
 
             return result;
+        }
+
+        internal List<InventoryItem> NewBox(string serverId, string moduleId, string formId, string fieldId, List<InventoryItem> insert, string box)
+        {
+            int nBracket = 0;
+            int nIndex = 0;
+            string colName = string.Empty;
+
+            //read the project
+            XElement service = Settings.Form(serverId, moduleId, formId)
+                                  .Elements("field")
+                                  .Where(c => (string)c.Attribute("id") == fieldId).FirstOrDefault();
+
+            //extract settings from Setting.xml
+            string urlService = service.Parent.Parent.Parent.Attribute("url").Value.ToString();
+            string dataviewName = service.Element("actions").Element("parameters").Element("dataviewName").Value;
+            bool suppressExceptions = bool.Parse(service.Element("actions").Element("parameters").Element("suppressExceptions").Value);
+            int offset = int.Parse(service.Element("actions").Element("parameters").Element("offset").Value);
+            int limit = int.Parse(service.Element("actions").Element("parameters").Element("limit").Value);
+            string options = service.Element("actions").Element("parameters").Element("options").Value;
+
+            //put the value in the delimitedParameterList
+            string delimitedParams = service.Element("actions").Element("parameters").Element("delimitedParameterList").Value;
+            Char separator = (char)Convert.ToInt32(service.Element("actions").Element("parameters").Element("separator").Value);
+
+            string value = "";
+
+            foreach (var inventoryItem in insert)
+            {
+                if (/*updateValues.IsValid(inventoryItem) && */inventoryItem.InventoryNumber != null)
+                {
+                    if (value == "")
+                        value = inventoryItem.InventoryNumber;
+                    else
+                        value += "','" + inventoryItem.InventoryNumber;
+                }
+            }
+
+            var arrValue = value.Split(separator);
+
+            while ((nBracket = delimitedParams.IndexOf("{0}", nBracket)) != -1)
+            {
+                delimitedParams = delimitedParams.Remove(nBracket, 3).Insert(nBracket, arrValue[nIndex]);
+                nBracket++;
+                nIndex++;
+            }
+
+            GGZoneModel ggZoneModel = new GGZoneModel();
+
+            //invoke model requesting the datatable
+            DataSet ds = ggZoneModel.GetData(urlService, suppressExceptions, dataviewName, delimitedParams, offset, limit, options);
+
+            DataTable model = ds.Tables[dataviewName];
+            //string box = "";
+            var inventoryItems = new List<InventoryItem>();
+            var arrValue2 = box.ToUpper().Split(new char[] { '-' });
+
+            foreach (var inventoryItem in insert)
+            {
+                if (/*updateValues.IsValid(inventoryItem) && */inventoryItem.InventoryNumber != null)
+                {
+                    DataRow[] dr = model.Select("inventory_number = '" + inventoryItem.InventoryNumber + "'");
+
+                    //parsing storage location
+                    //string val2 = inventoryItem.Box;
+
+                    //if (val2 != null)
+                    //{
+                    //var arrValue2 = box.ToUpper().Split(new char[] { '-' });
+
+                    dr[0]["storage_location_part1"] = arrValue2[0];
+                    dr[0]["storage_location_part2"] = arrValue2[1];
+                    dr[0]["storage_location_part3"] = arrValue2[2];
+                    //}
+                    dr[0]["storage_location_part4"] = inventoryItem.EntryId;//insert.IndexOf(inventoryItem) + 1;
+
+                    inventoryItems.Add(inventoryItem);
+                }
+            }
+
+            ggZoneModel.SaveData(urlService, suppressExceptions, ds, options);
+
+            return inventoryItems;
         }
     }
 }

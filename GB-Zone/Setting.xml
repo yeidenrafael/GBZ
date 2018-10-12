@@ -138,8 +138,23 @@
         </field>
       </form>
 
-      <form id="Boxes" title="Boxes" layout="vertical" cssClass="form-group" action="Index" controller="Storage">
-        
+      <form id="gbz_boxes" title="Boxes" layout="vertical" cssClass="form-group" action="Index" controller="Storage">
+        <field id="inventoryNumber" type="text"  placeholder="Inventory Number" visible="true">
+          <actions>
+            <parameters>
+              <suppressExceptions>false</suppressExceptions>
+              <dataviewName>gbz_boxes</dataviewName>
+              <delimitedParameterList>:inventorynumber={0};</delimitedParameterList>
+              <offset>0</offset>
+              <limit>0</limit>
+              <options>1</options>
+              <separator>127</separator>
+            </parameters>
+            <columns>
+            </columns>
+            <extendedProperties></extendedProperties>
+          </actions>
+        </field>
       </form>
     </module>
 

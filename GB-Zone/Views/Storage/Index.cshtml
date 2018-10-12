@@ -1,30 +1,67 @@
-﻿@{
+﻿@model System.Collections.IEnumerable
+
+@{
     ViewBag.ViewTitle = "| " + ViewData["moduleId"];
 }
 
-<!DOCTYPE html>
+@section scriptsHeader {
+    <script type="text/javascript">
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Index</title>
-</head>
-<body>
-    <div>
-        Inventory Numbers:
-        @Html.DevExpress().Memo(settings =>
-        {
-            settings.Name = "Memo";
-        }).GetHtml()
+        function OnKeyDown(s, e) {
+            if (e.htmlEvent.keyCode == 13) {
 
-        Box:
+                ASPxClientUtils.PreventEventAndBubble(e.htmlEvent);
+                var rows = GridView.batchEditHelper.GetEditState().insertedRowValues;
+                // length:
+                var count = Object.keys(rows).length;
+                //alert(count);
+                // keys:
+                for (var key in rows) {
+                    //alert(key);
+                }
+                var entry = "00" + count;
+                //alert(entry.substring(entry.length - 3));
 
-        @Html.DevExpress().TextBox(settings =>
-        {
-            settings.Name = "TextBox";
-        }).GetHtml()
+                setTimeout(function () {
+                    GridView.AddNewRow();
+                    GridView.batchEditApi.SetCellValue(key, 'EntryId', entry.substring(entry.length - 3));
+                    GridView.batchEditApi.StartEdit(GridView.batchEditApi.GetInsertedRowIndices()[count], GridView.GetColumnByField("InventoryNumber").index);
+                }, 100);
+            }
+        }
 
+        function StartBox(s, e) {
+            if (e.htmlEvent.keyCode == 13) {
 
+                $.ajax({
+                    url: '@Url.Action("GridViewPartial")',
+                    type: 'POST',
+                    data: { Parameter: newBox.GetText() },
+                });
+
+                OnKeyDown(s, e);
+            }
+        }
+    </script>
+}
+
+<div class="row">
+    <div class="hpanel">
+        <div class="panel-heading hbuilt">
+            New Box
+        </div>
+
+        <div class="panel-body text-center h-200">
+            @Html.DevExpress().TextBox(settings =>
+            {
+                settings.Name = "newBox";
+                settings.Properties.Caption = "Box";
+                settings.Properties.NullText = "CAR-SEC-BOX";
+                settings.Properties.ClientSideEvents.SetEventHandler("KeyDown", "StartBox");
+                settings.Properties.ClientSideEvents.Init = "function (s,e) {s.Focus()}";
+            }).GetHtml()
+
+            @Html.Partial("_GridViewPartial", Model)
+        </div>
     </div>
-</body>
-</html>
+</div>
