@@ -33,7 +33,6 @@ namespace GrinGlobal.Zone.Controllers
             // Does some database query to update info passing lastName as a parameter
             return GridViewPartial(Parameter);//RedirectToAction("GridViewPartial"); // This is going back to another page after the info is updated
         }
-
         [HttpPost, ValidateInput(false)]
         public ActionResult GridViewPartialAddNew([ModelBinder(typeof(DevExpressEditorsBinder))] GrinGlobal.Zone.Models.InventoryItem item)
         {
