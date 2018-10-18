@@ -23,7 +23,7 @@
                                     <span class="font-extra-bold">@col.Caption: </span>
                                     @if (Model.Rows.Count > 0)
                                     {
-                                        /*
+                                        
                                         if (col.ColumnName == "gid")
                                         {
 
@@ -31,7 +31,7 @@
                                             {
                                                 hlSettings.Name = "gid";
                                                 hlSettings.NavigateUrl = "javascript:void(0)";
-                                                hlSettings.Properties.ClientSideEvents.Click = string.Format("function(s, e) {{ ShowDetailPopup('{0}'); }}", Url.Action("GetGermplasmDetails", "Search", new { crop = ViewData["crop"].ToString(), germplasmDbId = @Model.Rows[0][col].ToString().Trim() }));
+                                                hlSettings.Properties.ClientSideEvents.Click = string.Format("function(s, e) {{ ShowDetailPopup('{0}'); }}", Url.Action("GetGermplasmDetails", "Search", new { serverId = ViewData["server"].ToString(), germplasmDbId = @Model.Rows[0][col].ToString().Trim() }));
                                                 hlSettings.Properties.Text = @Model.Rows[0][col].ToString().Trim();
                                             }).Render();
                                         }
@@ -39,8 +39,8 @@
                                         {
                                             @Model.Rows[0][col].ToString().Trim()
                                         }
-                                        */
-                                        @Model.Rows[0][col].ToString().Trim()
+                                        
+                                        //@Model.Rows[0][col].ToString().Trim()
                                     }
                                 </div>
                             }

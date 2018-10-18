@@ -27,6 +27,7 @@ namespace GrinGlobal.Zone.Helpers
                 return XElement.Load(fileXnml);
             }
         }
+
         public static XElement Server(string serverId) {
 
             XElement serverNode = xmlElement.Elements("server")
@@ -35,22 +36,51 @@ namespace GrinGlobal.Zone.Helpers
              
             return serverNode;
         }
+
         public static XElement Module(string serverId, string moduleId)
         {
 
             XElement cropNode = xmlElement.Elements("server")
                                           .Where(w => (string)w.Attribute("id") == serverId)
                                           .SingleOrDefault();
-            XElement module = (from el in cropNode.Elements("modules") where (string)el.Attribute("id") == moduleId select el).SingleOrDefault();
+
+            XElement module = (from el in cropNode.Elements("module")
+                               where (string)el.Attribute("id") == moduleId
+                               select el).SingleOrDefault();
             return module;
         }
-        public static IEnumerable<XElement> Fields(string serverId, string moduleId)
+
+        public static XElement Form(string serverId, string moduleId, string formId)
         {
 
             XElement cropNode = xmlElement.Elements("server")
                                           .Where(w => (string)w.Attribute("id") == serverId)
                                           .SingleOrDefault();
-            IEnumerable<XElement> fields = (from el in cropNode.Elements("modules") where (string)el.Attribute("id") == moduleId select el).Elements("form").Elements("field");
+
+            XElement module = (from el in cropNode.Elements("module")
+                               where (string)el.Attribute("id") == moduleId
+                               select el).SingleOrDefault();
+
+            XElement form = (from el in module.Elements("form")
+                               where (string)el.Attribute("id") == formId
+                             select el).SingleOrDefault();
+            return form;
+        }
+
+        public static IEnumerable<XElement> Fields(string serverId, string moduleId, string formId)
+        {
+
+            XElement cropNode = xmlElement.Elements("server")
+                                          .Where(w => (string)w.Attribute("id") == serverId)
+                                          .SingleOrDefault();
+
+            XElement module = (from el in cropNode.Elements("module")
+                                            where (string)el.Attribute("id") == moduleId
+                                            select el).SingleOrDefault();
+
+            IEnumerable<XElement> fields = (from el in module.Elements("form")
+                                            where (string)el.Attribute("id") == formId
+                                            select el).Elements("field");
             return fields;
         }
     }

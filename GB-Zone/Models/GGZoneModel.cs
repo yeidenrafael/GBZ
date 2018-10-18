@@ -5,6 +5,7 @@ using System.Data;
 using System.ServiceModel;
 using IO.Swagger.Api;
 using IO.Swagger.Model;
+using System.Collections.Generic;
 
 namespace GrinGlobal.Zone.Models
 {
@@ -68,6 +69,13 @@ namespace GrinGlobal.Zone.Models
             return result;
         }
 
+        public IList<InventoryItem> GetInventoryItems() {
+
+            var model = new List<InventoryItem>();
+
+            return model;
+        }
+
         /*
         public DataTable GetDataBusiness(bool suppressExceptions,
                                  string dataviewName,
@@ -128,4 +136,6 @@ namespace GrinGlobal.Zone.Models
         }
         */
     }
+
+
 }
