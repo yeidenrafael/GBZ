@@ -18,7 +18,7 @@
 <div class="row">
     @foreach (var module in Settings.Server(Session["server"].ToString()).Elements("module"))
     {
-        <div class="col-lg-4">
+        <div class="col-lg-6">
             <div class="hpanel hgreen">
                 <div class="panel-heading">                   
                 </div>
@@ -27,7 +27,7 @@
                         <i class="@module.Attribute("icon").Value fa-4x text-success"></i>
                     </div>
                     <div class="m-t-xl">
-                        <h3 class="text-success fa-3x">@module.Attribute("title").Value</h3>
+                        <h3 class="fa-3x">@module.Attribute("title").Value</h3>
                         <p>@module.Attribute("description").Value</p>
                     </div>
                     @foreach (var form in module.Elements("form"))
