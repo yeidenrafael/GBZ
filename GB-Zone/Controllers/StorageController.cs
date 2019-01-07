@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Web.Mvc;
 using GrinGlobal.Zone.Classes;
-using System.Data;
 using GrinGlobal.Zone.Models;
 using DevExpress.Web.Mvc;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
 
 namespace GrinGlobal.Zone.Controllers
 {
@@ -15,79 +17,58 @@ namespace GrinGlobal.Zone.Controllers
             ViewData["moduleId"] = moduleId;
             ViewData["formId"] = formId;
             Session["box"] = null;
-
-            return View(gbZoneModel.GetInventoryItems());
+            
+            return View(getDataTable());
         }
-        
-        GGZoneModel gbZoneModel = new GGZoneModel();
+
+        //GGZoneModel gbZoneModel = new GGZoneModel();
+        /*
+        [ValidateInput(false)]
+        public ActionResult GridViewPartial(string command)
+        {
+            List<InventoryItem> model;
+            if (Session["GridBound"] == null)
+            {
+                if (String.IsNullOrWhiteSpace(command))
+                {
+                    model = new List<InventoryItem>();
+
+                }
+                else
+                {
+                    Session["GridBound"] = command;
+                    model = new List<InventoryItem>();
+                }
+            }
+            else
+            {
+                model = new List<InventoryItem>();
+            }
+            return PartialView("_GridViewPartial", model);
+        }
+        */
 
         [ValidateInput(false)]
-        public ActionResult GridViewPartial(string Parameter)
+        public ActionResult GridViewPartial(string Parameter/*List<InventoryItem> model*/)
         {
-            Session["box"] = Parameter;
-            return PartialView("_GridViewPartial", gbZoneModel.GetInventoryItems());
+            return PartialView("_GridViewPartial", getDataTable()/*search.GetInventoryItems(serverId, moduleId, formId, fieldId, value)*/);
+            //return PartialView("_GridViewPartial", model);
         }
 
-        public ActionResult UpdateInfo(string Parameter)
+        [ValidateInput(false)]
+        public ActionResult NewBox(string Parameter)
         {
-            // Does some database query to update info passing lastName as a parameter
-            return GridViewPartial(Parameter);//RedirectToAction("GridViewPartial"); // This is going back to another page after the info is updated
+            Session["box"] = Parameter;
+            return GridViewPartial(Parameter /*new List<InventoryItem>()*/);
         }
-        [HttpPost, ValidateInput(false)]
-        public ActionResult GridViewPartialAddNew([ModelBinder(typeof(DevExpressEditorsBinder))] GrinGlobal.Zone.Models.InventoryItem item)
+
+        [ValidateInput(false)]
+        public ActionResult UpdateBox(string Parameter)
         {
-            var model = new object[0];
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    // Insert here a code to insert the new item in your model
-                }
-                catch (Exception e)
-                {
-                    ViewData["EditError"] = e.Message;
-                }
-            }
-            else
-                ViewData["EditError"] = "Please, correct all errors.";
-            return PartialView("_GridViewPartial", model);
+            return PartialView("_GridViewPartial", getDataTable());
+            //GridViewPartial(search.GetInventoryItems(serverId, moduleId, formId, fieldId, value));
         }
-        [HttpPost, ValidateInput(false)]
-        public ActionResult GridViewPartialUpdate([ModelBinder(typeof(DevExpressEditorsBinder))] InventoryItem item)
-        {
-            var model = new object[0];
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    // Insert here a code to update the item in your model
-                }
-                catch (Exception e)
-                {
-                    ViewData["EditError"] = e.Message;
-                }
-            }
-            else
-                ViewData["EditError"] = "Please, correct all errors.";
-            return PartialView("_GridViewPartial", model);
-        }
-        [HttpPost, ValidateInput(false)]
-        public ActionResult GridViewPartialDelete(System.String EntryId)
-        {
-            var model = new object[0];
-            if (EntryId != null)
-            {
-                try
-                {
-                    // Insert here a code to delete the item from your model
-                }
-                catch (Exception e)
-                {
-                    ViewData["EditError"] = e.Message;
-                }
-            }
-            return PartialView("_GridViewPartial", model);
-        }
+
         [ValidateInput(false)]
         public ActionResult BatchEditingUpdateModel(MVCxGridViewBatchUpdateValues<InventoryItem, object> updateValues)
         {
@@ -124,6 +105,67 @@ namespace GrinGlobal.Zone.Controllers
             //return PartialView("_GridViewPartial", search.NewBox(serverId, moduleId, formId, fieldId, updateValues.Insert, box));//GridViewPartial();
             return RedirectToAction("Index2", "Search", new { serverId, moduleId, formId = "gbz_get_inventory", fieldId = "storageLocation", value = box }); // This is going back to another page after the info is updated
         }
+
+        public ActionResult BatchUpdateAction()
+        {
+            DataTable table = getDataTable();
+
+            List<string> keysToInsert = GridViewExtension.GetBatchInsertValues<string>(table.Columns[0].ColumnName);
+            if (keysToInsert != null)
+                //Data.InsertRows(keysToInsert);
+                Console.WriteLine("Inserting");
+            foreach (DataColumn column in table.Columns)
+            {
+                var newValues = GridViewExtension.GetBatchUpdateValues<string, string>(column.ColumnName); // S is key field type, T is the column type
+
+                if (newValues != null && newValues.Count > 0)
+                {
+                    //Data.UpdateColumn(column.ColumnName, newValues);
+                    foreach (string item in newValues.Keys)
+                    {
+                        var row = table.Rows.Find(item);
+                        row[column.ColumnName] = newValues[item];
+                    }
+                }
+
+                var insertValues = GridViewExtension.GetBatchInsertValues<string>(column.ColumnName);
+                if (insertValues != null)
+                {
+                    Dictionary<string, string> dictionary = keysToInsert.ToDictionary(x => x, x => insertValues[keysToInsert.IndexOf(x)]);
+                    //Data.UpdateColumn(column.ColumnName, dictionary);
+                    Console.WriteLine("Updating");
+                }
+            }
+
+            var deleteValues = GridViewExtension.GetBatchDeleteKeys<string>();
+            if (deleteValues != null && deleteValues.Count != 0)
+                //Data.RemoveRows(deleteValues);
+                Console.WriteLine("Removing");
+
+            return PartialView("_GridViewPartial", table);
+        }
+
+        private DataTable getDataTable()
+        {
+            DataViewsSearch search = new DataViewsSearch();
+
+            Session["box"] = "AL04-B05-02";// Parameter;
+
+            string serverId = Session["server"].ToString();
+            string moduleId = "Inventory";
+            string formId = "gbz_get_boxes";
+            string fieldId = "storageLocation";
+            string value = Session["box"].ToString();
+
+            ViewData["server"] = serverId;
+            ViewData["moduleId"] = moduleId;
+            ViewData["formId"] = formId;
+            ViewData["viewName"] = fieldId;
+
+            return search.GetData(serverId, moduleId, formId, fieldId, value);
+        }
+
+        /*
         protected void InsertProduct(InventoryItem product, MVCxGridViewBatchUpdateValues<InventoryItem, object> updateValues)
         {
             try
@@ -156,6 +198,6 @@ namespace GrinGlobal.Zone.Controllers
             {
                 updateValues.SetErrorText(productID, e.Message);
             }
-        }
+        }*/
     }
 }

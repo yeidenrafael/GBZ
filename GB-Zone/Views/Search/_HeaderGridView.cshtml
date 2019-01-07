@@ -23,7 +23,7 @@
                                     <span class="font-extra-bold">@col.Caption: </span>
                                     @if (Model.Rows.Count > 0)
                                     {
-                                        
+                                        /*
                                         if (col.ColumnName == "gid")
                                         {
 
@@ -39,8 +39,8 @@
                                         {
                                             @Model.Rows[0][col].ToString().Trim()
                                         }
-                                        
-                                        //@Model.Rows[0][col].ToString().Trim()
+                                        */
+                                        @Model.Rows[0][col].ToString().Trim()
                                     }
                                 </div>
                             }

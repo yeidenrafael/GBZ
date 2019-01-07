@@ -1,5 +1,6 @@
 ﻿@using System.Data
 
+
 @{
 
     var grid = Html.DevExpress().GridView(st =>
@@ -15,7 +16,7 @@
         st.ControlStyle.BorderBottom.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(1);
 
         //st.SettingsPager.PageSize = 10;
-        //st.SettingsPager.Position = PagerPosition.TopAndBottom;
+        st.SettingsPager.Position = System.Web.UI.WebControls.PagerPosition.TopAndBottom;
         st.SettingsPager.Visible = true;
         st.SettingsPager.FirstPageButton.Visible = true;
         st.SettingsPager.LastPageButton.Visible = true;
@@ -27,9 +28,12 @@
         st.SettingsEditing.UpdateRowRouteValues = new { Controller = "Search", Action = "GridViewPartialUpdate", serverId = ViewData["server"].ToString(), moduleId = ViewData["moduleId"].ToString(), formId = ViewData["formId"].ToString(), fieldId = ViewData["viewName"].ToString(), value = ViewData["value"].ToString(), viewName = "_GridViewSearch" };
         st.SettingsEditing.Mode = GridViewEditingMode.Inline;
 
-        //st.SettingsEditing.BatchUpdateRouteValues = new { Controller = "Search", Action = "GridViewSearchUpdate", crop = ViewData["crop"].ToString(), value = ViewData["value"].ToString(), viewName = ViewData["viewName"].ToString()};
+        //st.SettingsEditing.BatchUpdateRouteValues = new { Controller = "Search", Action = "GridViewPartialUpdate", serverId = ViewData["server"].ToString(), moduleId = ViewData["moduleId"].ToString(), formId = ViewData["formId"].ToString(), fieldId = ViewData["viewName"].ToString(), value = ViewData["value"].ToString(), viewName = "_GridViewSearch" };//new { Controller = "Search", Action = "BatchEditingUpdateModel" };
         //st.SettingsEditing.Mode = GridViewEditingMode.Batch;
+        //st.SettingsEditing.BatchEditSettings.EditMode = GridViewBatchEditMode.Cell;
         //st.SettingsEditing.BatchEditSettings.StartEditAction = GridViewBatchStartEditAction.Click;
+        //st.SettingsEditing.BatchEditSettings.HighlightDeletedRows = true;
+        //st.SettingsEditing.NewItemRowPosition = GridViewNewItemRowPosition.Bottom;
 
         //st.SettingsBehavior.ConfirmDelete = true;
         st.SettingsBehavior.AllowSelectByRowClick = true;
@@ -126,13 +130,14 @@
                     if (col.FieldName == "storage_location")
                     {
                         var prty = col.PropertiesEdit as TextBoxProperties;
-                        prty.MaskSettings.Mask = "CC##CC##C##-###";
                         //prty.MaskSettings.ShowHints = false;
+                        prty.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+                        prty.MaskSettings.Mask = "CC##-C##-##-###";
+                        prty.MaskSettings.IncludeLiterals = MaskIncludeLiteralsMode.All;
+                        prty.MaskSettings.ErrorText = "Invalid Storage Location";
+                        prty.ValidationSettings.Display = Display.Dynamic;
                     }
                 });
-
-
-
             }
         }
 

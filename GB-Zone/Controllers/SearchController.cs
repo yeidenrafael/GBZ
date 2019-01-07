@@ -6,7 +6,6 @@ namespace GrinGlobal.Zone.Controllers
 {
     public class SearchController : Controller
     {
-
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(SearchController));
         // GET: Search
         public ActionResult Index(string moduleId, string formId)
@@ -139,5 +138,29 @@ namespace GrinGlobal.Zone.Controllers
             
             return PartialView("_LoadOnDemand", search.GetGermplasmDetails(serverId, Int32.Parse(germplasmDbId)));
         }
+
+        /*[ValidateInput(false)]
+        public ActionResult BatchEditingUpdateModel(MVCxGridViewBatchUpdateValues<object, object> updateValues)
+        {
+            foreach (var myObject in updateValues.Update)
+            {
+                //How to update Generator._data?
+                //var outlookApp = Activator.CreateInstance(Type.GetTypeFromProgID("Outlook.Application"));
+
+                var properties = myObject.GetType().GetProperties();
+                foreach (var property in properties)
+                {
+                    var PropertyName = property.Name;
+                    //You get "Property1" as a result
+
+                    var PropetyValue = myObject.GetType().GetProperty(property.Name).GetValue(myObject, null);
+                    //You get "Value1" as a result
+
+                    // you can use the PropertyName and Value here
+                }
+            }
+
+            return null;
+        }*/
     }
 }

@@ -66,7 +66,7 @@ namespace GrinGlobal.Zone.Classes
 
             //invoke model requesting the datatable
             DataSet ds = ggZoneModel.GetData(urlService, suppressExceptions, dataviewName, delimitedParams, offset, limit, options);
-
+            
             //remove or add column
             foreach (DataColumn col in ds.Tables[dataviewName].Columns)
             {
@@ -115,6 +115,19 @@ namespace GrinGlobal.Zone.Classes
 
             return ds.Tables[dataviewName];
 
+        }
+
+        internal List<InventoryItem> GetInventoryItems(string serverId, string moduleId, string formId, string fieldId, string value)
+        {
+            DataTable dataTableName = GetData(serverId, moduleId, formId, fieldId, value);
+
+            List<InventoryItem> listName = dataTableName.AsEnumerable().Select(m => new InventoryItem()
+            {
+                EntryId = m.Field<string>("storage_location_part4"),
+                InventoryNumber = m.Field<string>("inventory_number"),
+            }).ToList();
+
+            return listName;
         }
 
         public DataTable SaveData(string serverId, string moduleId, string formId, string fieldId, string value)

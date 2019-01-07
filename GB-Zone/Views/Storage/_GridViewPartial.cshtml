@@ -1,25 +1,56 @@
-@model IEnumerable<GrinGlobal.Zone.Models.InventoryItem>
+@model System.Data.DataTable
 
 @{
     var grid = Html.DevExpress().GridView(settings =>
     {
         settings.Name = "GridView";
-        settings.KeyFieldName = "InventoryNumber";
         settings.CallbackRouteValues = new { Controller = "Storage", Action = "GridViewPartial" };
-        settings.SettingsEditing.BatchUpdateRouteValues = new { Controller = "Storage", Action = "BatchEditingUpdateModel" };
 
+        //settings.SettingsEditing.BatchUpdateRouteValues = new { Controller = "Storage", Action = "BatchEditingUpdateModel" };
+        settings.SettingsEditing.BatchUpdateRouteValues = new { Controller = "Storage", Action = "BatchUpdateAction" };
         settings.SettingsEditing.Mode = GridViewEditingMode.Batch;
         settings.SettingsEditing.BatchEditSettings.EditMode = GridViewBatchEditMode.Cell;
         settings.SettingsEditing.BatchEditSettings.StartEditAction = GridViewBatchStartEditAction.Click;
         settings.SettingsEditing.BatchEditSettings.HighlightDeletedRows = true;
         settings.SettingsEditing.NewItemRowPosition = GridViewNewItemRowPosition.Bottom;
 
+        settings.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords;
+
         settings.CommandColumn.Visible = true;
         //settings.CommandColumn.ShowDeleteButton = true;
         settings.CommandColumn.ShowNewButtonInHeader = true;
 
-        settings.Columns.Add("EntryId");
-        settings.Columns.Add("InventoryNumber");
+        //settings.KeyFieldName = "InventoryNumber";
+        //settings.KeyFieldName = "inventory_id";
+        //settings.Columns.Add("EntryId");
+        //settings.Columns.Add("InventoryNumber");
+        /*foreach (System.Data.DataColumn column in Model.Columns)
+        {
+            settings.Columns.Add(column.ColumnName);
+        }*/
+        foreach (System.Data.DataColumn dc in Model.Columns)
+        {
+            if (dc.ExtendedProperties["is_primary_key"].ToString() == "Y")
+            {
+                settings.KeyFieldName = dc.ColumnName; //"inventory_id";
+            }
+
+            if (/*dc.ColumnMapping != System.Data.MappingType.Hidden && */dc.ExtendedProperties["is_header"] == null)
+            {
+
+                settings.Columns.Add(col =>
+                {
+                    col.FieldName = dc.ColumnName;
+                    col.Name = dc.ColumnName;
+                    col.Caption = dc.Caption;
+
+                    if (dc.ColumnMapping == System.Data.MappingType.Hidden)
+                    {
+                        col.Visible = false;
+                    }
+                });
+            }
+        }
 
         settings.CellEditorInitialize = (s, e) =>
         {
@@ -30,9 +61,11 @@
             }
         };
     });
+
     if (ViewData["EditError"] != null)
     {
         grid.SetEditErrorText((string)ViewData["EditError"]);
     }
 }
+
 @grid.Bind(Model).GetHtml()

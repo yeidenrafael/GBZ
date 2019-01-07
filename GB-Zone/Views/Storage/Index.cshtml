@@ -1,4 +1,4 @@
-﻿@model System.Collections.IEnumerable
+﻿@model System.Data.DataTable
 
 @{
     ViewBag.ViewTitle = "| " + ViewData["moduleId"];
@@ -31,16 +31,75 @@
         }
 
         function StartBox(s, e) {
+
             if (e.htmlEvent.keyCode == 13) {
 
                 $.ajax({
                     url: '@Url.Action("GridViewPartial")',
                     type: 'POST',
-                    data: { Parameter: newBox.GetText() },
+                    data: { Parameter: box.GetText() },
                 });
 
                 OnKeyDown(s, e);
             }
+        }
+
+        function NewBox(s, e) {
+
+            $.ajax({
+                url: '@Url.Action("NewBox")',
+                type: 'POST',
+                data: { Parameter: box.GetText() },
+            });
+
+            var rows = GridView.batchEditHelper.GetEditState().insertedRowValues;
+            // length:
+            var count = Object.keys(rows).length;
+            //alert(count);
+            // keys:
+            for (var key in rows) {
+                //alert(key);
+            }
+            var entry = "00" + count;
+            //alert(entry.substring(entry.length - 3));
+
+            setTimeout(function () {
+                GridView.AddNewRow();
+                GridView.batchEditApi.SetCellValue(key, 'EntryId', entry.substring(entry.length - 3));
+                GridView.batchEditApi.StartEdit(GridView.batchEditApi.GetInsertedRowIndices()[count], GridView.GetColumnByField("InventoryNumber").index);
+            }, 100);
+        }
+
+        function UpdateBox(s, e) {
+
+            $.ajax({
+                url: '@Url.Action("UpdateBox")',
+                type: 'POST',
+                data: { Parameter: box.GetText() },
+            });
+            GridView.Refresh();
+            /*
+                var rows = GridView.batchEditHelper.GetEditState().insertedRowValues;
+                // length:
+                var count = Object.keys(rows).length;
+                //alert(count);
+                // keys:
+                for (var key in rows) {
+                    //alert(key);
+                }
+                var entry = "00" + count;
+                //alert(entry.substring(entry.length - 3));
+
+                setTimeout(function () {
+                    GridView.AddNewRow();
+                    GridView.batchEditApi.SetCellValue(key, 'EntryId', entry.substring(entry.length - 3));
+                    GridView.batchEditApi.StartEdit(GridView.batchEditApi.GetInsertedRowIndices()[count], GridView.GetColumnByField("InventoryNumber").index);
+                }, 100);*/
+        }
+
+        function OnClick(s, e) {
+            GridView.PerformCallback({ command: "BindGrid" });
+
         }
     </script>
 }
@@ -48,21 +107,43 @@
 <div class="row">
     <div class="hpanel">
         <div class="panel-heading hbuilt">
-            New Box
+            Boxes
         </div>
 
         <div class="panel-body text-center h-200">
             @Html.DevExpress().TextBox(settings =>
-            {
-                settings.Name = "newBox";
-                settings.Properties.Caption = "Box";
-                settings.Properties.NullText = "CAR-SEC-BOX";
-                //settings.Properties.DisplayFormatString = "[ 00 - 00 - 00 ]";
-                settings.Properties.ClientSideEvents.SetEventHandler("KeyDown", "StartBox");
-                settings.Properties.ClientSideEvents.Init = "function (s,e) {s.Focus()}";
-            }).GetHtml()
+                {
+                    settings.Name = "box";
+                    settings.Properties.Caption = "Box";
+                    settings.Properties.NullText = "CAR-SEC-BOX";
+                    settings.Properties.ClientSideEvents.SetEventHandler("KeyDown", "StartBox");
+                    settings.Properties.ClientSideEvents.Init = "function (s,e) {s.Focus()}";
+                    settings.Properties.DisplayFormatString = "CAR-SEC-BOX";
+                    settings.Properties.MaskSettings.Mask = "CC##-C##-##";
+                    settings.Properties.MaskSettings.IncludeLiterals = MaskIncludeLiteralsMode.All;
+                    settings.Properties.MaskSettings.ErrorText = "Invalid Storage Location";
+                    settings.Properties.ValidationSettings.Display = Display.Dynamic;
+                    settings.Properties.HelpText = "CAR-SEC-BOX";
+                }).GetHtml()
+
+            @Html.DevExpress().Button(settings =>
+                {
+                    settings.Name = "NewBox";
+                    settings.Text = "New";
+                    settings.UseSubmitBehavior = false;
+                    settings.ClientSideEvents.Click = "NewBox";
+                }).GetHtml()
+
+            @Html.DevExpress().Button(settings =>
+                {
+                    settings.Name = "UpdateBox";
+                    settings.Text = "Update";
+                    settings.UseSubmitBehavior = false;
+                    settings.ClientSideEvents.Click = "UpdateBox";
+                }).GetHtml()
 
             @Html.Partial("_GridViewPartial", Model)
+
         </div>
     </div>
 </div>
