@@ -9,7 +9,7 @@
         st.CallbackRouteValues = new { Controller = "Search", Action = "GridView", serverId = ViewData["server"].ToString(), moduleId = ViewData["moduleId"].ToString(), formId = ViewData["formId"].ToString(), fieldId = ViewData["viewName"].ToString(), value = ViewData["value"].ToString(), viewName = "_GridViewSearch" };
 
         st.Width = System.Web.UI.WebControls.Unit.Percentage(100);
-
+        
         st.ControlStyle.Paddings.Padding = System.Web.UI.WebControls.Unit.Pixel(0);
         st.ControlStyle.Border.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(0);
         st.ControlStyle.BorderBottom.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(1);
@@ -77,7 +77,7 @@
                     col.FieldName = dc.ColumnName;
                     col.Name = dc.ColumnName;
                     col.Caption = dc.Caption;
-
+                    
                     if (dc.ColumnMapping == System.Data.MappingType.Hidden)
                     {
                         col.Visible = false;
@@ -130,9 +130,6 @@
                         //prty.MaskSettings.ShowHints = false;
                     }
                 });
-
-
-
             }
         }
 
