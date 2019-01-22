@@ -355,10 +355,10 @@
               <column header="true">order_type</column>
               <column header="true">cooperator_name</column>
               <column header="true">organization</column>
-              <column header="true">final_country</column>
-              <column link="true" moduleRef="Orders" formRef="gbz_get_inventory" fieldRef="intrid" colRef="inventory_number_part1" >accession_number</column>
+              <column header="true">destination_country</column>
+              <!--<column link="true" moduleRef="Orders" formRef="gbz_get_inventory" fieldRef="intrid" colRef="inventory_number_part1" >accession_number</column>
               <column link="true" moduleRef="Orders" formRef="gbz_get_inventory" fieldRef="inventoryNumber" colRef="inventory_number" >inventory_number</column>
-              <column link="true" moduleRef="Orders" formRef="gbz_get_inventory" fieldRef="storageLocation" colRef="storage_location" >storage_location</column>
+              <column link="true" moduleRef="Orders" formRef="gbz_get_inventory" fieldRef="storageLocation" colRef="storage_location" >storage_location</column>-->
             </columns>
             <extendedProperties>
               <masterDetail actionName="GridViewSearchDetail" moduleRef="Inventory" formRef="gbz_get_inventory" fieldRef="orderrequestitemid" colRef="order_request_item_id"></masterDetail>
@@ -453,8 +453,8 @@
               <column header="true">gid</column>
               <column header="true">taxonomy</column>
               <column header="true">country</column>
-              <column link="true" moduleRef="Inventory" formRef="gbz_get_inventory" fieldRef="inventoryNumber" colRef="inventory_number" >inventory_number</column>
-              <column link="true" moduleRef="Inventory" formRef="gbz_get_inventory" fieldRef="storageLocation" colRef="storage_location" >storage_location</column>
+              <!--<column link="true" moduleRef="Inventory" formRef="gbz_get_inventory" fieldRef="inventoryNumber" colRef="inventory_number" >inventory_number</column>
+              <column link="true" moduleRef="Inventory" formRef="gbz_get_inventory" fieldRef="storageLocation" colRef="storage_location" >storage_location</column>-->
             </columns>
             <extendedProperties></extendedProperties>
           </actions>
@@ -472,9 +472,9 @@
               <separator>127</separator>
             </parameters>
             <columns>
-              <column link="true" moduleRef="Inventory" formRef="gbz_get_inventory" fieldRef="intrid" colRef="inventory_number_part1" >accession_number</column>
+              <!--<column link="true" moduleRef="Inventory" formRef="gbz_get_inventory" fieldRef="intrid" colRef="inventory_number_part1" >accession_number</column>
               <column link="true" moduleRef="Inventory" formRef="gbz_get_inventory" fieldRef="inventoryNumber" colRef="inventory_number" >inventory_number</column>
-              <column link="true" moduleRef="Inventory" formRef="gbz_get_inventory" fieldRef="storageLocation" colRef="storage_location" >storage_location</column>
+              <column link="true" moduleRef="Inventory" formRef="gbz_get_inventory" fieldRef="storageLocation" colRef="storage_location" >storage_location</column>-->
             </columns>
             <extendedProperties></extendedProperties>
           </actions>
