@@ -100,6 +100,11 @@ namespace GrinGlobal.Zone.Classes
                 {
                     col.ReadOnly = false;
                 }
+
+                /*if (col.ColumnName == "inventory_number" && formId == "gbz_get_boxes")
+                {
+                    col.ReadOnly = false;
+                }*/
             }
 
             
@@ -250,6 +255,100 @@ namespace GrinGlobal.Zone.Classes
 
             return ds.Tables[dataviewName];
             */
+            return result.Tables[dataviewName];
+        }
+
+        public DataTable BatchSaveData(string serverId, string moduleId, string formId, string fieldId, string value)
+        {
+            //string cropId = cropSelected;
+
+            int nBracket = 0;
+            int nIndex = 0;
+            string colName = string.Empty;
+
+            //read the project
+            /*XElement service = Settings.CropInfo(cropId)
+                                  .Elements("modules")
+                                  .Elements("form")
+                                  .Elements("field")
+                                  .Where(c => (string)c.Attribute("id") == viewSelected).FirstOrDefault();*/
+
+            /*XElement service = Settings.Module(serverId, moduleId)
+                                  .Elements("form")
+                                  .Elements("field")
+                                  .Where(c => (string)c.Attribute("id") == fieldId).FirstOrDefault();*/
+            XElement service = Settings.Form(serverId, moduleId, formId)
+                                  .Elements("field")
+                                  .Where(c => (string)c.Attribute("id") == fieldId).FirstOrDefault();
+
+            //extract settings from Setting.xml
+            string urlService = service.Parent.Parent.Parent.Attribute("url").Value.ToString();
+            string dataviewName = service.Element("actions").Element("parameters").Element("dataviewName").Value;
+            bool suppressExceptions = bool.Parse(service.Element("actions").Element("parameters").Element("suppressExceptions").Value);
+            int offset = int.Parse(service.Element("actions").Element("parameters").Element("offset").Value);
+            int limit = int.Parse(service.Element("actions").Element("parameters").Element("limit").Value);
+            string options = service.Element("actions").Element("parameters").Element("options").Value;
+
+            //put the value in the delimitedParameterList
+            string delimitedParams = service.Element("actions").Element("parameters").Element("delimitedParameterList").Value;
+            Char separator = (char)Convert.ToInt32(service.Element("actions").Element("parameters").Element("separator").Value);
+
+            var arrValue = value.Split(separator);
+
+            while ((nBracket = delimitedParams.IndexOf("{0}", nBracket)) != -1)
+            {
+                delimitedParams = delimitedParams.Remove(nBracket, 3).Insert(nBracket, arrValue[nIndex]);
+                nBracket++;
+                nIndex++;
+            }
+
+            GGZoneModel ggZoneModel = new GGZoneModel();
+
+            //invoke model requesting the datatable
+            DataSet oldds = ggZoneModel.GetData(urlService, suppressExceptions, dataviewName, delimitedParams, offset, limit, options);
+
+            DataTable model = oldds.Tables[dataviewName];
+
+            DataTable table = oldds.Tables[dataviewName]; //search.GetData(serverId, moduleId, formId, fieldId, value);//getDataTable();
+
+            List<string> keysToInsert = GridViewExtension.GetBatchInsertValues<string>(table.Columns[0].ColumnName);
+            if (keysToInsert != null)
+                //Data.InsertRows(keysToInsert);
+                Console.WriteLine("Inserting");
+            foreach (DataColumn column in table.Columns)
+            {
+                var newValues = GridViewExtension.GetBatchUpdateValues<string, string>(column.ColumnName); // S is key field type, T is the column type
+
+                if (newValues != null && newValues.Count > 0)
+                {
+                    //Data.UpdateColumn(column.ColumnName, newValues);
+                    foreach (string item in newValues.Keys)
+                    {
+                        var row = table.Rows.Find(item);
+                        if (!column.ReadOnly)
+                        {
+                            row[column.ColumnName] = newValues[item];
+                        }
+                    }
+                }
+
+                var insertValues = GridViewExtension.GetBatchInsertValues<string>(column.ColumnName);
+                if (insertValues != null)
+                {
+                    Dictionary<string, string> dictionary = keysToInsert.ToDictionary(x => x, x => insertValues[keysToInsert.IndexOf(x)]);
+                    //Data.UpdateColumn(column.ColumnName, dictionary);
+                    Console.WriteLine("Updating");
+                }
+            }
+
+            var deleteValues = GridViewExtension.GetBatchDeleteKeys<string>();
+            if (deleteValues != null && deleteValues.Count != 0)
+                //Data.RemoveRows(deleteValues);
+                Console.WriteLine("Removing");
+            
+            
+            DataSet result = ggZoneModel.SaveData(urlService, suppressExceptions, oldds, options);
+            
             return result.Tables[dataviewName];
         }
 

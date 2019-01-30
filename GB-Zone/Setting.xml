@@ -138,7 +138,7 @@
         </field>
       </form>
 
-      <form id="gbz_boxes" title="Boxes" layout="vertical" cssClass="form-group" action="Index" controller="Storage">
+      <form id="gbz_boxes" title="New Box" layout="vertical" cssClass="form-group" action="Index" controller="Storage">
         <field id="inventoryNumber" type="text"  placeholder="Inventory Number" visible="true">
           <actions>
             <parameters>
@@ -156,8 +156,8 @@
           </actions>
         </field>
       </form>
-      
-      <form id="gbz_get_boxes" title="Storage location by box" layout="vertical" cssClass="form-group" action="Index" controller="Storage">
+      <!--
+      <form id="gbz_get_box" title="Storage location by box" layout="vertical" cssClass="form-group" action="Index" controller="Storage">
         <field id="inventoryNumber" type="text"  placeholder="Inventory Number" visible="true">
           <actions>
             <parameters>
@@ -189,6 +189,27 @@
             </columns>
             <extendedProperties>
             </extendedProperties>
+          </actions>
+        </field>
+      </form>-->
+
+      <form id="gbz_get_boxes" title="Update Box" layout="vertical" cssClass="form-group" action="Index" controller="BatchEdit">
+        <field id="storageLocation" type="text" placeholder="CAR-SEC-BOX" visible="true">
+          <actions>
+            <parameters>
+              <suppressExceptions>false</suppressExceptions>
+              <dataviewName>gbz_get_boxes</dataviewName>
+              <delimitedParameterList>:inventorynumber=;:car={0};:sec={0};:box={0};</delimitedParameterList>
+              <offset>0</offset>
+              <limit>0</limit>
+              <options>1</options>
+              <separator>45</separator>
+            </parameters>
+            <columns>
+              <column link="true" moduleRef="Inventory" formRef="gbz_get_inventory" fieldRef="intrid" colRef="inventory_number_part1" >accession_number</column>
+              <column link="true" moduleRef="Inventory" formRef="gbz_get_inventory" fieldRef="inventoryNumber" colRef="inventory_number" >inventory_number</column>
+            </columns>
+            <extendedProperties></extendedProperties>
           </actions>
         </field>
       </form>

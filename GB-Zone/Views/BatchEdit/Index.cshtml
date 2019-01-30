@@ -1,0 +1,13 @@
+﻿@model System.Data.DataTable
+
+@{
+    ViewBag.ViewTitle = "| " + ViewData["moduleId"];
+}
+
+@Html.Partial("_SearchFields")
+
+@if (ViewData["viewName"] != null)
+{
+    Html.RenderPartial("_HeaderGridView");
+    //Html.RenderPartial("_GridViewSearch", Model, new ViewDataDictionary { { "viewName", ViewData["viewName"] }, { "value", ViewData["value"] }, { "server", ViewData["server"] }, { "moduleId", ViewData["moduleId"] } });
+}

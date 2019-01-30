@@ -695,6 +695,7 @@
     <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="Classes\DataViewsSearch.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\BatchEditController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\StorageController.cs" />
@@ -1040,6 +1041,10 @@
     <Content Include="Views\Shared\_Navigation.cshtml" />
     <Content Include="Views\Storage\Index.cshtml" />
     <Content Include="Views\Storage\_GridViewPartial.cshtml" />
+    <Content Include="Views\BatchEdit\Index.cshtml" />
+    <Content Include="Views\BatchEdit\_SearchFields.cshtml" />
+    <Content Include="Views\BatchEdit\_HeaderGridView.cshtml" />
+    <Content Include="Views\BatchEdit\_GridViewSearch.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
