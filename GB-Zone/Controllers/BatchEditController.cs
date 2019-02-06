@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Web.Mvc;
 using GrinGlobal.Zone.Classes;
-using System.Data;
-using DevExpress.Web.Mvc;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace GrinGlobal.Zone.Controllers
 {
@@ -40,7 +36,7 @@ namespace GrinGlobal.Zone.Controllers
             return View(search.GetData(serverId, moduleId, formId, fieldId, value));
         }
 
-        public ActionResult Index2(string serverId, string moduleId, string formId, string fieldId, string value)
+        public ActionResult Index(string serverId, string moduleId, string formId, string fieldId, string value)
         {
             DataViewsSearch search = new DataViewsSearch();
 
@@ -50,7 +46,27 @@ namespace GrinGlobal.Zone.Controllers
             ViewData["viewName"] = fieldId;
             ViewData["value"] = value;
 
-            return View("Index", search.GetData(serverId, moduleId, formId, fieldId, value));
+            return View(search.GetData(serverId, moduleId, formId, fieldId, value));
+        }
+
+        [HttpPost]
+        public ActionResult Reorder(FormCollection formdata)
+        {
+            DataViewsSearch search = new DataViewsSearch();
+
+            string serverId = Session["server"].ToString();
+            string moduleId = formdata["moduleId"];
+            string formId = formdata["formId"];
+            string fieldId = formdata["fieldId"];
+            string value = formdata["value"];
+
+            ViewData["server"] = serverId;
+            ViewData["moduleId"] = moduleId;
+            ViewData["formId"] = formId;
+            ViewData["viewName"] = fieldId;
+            ViewData["value"] = value;
+
+            return View("Index", search.ReorderBox(serverId, moduleId, formId, fieldId, value));
         }
 
         public ActionResult GridView(string serverId, string moduleId, string formId, string fieldId, string value, string viewName)

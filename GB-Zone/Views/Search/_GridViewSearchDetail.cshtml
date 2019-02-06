@@ -24,13 +24,13 @@
         st.SettingsEditing.Mode = GridViewEditingMode.Inline;
 
         st.SettingsBehavior.AllowSelectByRowClick = true;
-        
+
         st.CommandColumn.Visible = true;
         st.CommandColumn.ShowEditButton = true;
-        
+
         st.CommandColumn.CustomButtons.Add(new GridViewCommandColumnCustomButton() { ID = "btnGetKey", Text = "Select" });
         st.ClientSideEvents.CustomButtonClick = string.Format("function(s, e) {{ CustomButtonClick(s, e, '{0}'); }}", Url.Action("GridViewPartialUpdateInv", "Search", new { serverId = ViewData["server"].ToString(), moduleId = ViewData["moduleId"].ToString(), formId = ViewData["formId"].ToString(), fieldId = ViewData["viewName"].ToString(), value = ViewData["value"].ToString(), viewName = "_GridViewSearchDetail", newInventory = "s.GetRowKey(e.visibleIndex)" }));
-        
+
         st.Settings.ShowFilterRow = true;
         st.Settings.ShowHeaderFilterButton = true;
         st.Settings.ShowFooter = true;
@@ -100,6 +100,7 @@
                     {
                         var prty = col.PropertiesEdit as TextBoxProperties;
                         prty.MaskSettings.Mask = "CC##CC##C##-###";
+                        prty.ValidationSettings.RequiredField.IsRequired = false;
                     }
                 });
             }

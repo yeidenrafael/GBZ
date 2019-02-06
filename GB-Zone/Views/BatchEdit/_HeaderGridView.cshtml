@@ -50,6 +50,16 @@
                         <span class="font-extra-bold">Total numbre of records: </span>
                         @Model.Rows.Count
                     </div>
+                    <div class="col-sm-3">
+                        @using (Html.BeginForm("Reorder", "BatchEdit", FormMethod.Post, new { id = "formFilter" }))
+                        {
+                            <input type="hidden" name="moduleId" value="@ViewData["moduleId"].ToString()">
+                            <input type="hidden" name="formId" value="@ViewData["formId"].ToString()">
+                            <input type="hidden" name="fieldId" value="@ViewData["viewName"].ToString()">
+                            <input type="hidden" name="value" value="@ViewData["value"].ToString()">
+                            <button class="btn btn-success" type="submit">Reorder items</button>
+                        }
+                    </div>
                 </div>
                 <div class="row">
                     @if (ViewData["viewName"] != null)

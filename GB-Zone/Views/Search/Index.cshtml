@@ -39,6 +39,11 @@
                 //event.cancelBubble = true;
             }
         }
+        function onValidation(s, e) {
+            if (s.GetValue() == "") {
+                e.isValid = true;
+            }
+        }
     </script>
 }
 

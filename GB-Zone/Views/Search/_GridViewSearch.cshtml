@@ -131,11 +131,14 @@
                     {
                         var prty = col.PropertiesEdit as TextBoxProperties;
                         //prty.MaskSettings.ShowHints = false;
-                        prty.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+                        //prty.Width = System.Web.UI.WebControls.Unit.Percentage(100);
                         prty.MaskSettings.Mask = "CC##-C##-##-###";
-                        prty.MaskSettings.IncludeLiterals = MaskIncludeLiteralsMode.All;
+                        //prty.MaskSettings.IncludeLiterals = MaskIncludeLiteralsMode.All;
                         prty.MaskSettings.ErrorText = "Invalid Storage Location";
-                        prty.ValidationSettings.Display = Display.Dynamic;
+                        //prty.ValidationSettings.Display = Display.Dynamic;
+                        prty.ValidationSettings.CausesValidation = false;
+                        prty.ValidationSettings.RequiredField.IsRequired = false;
+                        prty.ClientSideEvents.Validation = "onValidation";
                     }
                 });
             }

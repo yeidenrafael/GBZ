@@ -122,6 +122,18 @@ namespace GrinGlobal.Zone.Classes
 
         }
 
+        internal DataTable ReorderBox(string serverId, string moduleId, string formId, string fieldId, string value)
+        {
+            DataTable dt = GetData(serverId, moduleId, formId, fieldId, value);
+            int count = 1;
+            foreach (DataRow row in dt.Rows)
+            {
+                string entry = "00" + count++;
+                row["storage_location_part4"] = entry.Substring(entry.Length - 3);
+            }
+            return dt;
+        }
+
         internal List<InventoryItem> GetInventoryItems(string serverId, string moduleId, string formId, string fieldId, string value)
         {
             DataTable dataTableName = GetData(serverId, moduleId, formId, fieldId, value);
@@ -307,11 +319,11 @@ namespace GrinGlobal.Zone.Classes
             //invoke model requesting the datatable
             DataSet oldds = ggZoneModel.GetData(urlService, suppressExceptions, dataviewName, delimitedParams, offset, limit, options);
 
-            DataTable model = oldds.Tables[dataviewName];
+            //DataTable model = oldds.Tables[dataviewName];
 
             DataTable table = oldds.Tables[dataviewName]; //search.GetData(serverId, moduleId, formId, fieldId, value);//getDataTable();
 
-            List<string> keysToInsert = GridViewExtension.GetBatchInsertValues<string>(table.Columns[0].ColumnName);
+            List<string> keysToInsert = GridViewExtension.GetBatchInsertValues<string>("storage_location_part4"/*table.Columns[0].ColumnName*/);
             if (keysToInsert != null)
                 //Data.InsertRows(keysToInsert);
                 Console.WriteLine("Inserting");
