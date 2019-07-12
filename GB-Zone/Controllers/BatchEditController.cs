@@ -36,7 +36,7 @@ namespace GrinGlobal.Zone.Controllers
             return View(search.GetData(serverId, moduleId, formId, fieldId, value));
         }
 
-        public ActionResult Index(string serverId, string moduleId, string formId, string fieldId, string value)
+        public ActionResult Index2(string serverId, string moduleId, string formId, string fieldId, string value)
         {
             DataViewsSearch search = new DataViewsSearch();
 
