@@ -207,15 +207,15 @@ namespace GrinGlobal.Zone.Controllers
             return PartialView(viewName, search.GetData(serverId, moduleId, formId, fieldId, value));
         }
 
-        public ActionResult GetGermplasmDetails(string serverId, string germplasmDbId)
-        {
-            DataViewsSearch search = new DataViewsSearch();
+        //public ActionResult GetGermplasmDetails(string serverId, string germplasmDbId)
+        //{
+        //    DataViewsSearch search = new DataViewsSearch();
 
-            ViewData["server"] = serverId;
-            ViewData["germplasmDbId"] = germplasmDbId;
+        //    ViewData["server"] = serverId;
+        //    ViewData["germplasmDbId"] = germplasmDbId;
 
-            return PartialView("_LoadOnDemand", search.GetGermplasmDetails(serverId, Int32.Parse(germplasmDbId)));
-        }
+        //    return PartialView("_LoadOnDemand", search.GetGermplasmDetails(serverId, Int32.Parse(germplasmDbId)));
+        //}
 
     }
 }

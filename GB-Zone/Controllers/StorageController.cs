@@ -153,8 +153,8 @@ namespace GrinGlobal.Zone.Controllers
 
             string serverId = Session["server"].ToString();
             string moduleId = "Inventory";
-            string formId = "gbz_get_boxes";
-            string fieldId = "storageLocation";
+            string formId = "gbz_boxes";
+            string fieldId = "inventoryNumber";
             string value = Session["box"].ToString();
 
             ViewData["server"] = serverId;

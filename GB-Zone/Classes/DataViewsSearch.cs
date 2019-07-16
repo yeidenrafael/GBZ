@@ -1,7 +1,7 @@
 ﻿using DevExpress.Web.Mvc;
 using GrinGlobal.Zone.Helpers;
 using GrinGlobal.Zone.Models;
-using IO.Swagger.Model;
+//using IO.Swagger.Model;
 using System;
 using System.Data;
 using System.Linq;
@@ -126,10 +126,11 @@ namespace GrinGlobal.Zone.Classes
         {
             DataTable dt = GetData(serverId, moduleId, formId, fieldId, value);
             int count = 1;
+            string fmt = "000";
             foreach (DataRow row in dt.Rows)
             {
-                string entry = "00" + count++;
-                row["storage_location_part4"] = entry.Substring(entry.Length - 3);
+                row["storage_location_part4"] = count.ToString(fmt);
+                count++;
             }
             return dt;
         }
@@ -345,7 +346,8 @@ namespace GrinGlobal.Zone.Classes
                 }
 
                 var insertValues = GridViewExtension.GetBatchInsertValues<string>(column.ColumnName);
-                if (insertValues != null)
+                if (insertValues != null && insertValues.Count> 0)
+                //if (insertValues != null )
                 {
                     Dictionary<string, string> dictionary = keysToInsert.ToDictionary(x => x, x => insertValues[keysToInsert.IndexOf(x)]);
                     //Data.UpdateColumn(column.ColumnName, dictionary);
@@ -393,20 +395,20 @@ namespace GrinGlobal.Zone.Classes
             ggZoneModel.SaveData(urlService, suppressExceptions, ds, options);
         }
 
-        public BrapiResponseBrGermplasmV2TO GetGermplasmDetails(string cropId, int germplasmDbId)
-        {
-            XElement service = Settings.Server(cropId);
+        //public BrapiResponseBrGermplasmV2TO GetGermplasmDetails(string cropId, int germplasmDbId)
+        //{
+        //    XElement service = Settings.Server(cropId);
 
-            //extract settings from Setting.xml
-            string crop = service.Attribute("name").Value.ToString();
+        //    //extract settings from Setting.xml
+        //    string crop = service.Attribute("name").Value.ToString();
 
 
-            GGZoneModel ggZoneModel = new GGZoneModel();
+        //    GGZoneModel ggZoneModel = new GGZoneModel();
 
-            var result = ggZoneModel.GetGermplasmDetails(crop, germplasmDbId);
+        //    var result = ggZoneModel.GetGermplasmDetails(crop, germplasmDbId);
 
-            return result;
-        }
+        //    return result;
+        //}
 
         internal List<InventoryItem> NewBox(string serverId, string moduleId, string formId, string fieldId, List<InventoryItem> insert, string box)
         {

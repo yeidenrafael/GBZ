@@ -71,7 +71,6 @@
         }
 
         function UpdateBox(s, e) {
-
             $.ajax({
                 url: '@Url.Action("UpdateBox")',
                 type: 'POST',
@@ -126,13 +125,15 @@
                     settings.Properties.HelpText = "CAR-SEC-BOX";
                 }).GetHtml()
 
-            @Html.DevExpress().Button(settings =>
-                {
-                    settings.Name = "NewBox";
-                    settings.Text = "New";
-                    settings.UseSubmitBehavior = false;
-                    settings.ClientSideEvents.Click = "NewBox";
-                }).GetHtml()
+            @Html.DevExpress().Button(
+                settings =>
+                    {
+                        settings.Name = "NewBox";
+                        settings.Text = "New";
+                        settings.UseSubmitBehavior = false;
+                        settings.ClientSideEvents.Click = "NewBox";
+                    }
+                ).GetHtml()
 
             @Html.DevExpress().Button(settings =>
                 {

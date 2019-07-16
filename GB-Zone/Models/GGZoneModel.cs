@@ -2,8 +2,8 @@
 using GrinGlobal.Zone.GGService;
 using System.Data;
 using System.ServiceModel;
-using IO.Swagger.Api;
-using IO.Swagger.Model;
+//using IO.Swagger.Api;
+//using IO.Swagger.Model;
 using System.Collections.Generic;
 
 namespace GrinGlobal.Zone.Models
@@ -57,16 +57,16 @@ namespace GrinGlobal.Zone.Models
             }
         }
 
-        public BrapiResponseBrGermplasmV2TO GetGermplasmDetails(string crop, int germplasmDbId)
-        {
-            //test brapi
-            //GermplasmApi gmApi = new GermplasmApi("http://asdev.cimmyt.org:8280/brapi/v1");
-            GermplasmApi gmApi = new GermplasmApi("http://itu-dev-srv:8280/brapi/v1");
+        //public BrapiResponseBrGermplasmV2TO GetGermplasmDetails(string crop, int germplasmDbId)
+        //{
+        //    //test brapi
+        //    //GermplasmApi gmApi = new GermplasmApi("http://asdev.cimmyt.org:8280/brapi/v1");
+        //    GermplasmApi gmApi = new GermplasmApi("http://itu-dev-srv:8280/brapi/v1");
 
-            var result = gmApi.GetGermplasmDetails(crop.ToLower(), germplasmDbId);
+        //    var result = gmApi.GetGermplasmDetails(crop.ToLower(), germplasmDbId);
          
-            return result;
-        }
+        //    return result;
+        //}
 
         public IList<InventoryItem> GetInventoryItems() {
 
