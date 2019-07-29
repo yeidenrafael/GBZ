@@ -1,7 +1,6 @@
 ﻿using DevExpress.Web.Mvc;
 using GrinGlobal.Zone.Helpers;
 using GrinGlobal.Zone.Models;
-using IO.Swagger.Model;
 using System;
 using System.Data;
 using System.Linq;
@@ -269,20 +268,6 @@ namespace GrinGlobal.Zone.Classes
             ggZoneModel.SaveData(urlService, suppressExceptions, ds, options);
         }
 
-        public BrapiResponseBrGermplasmV2TO GetGermplasmDetails(string cropId, int germplasmDbId)
-        {
-            XElement service = Settings.Server(cropId);
-
-            //extract settings from Setting.xml
-            string crop = service.Attribute("name").Value.ToString();
-
-
-            GGZoneModel ggZoneModel = new GGZoneModel();
-
-            var result = ggZoneModel.GetGermplasmDetails(crop, germplasmDbId);
-
-            return result;
-        }
 
         internal List<InventoryItem> NewBox(string serverId, string moduleId, string formId, string fieldId, List<InventoryItem> insert, string box)
         {
@@ -365,6 +350,61 @@ namespace GrinGlobal.Zone.Classes
             ggZoneModel.SaveData(urlService, suppressExceptions, ds, options);
 
             return inventoryItems;
+        }
+
+        public void BoxBatchSave(string serverId, string moduleId, string formId, string fieldId, DataTable insert, string box)
+        {
+            GGZoneModel ggZoneModel = new GGZoneModel();
+            int nBracket = 0;
+            int nIndex = 0;
+            string colName = string.Empty;
+            XElement service = Settings.Form(serverId, moduleId, formId)
+                                  .Elements("field")
+                                  .Where(c => (string)c.Attribute("id") == fieldId).FirstOrDefault();
+            //extract settings from Setting.xml
+            string urlService = service.Parent.Parent.Parent.Attribute("url").Value.ToString();
+            string dataviewName = service.Element("actions").Element("parameters").Element("dataviewName").Value;
+            bool suppressExceptions = bool.Parse(service.Element("actions").Element("parameters").Element("suppressExceptions").Value);
+            int offset = int.Parse(service.Element("actions").Element("parameters").Element("offset").Value);
+            int limit = int.Parse(service.Element("actions").Element("parameters").Element("limit").Value);
+            string options = service.Element("actions").Element("parameters").Element("options").Value;
+            //put the value in the delimitedParameterList
+            string delimitedParams = service.Element("actions").Element("parameters").Element("delimitedParameterList").Value;
+            Char separator = (char)Convert.ToInt32(service.Element("actions").Element("parameters").Element("separator").Value);
+
+            var boxPart = box.Split(separator);
+            string value = "";
+            foreach (DataRow inventoryItem in insert.Rows) // create new array from parameters to update or insert new bolsitas
+            {
+                if (inventoryItem["inventory_number"] != null)
+                {
+                    if (value == "")
+                        value = inventoryItem["inventory_number"].ToString();
+                    else
+                        value += "','" + inventoryItem["inventory_number"].ToString();
+                }
+            }
+            string[] arrValue = new string[] { value,"","","" };//cast string to querry in array whit one value
+            while ((nBracket = delimitedParams.IndexOf("{0}", nBracket)) != -1)
+            {
+                delimitedParams = delimitedParams.Remove(nBracket, 3).Insert(nBracket, arrValue[nIndex]);
+                nBracket++;
+                nIndex++;
+            }
+            DataSet oldds = ggZoneModel.GetData(urlService, suppressExceptions, dataviewName, delimitedParams, offset, limit, options);// search by DataSet de all bolsitas
+            DataTable model = oldds.Tables[dataviewName];
+            foreach (DataRow inventoryItem in insert.Rows)
+            {
+                if (inventoryItem["inventory_number"] != null)
+                {
+                    DataRow[] dr = model.Select("inventory_number = '" + inventoryItem["inventory_number"].ToString() + "'");
+                    dr[0]["storage_location_part1"] = boxPart[0];
+                    dr[0]["storage_location_part2"] = boxPart[1];
+                    dr[0]["storage_location_part3"] = boxPart[2];
+                    dr[0]["storage_location_part4"] = inventoryItem["storage_location_part4"];
+                }
+            }
+            ggZoneModel.SaveData(urlService, suppressExceptions, oldds, options);
         }
     }
 }

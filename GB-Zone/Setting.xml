@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Settings>
-  <server id="01" name="Wheat" url="http://localhost/gringlobal/gui.asmx">
+  <server id="01" name="Wheat" url="http://itu-dev-srv:81/gringlobal/gui.asmx">
     <module id="Inventory" title="Inventory" description="You can search and update information about Inventory items" icon="pe-7s-note2">
       <form id="gbz_get_inventory" title="Inventory items" layout="vertical" cssClass="form-group" action="Index" controller="Search">
         <field id="storageLocation" type="text" placeholder="CAR-SEC-BOX" visible="true">
@@ -138,7 +138,7 @@
         </field>
       </form>
 
-      <form id="gbz_boxes" title="Boxes" layout="vertical" cssClass="form-group" action="Index" controller="Storage">
+      <form id="gbz_boxes" title="New Boxes" layout="vertical" cssClass="form-group" action="Index" controller="Storage">
         <field id="inventoryNumber" type="text"  placeholder="Inventory Number" visible="true">
           <actions>
             <parameters>
@@ -156,6 +156,35 @@
           </actions>
         </field>
       </form>
+
+      <form id="gbz_get_box" title="Update Box" layout="vertical" cssClass="form-group" action="Index" controller="Box">
+        <field id="inventoryNumber" type="text"  placeholder="CAR-SEC-BOX" visible="true">
+          <actions>
+            <parameters>
+              <suppressExceptions>false</suppressExceptions>
+              <dataviewName>gbz_get_box</dataviewName>
+              <delimitedParameterList>:inventorynumber={0};:car={0};:sec={0};:box={0};</delimitedParameterList>
+              <offset>0</offset>
+              <limit>0</limit>
+              <options>1</options>
+              <separator>45</separator>
+            </parameters>
+            <columns>
+            </columns>
+            <extendedProperties></extendedProperties>
+          </actions>
+        </field>
+        <properties>
+          <cellAutoincremente>storage_location_part4</cellAutoincremente>
+          <colums>
+            <colum id ="inventory_number">
+              <readOnly>false</readOnly>  
+            </colum>
+          </colums>
+        </properties>
+      </form>
+    
+      
     </module>
 
     <module id="Orders" title="Orders" description="You can search and update information about Order items" icon="pe-7s-box1">
@@ -334,7 +363,7 @@
 -->    
   </server>
 
-  <server id="02" name="Maize" url="http://localhost:81/gringlobal/gui.asmx">
+  <server id="02" name="Maize" url="http://itu-dev-srv:81/gringlobal/gui.asmx">
     <module id="Orders" title="Orders" description="You can search and update information about Order items" icon="pe-7s-box1">
       <form id="gbz_get_order_request_item" title="Order items" layout="vertical" cssClass="form-group" action="Index" controller="Search">
         <field id="orderrequestid" type="number" placeholder="Order Number" visible="true">
