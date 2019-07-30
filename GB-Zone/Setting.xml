@@ -174,14 +174,6 @@
             <extendedProperties></extendedProperties>
           </actions>
         </field>
-        <properties>
-          <cellAutoincremente>storage_location_part4</cellAutoincremente>
-          <colums>
-            <colum id ="inventory_number">
-              <readOnly>false</readOnly>  
-            </colum>
-          </colums>
-        </properties>
       </form>
     
       

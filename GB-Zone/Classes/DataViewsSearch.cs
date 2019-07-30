@@ -354,6 +354,11 @@ namespace GrinGlobal.Zone.Classes
 
         public void BoxBatchSave(string serverId, string moduleId, string formId, string fieldId, DataTable insert, string box)
         {
+            string COLUMN_INVENTORY_NUMBER = "inventory_number"; 
+            string COLUMN_CAR = "storage_location_part1";
+            string COLUMN_SEC = "storage_location_part2";
+            string COLUMN_BOX = "storage_location_part3";
+            string COLUMN_PAQ = "storage_location_part4";
             GGZoneModel ggZoneModel = new GGZoneModel();
             int nBracket = 0;
             int nIndex = 0;
@@ -376,12 +381,12 @@ namespace GrinGlobal.Zone.Classes
             string value = "";
             foreach (DataRow inventoryItem in insert.Rows) // create new array from parameters to update or insert new bolsitas
             {
-                if (inventoryItem["inventory_number"] != null)
+                if (inventoryItem[COLUMN_INVENTORY_NUMBER] != null)
                 {
                     if (value == "")
-                        value = inventoryItem["inventory_number"].ToString();
+                        value = inventoryItem[COLUMN_INVENTORY_NUMBER].ToString();
                     else
-                        value += "','" + inventoryItem["inventory_number"].ToString();
+                        value += "','" + inventoryItem[COLUMN_INVENTORY_NUMBER].ToString();
                 }
             }
             string[] arrValue = new string[] { value,"","","" };//cast string to querry in array whit one value
@@ -395,13 +400,13 @@ namespace GrinGlobal.Zone.Classes
             DataTable model = oldds.Tables[dataviewName];
             foreach (DataRow inventoryItem in insert.Rows)
             {
-                if (inventoryItem["inventory_number"] != null)
+                if (inventoryItem[COLUMN_INVENTORY_NUMBER] != null)
                 {
-                    DataRow[] dr = model.Select("inventory_number = '" + inventoryItem["inventory_number"].ToString() + "'");
-                    dr[0]["storage_location_part1"] = boxPart[0];
-                    dr[0]["storage_location_part2"] = boxPart[1];
-                    dr[0]["storage_location_part3"] = boxPart[2];
-                    dr[0]["storage_location_part4"] = inventoryItem["storage_location_part4"];
+                    DataRow[] dr = model.Select(COLUMN_INVENTORY_NUMBER + " = '" + inventoryItem[COLUMN_INVENTORY_NUMBER].ToString() + "'");
+                    dr[0][COLUMN_CAR] = boxPart[0];
+                    dr[0][COLUMN_SEC] = boxPart[1];
+                    dr[0][COLUMN_BOX] = boxPart[2];
+                    dr[0][COLUMN_PAQ] = inventoryItem[COLUMN_PAQ];
                 }
             }
             ggZoneModel.SaveData(urlService, suppressExceptions, oldds, options);
