@@ -1,13 +1,77 @@
 ﻿@model System.Data.DataTable
-@{
-    ViewBag.ViewTitle = "";
-}
-@Html.Partial("_SearchFields")
 
 @{
-    if (ViewData["viewName"] != null)
-    {
-        Html.RenderPartial("_HeaderGridView");
-        Html.RenderPartial("_GridViewSearch", Model, new ViewDataDictionary { { "viewName", ViewData["viewName"] }, { "value", ViewData["value"] }, { "crop", ViewData["crop"] }, { "moduleId", ViewData["moduleId"] } });
-    }
+    ViewBag.ViewTitle = "| " + ViewData["moduleId"];
 }
+
+
+@section scriptsHeader {
+
+    <script type="text/javascript">
+        function OnTest(s, e) {
+            PopupControl.Show();
+        }
+        function ShowDetailPopup(url) {
+            PopupControl.SetContentUrl(url);
+            PopupControl.Show();
+        }
+        function CustomButtonClick(s, e, acurl) {
+            var key = s.GetRowKey(e.visibleIndex);
+            //alert("Inventory Id " + key);
+
+            if (e.buttonID === "btnGetKey") {
+                //var destUrl = url + "/" + key;
+                //alert("Destination Url is: " + destUrl);
+
+                //window.location.href = destUrl;
+
+                $.ajax({
+                    type: "POST",
+                    url: acurl,
+                    data: { newInventory: key },
+                    success: function (response) {
+                        $("#container").html(response);
+                        //alert("Inventory source changed");
+                    }
+                });
+                gvSearch.Refresh();
+                //ASPx.GVHideDetailRow('gvSearch', e.visibleIndex, event);
+                //event.cancelBubble = true;
+            }
+        }
+    </script>
+}
+
+@Html.Partial("_SearchFields")
+
+@if (ViewData["viewName"] != null)
+{
+    Html.RenderPartial("_HeaderGridView");
+    //Html.RenderPartial("_GridViewSearch", Model, new ViewDataDictionary { { "viewName", ViewData["viewName"] }, { "value", ViewData["value"] }, { "server", ViewData["server"] }, { "moduleId", ViewData["moduleId"] } });
+}
+<div class="row">
+    <div class="col-lg-12">
+        
+            @if (ViewData["viewName"] != null)
+            {
+                //Html.RenderPartial("_HeaderGridView");
+                Html.RenderPartial("_GridViewSearch", Model, new ViewDataDictionary { { "viewName", ViewData["viewName"] }, { "value", ViewData["value"] }, { "server", ViewData["server"] }, { "moduleId", ViewData["moduleId"] }, { "formId", ViewData["formId"] } });
+            }
+        
+    </div>
+</div>
+
+@Html.DevExpress().PopupControl(settings =>
+{
+    settings.Name = "PopupControl";
+    //settings.Width = System.Web.UI.WebControls.Unit.Pixel(800);//Percentage(100);
+    //settings.Height = System.Web.UI.WebControls.Unit.Percentage(100);//Unit.Pixel(800);
+    settings.CloseAction = CloseAction.OuterMouseClick;
+    settings.PopupVerticalAlign = PopupVerticalAlign.Middle;
+    settings.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+    settings.ShowFooter = false;
+    settings.AllowDragging = true;
+    settings.HeaderText = "Germplasm detail";
+    settings.Modal = false;
+    settings.ClientSideEvents.PopUp = "function(s, e) { s.SetWidth(document.documentElement.clientWidth-20); s.SetHeight(document.documentElement.clientHeight-20); s.UpdatePosition(); }";
+}).GetHtml()

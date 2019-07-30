@@ -1,0 +1,43 @@
+﻿@using GrinGlobal.Zone.Helpers
+
+<!-- Navigation -->
+<aside id="menu">
+    <div id="navigation">
+        <div class="profile-picture">
+            <a href="~/">
+                <img src="~/Content/img/profile.png" class="img-circle m-b" alt="logo">
+            </a>
+
+            <div class="stats-label text-color">
+                <div class="dropdown">
+                    <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+                        <span class="font-extra-bold font-uppercase">@Html.Encode(User.Identity.Name)<b class="caret"></b></span>
+                    </a>
+                    <ul class="dropdown-menu animated flipInX m-t-xs">
+                        <li><a href="http://servicedesk.cimmyt.org/otrs/customer.pl" target="_blank">Service Desk</a></li>
+                        <li class="divider"></li>
+                        <li>@Html.Partial("_LogOnPartialView")</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <ul class="nav" id="side-menu">
+            <li class="active">
+                <a href="~/"> <span class="nav-label">Modules</span><span class="label label-success pull-right">v.1</span></a>
+            </li>
+            @foreach (var module in Settings.Server(Session["server"].ToString()).Elements("module"))
+            {
+                <li>
+                    <a href="#"><span class="nav-label">@module.Attribute("title").Value</span><span class="fa arrow"></span> </a>
+                    <ul class="nav nav-second-level">
+                        @foreach (var form in module.Elements("form"))
+                        {
+                            <li><a href="@Url.Action(form.Attribute("action").Value, form.Attribute("controller").Value, new { moduleId = module.Attribute("id").Value, formId = form.Attribute("id").Value })">@form.Attribute("title").Value</a></li>
+                        }
+                    </ul>
+                </li>
+            }
+        </ul>
+    </div>
+</aside>

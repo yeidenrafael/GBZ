@@ -49,19 +49,19 @@ namespace GrinGlobal.Zone.Controllers
                 return View(model);
             }
 
-            var userInformation = model.validateGG(model.Crop, model.UserName, model.Password);
+            var userInformation = model.validateGG(model.Server, model.UserName, model.Password);
             if (userInformation != null) {
                 DataRow rowUser = userInformation.Rows[0];
                 if (rowUser["is_enabled"].ToString() == "Y")
                 {
-                    Session["crop"] = model.Crop;
+                    Session["server"] = model.Server;
                     Session["username"] = model.UserName;
                     Session["userkey"] = model.Password;
                     FormsAuthentication.SetAuthCookie(model.UserName, false);
                     return RedirectToAction("Index", "Home");
                 }
                 else {
-                    ModelState.AddModelError("", "The user is disabled in GrinGlobal application");
+                    ModelState.AddModelError("", "The user is disabled in GRIN-Global server");
                     return View(model);
                 }
             }

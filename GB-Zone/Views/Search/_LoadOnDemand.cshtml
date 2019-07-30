@@ -1,0 +1,344 @@
+﻿@using IO.Swagger.Model
+@using System.Web.UI.WebControls
+
+@model BrapiResponseBrGermplasmV2TO
+
+    @{
+        using (Html.BeginForm("GetGermplasmDetails", "Search"))
+        {
+            Html.DevExpress().FormLayout(s =>
+            {
+                s.Name = "germplasmForm";
+                s.Styles.LayoutItem.Caption.Font.Bold = true;
+                s.Width = Unit.Percentage(100);
+                //s.Styles.LayoutItem.Caption.Font.Size = 10;
+                //s.SettingsAdaptivity.AdaptivityMode = FormLayoutAdaptivityMode.SingleColumnWindowLimit;
+                //s.SettingsAdaptivity.SwitchToSingleColumnAtWindowInnerWidth = 700;
+                //s.UseDefaultPaddings = false;
+
+                s.Items.Add(m => m.Result.AccessionName, i =>
+                {
+                    i.NestedExtension().Label(settings =>
+                    {
+                        settings.Text = Model.Result.AccessionName;
+                    });
+                });
+                s.Items.Add(m => m.Result.AccessionNumber, i =>
+                {
+                    i.NestedExtension().Label(settings =>
+                    {
+                        settings.ControlStyle.CssClass = "font-extra-bold";
+                        settings.Text = Model.Result.AccessionNumber;
+                    });
+                });
+                s.Items.Add(m => m.Result.AcquisitionDate, i =>
+                {
+                    i.NestedExtension().Label(settings =>
+                    {
+                        settings.Text = Model.Result.AcquisitionDate;
+                    });
+                });
+                s.Items.Add(m => m.Result.AncestralData, i =>
+                {
+                    i.NestedExtension().Label(settings =>
+                    {
+                        settings.Text = Model.Result.AncestralData;
+                    });
+                });
+                s.Items.Add(m => m.Result.BiologicalStatusOfAccession, i =>
+                {
+                    i.NestedExtension().Label(settings =>
+                    {
+                        settings.Text = Model.Result.BiologicalStatusOfAccession;
+                    });
+                });
+                s.Items.Add(m => m.Result.BreedingInstituteCode, i =>
+                {
+                    i.NestedExtension().Label(settings =>
+                    {
+                        settings.Text = Model.Result.BreedingInstituteCode;
+                    });
+                });
+                s.Items.Add(m => m.Result.BreedingInstituteName, i =>
+                {
+                    i.NestedExtension().Label(settings =>
+                    {
+                        settings.Text = Model.Result.BreedingInstituteName;
+                    });
+                });
+                s.Items.Add(m => m.Result.CollectingAcquisitionSource, i =>
+                {
+                    i.NestedExtension().Label(settings =>
+                    {
+                        settings.Text = Model.Result.CollectingAcquisitionSource;
+                    });
+                });
+                s.Items.Add(m => m.Result.CollectingDateOfSample, i =>
+                {
+                    i.NestedExtension().Label(settings =>
+                    {
+                        settings.Text = Model.Result.CollectingDateOfSample;
+                    });
+                });
+                s.Items.Add(m => m.Result.CollectingInstituteAddress, i =>
+                {
+                    i.NestedExtension().Label(settings =>
+                    {
+                        settings.Text = Model.Result.CollectingInstituteAddress;
+                    });
+                });
+                s.Items.Add(m => m.Result.CollectingInstituteCode, i =>
+                {
+                    i.NestedExtension().Label(settings =>
+                    {
+                        settings.Text = Model.Result.CollectingInstituteCode;
+                    });
+                });
+                s.Items.Add(m => m.Result.CollectingInstituteName, i =>
+                {
+                    i.NestedExtension().Label(settings =>
+                    {
+                        settings.Text = Model.Result.CollectingInstituteName;
+                    });
+                });
+                s.Items.Add(m => m.Result.CollectingMissionIdentifier, i =>
+                {
+                    i.NestedExtension().Label(settings =>
+                    {
+                        settings.Text = Model.Result.CollectingMissionIdentifier;
+                    });
+                });
+                s.Items.Add(m => m.Result.CollectingNumber, i =>
+                {
+                    i.NestedExtension().Label(settings =>
+                    {
+                        settings.Text = Model.Result.CollectingNumber;
+                    });
+                });
+                s.Items.Add(m => m.Result.CommonCropName, i =>
+                {
+                    i.NestedExtension().Label(settings =>
+                    {
+                        settings.Text = Model.Result.CommonCropName;
+                    });
+                });
+                s.Items.Add(m => m.Result.CoordinateDatum, i =>
+                {
+                    i.NestedExtension().Label(settings =>
+                    {
+                        settings.Text = Model.Result.CoordinateDatum;
+                    });
+                });
+                s.Items.Add(m => m.Result.CoordinateUncertainty, i =>
+                {
+                    i.NestedExtension().Label(settings =>
+                    {
+                        settings.Text = Model.Result.CoordinateUncertainty;
+                    });
+                });
+                s.Items.Add(m => m.Result.CountryOfOrigin, i =>
+                {
+                    i.NestedExtension().Label(settings =>
+                    {
+                        settings.Text = Model.Result.CountryOfOrigin;
+                    });
+                });
+                s.Items.Add(m => m.Result.Declatitude, i =>
+                {
+                    i.NestedExtension().Label(settings =>
+                    {
+                        settings.Text = Model.Result.Declatitude;
+                    });
+                });
+                s.Items.Add(m => m.Result.Declongitude, i =>
+                {
+                    i.NestedExtension().Label(settings =>
+                    {
+                        settings.Text = Model.Result.Declongitude;
+                    });
+                });
+                s.Items.Add(m => m.Result.DefaultDisplayName, i =>
+                {
+                    i.NestedExtension().Label(settings =>
+                    {
+                        settings.Text = Model.Result.DefaultDisplayName;
+                    });
+                });
+                s.Items.Add(m => m.Result.DonorAccessionNumber, i =>
+                {
+                    i.NestedExtension().Label(settings =>
+                    {
+                        settings.Text = Model.Result.DonorAccessionNumber;
+                    });
+                });
+                s.Items.Add(m => m.Result.DonorInstituteCode, i =>
+                {
+                    i.NestedExtension().Label(settings =>
+                    {
+                        settings.Text = Model.Result.DonorInstituteCode;
+                    });
+                });
+                s.Items.Add(m => m.Result.DonorInstituteName, i =>
+                {
+                    i.NestedExtension().Label(settings =>
+                    {
+                        settings.Text = Model.Result.DonorInstituteName;
+                    });
+                });
+                s.Items.Add(m => m.Result.ElevationOfCollectingSite, i =>
+                {
+                    i.NestedExtension().Label(settings =>
+                    {
+                        settings.Text = Model.Result.ElevationOfCollectingSite;
+                    });
+                });
+                s.Items.Add(m => m.Result.GeoreferencingMethod, i =>
+                {
+                    i.NestedExtension().Label(settings =>
+                    {
+                        settings.Text = Model.Result.GeoreferencingMethod;
+                    });
+                });
+                s.Items.Add(m => m.Result.GermplasmDbId, i =>
+                {
+                    i.NestedExtension().Label(settings =>
+                    {
+                        settings.Text = Model.Result.GermplasmDbId.ToString();
+                    });
+                });
+                s.Items.Add(m => m.Result.GermplasmName, i =>
+                {
+                    i.NestedExtension().Label(settings =>
+                    {
+                        settings.Text = Model.Result.GermplasmName;
+                    });
+                });
+                s.Items.Add(m => m.Result.GermplasmPUI, i =>
+                {
+                    i.NestedExtension().HyperLink(settings =>
+                    {
+                        settings.Name = "hyperLink1";
+                        settings.Properties.Text = Model.Result.GermplasmPUI;
+                        settings.Properties.Target = "_blank";
+                    });
+                });
+                s.Items.Add(m => m.Result.InstituteCode, i =>
+                {
+                    i.NestedExtension().Label(settings =>
+                    {
+                        settings.Text = Model.Result.InstituteCode;
+                    });
+                });
+                s.Items.Add(m => m.Result.InstituteMaintainingSafetyDuplicates, i =>
+                {
+                    i.NestedExtension().Label(settings =>
+                    {
+                        settings.Text = Model.Result.InstituteMaintainingSafetyDuplicates;
+                    });
+                });
+                s.Items.Add(m => m.Result.LocationOfCollectingSite, i =>
+                {
+                    i.NestedExtension().Label(settings =>
+                    {
+                        settings.Text = Model.Result.LocationOfCollectingSite;
+                    });
+                });
+                s.Items.Add(m => m.Result.LocationOfSafetyDuplicates, i =>
+                {
+                    i.NestedExtension().Label(settings =>
+                    {
+                        settings.Text = Model.Result.LocationOfSafetyDuplicates;
+                    });
+                });
+                s.Items.Add(m => m.Result.MlsStatusOfTheAccession, i =>
+                {
+                    i.NestedExtension().Label(settings =>
+                    {
+                        settings.Text = Model.Result.MlsStatusOfTheAccession;
+                    });
+                });
+                s.Items.Add(m => m.Result.OtherIdentifiers, i =>
+                {
+                    i.NestedExtension().Label(settings =>
+                    {
+                        settings.Text = Model.Result.OtherIdentifiers;
+                    });
+                });
+                s.Items.Add(m => m.Result.Pedigree, i =>
+                {
+                    i.NestedExtension().Label(settings =>
+                    {
+                        settings.Text = Model.Result.Pedigree;
+                    });
+                });
+                s.Items.Add(m => m.Result.Remarks, i =>
+                {
+                    i.NestedExtension().Label(settings =>
+                    {
+                        settings.Text = Model.Result.Remarks;
+                    });
+                });
+                s.Items.Add(m => m.Result.Genus, i =>
+                {
+                    i.NestedExtension().Label(settings =>
+                    {
+                        settings.Text = Model.Result.Genus;
+                    });
+                });
+                s.Items.Add(m => m.Result.Species, i =>
+                {
+                    i.NestedExtension().Label(settings =>
+                    {
+                        settings.Text = Model.Result.Species;
+                    });
+                });
+                s.Items.Add(m => m.Result.SpeciesAuthority, i =>
+                {
+                    i.NestedExtension().Label(settings =>
+                    {
+                        settings.Text = Model.Result.SpeciesAuthority;
+                    });
+                });
+                s.Items.Add(m => m.Result.Subtaxon, i =>
+                {
+                    i.NestedExtension().Label(settings =>
+                    {
+                        settings.Text = Model.Result.Subtaxon;
+                    });
+                });
+                s.Items.Add(m => m.Result.SubtaxonAuthority, i =>
+                {
+                    i.NestedExtension().Label(settings =>
+                    {
+                        settings.Text = Model.Result.SubtaxonAuthority;
+                    });
+                });
+                s.Items.Add(i =>
+                {
+                    i.Caption = "Synonyms";
+
+                    System.Text.StringBuilder sb = new System.Text.StringBuilder();
+
+                    foreach (string str in Model.Result.Synonyms)
+                    {
+                        TagBuilder tag = new TagBuilder("span");
+                        tag.InnerHtml = str;
+                        tag.AddCssClass("stringitem");
+                        sb.AppendFormat("{0}<br />", tag.ToString());
+                        //sb.Append(str);
+                    }
+                    i.CssClass = "font-extra-bold";
+
+                    i.SetNestedContent(sb.ToString());
+                });
+                s.Items.Add(m => m.Result.TypeOfGermplasmStorage, i =>
+                {
+                    i.NestedExtension().Label(settings =>
+                    {
+                        settings.Text = Model.Result.TypeOfGermplasmStorage;
+                    });
+                });
+
+            }).Render();
+        }
+    }

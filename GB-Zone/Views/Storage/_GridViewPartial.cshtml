@@ -1,0 +1,38 @@
+@model IEnumerable<GrinGlobal.Zone.Models.InventoryItem>
+
+@{
+    var grid = Html.DevExpress().GridView(settings =>
+    {
+        settings.Name = "GridView";
+        settings.KeyFieldName = "InventoryNumber";
+        settings.CallbackRouteValues = new { Controller = "Storage", Action = "GridViewPartial" };
+        settings.SettingsEditing.BatchUpdateRouteValues = new { Controller = "Storage", Action = "BatchEditingUpdateModel" };
+
+        settings.SettingsEditing.Mode = GridViewEditingMode.Batch;
+        settings.SettingsEditing.BatchEditSettings.EditMode = GridViewBatchEditMode.Cell;
+        settings.SettingsEditing.BatchEditSettings.StartEditAction = GridViewBatchStartEditAction.Click;
+        settings.SettingsEditing.BatchEditSettings.HighlightDeletedRows = true;
+        settings.SettingsEditing.NewItemRowPosition = GridViewNewItemRowPosition.Bottom;
+
+        settings.CommandColumn.Visible = true;
+        //settings.CommandColumn.ShowDeleteButton = true;
+        settings.CommandColumn.ShowNewButtonInHeader = true;
+
+        settings.Columns.Add("EntryId");
+        settings.Columns.Add("InventoryNumber");
+
+        settings.CellEditorInitialize = (s, e) =>
+        {
+            if (e.Column.Index == (e.Column.Collection.Count - 1))
+            {
+                ASPxEditBase editor = e.Editor as ASPxEditBase;
+                editor.SetClientSideEventHandler("KeyDown", "OnKeyDown");
+            }
+        };
+    });
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@grid.Bind(Model).GetHtml()

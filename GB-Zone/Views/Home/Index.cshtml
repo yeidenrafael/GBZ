@@ -3,19 +3,44 @@
 @{ViewBag.ViewTitle = "| Modules"; }
 
 
-<div class="row text-center">
-    <div class="col-lg-12">
-        <h2><span class="text-success">GB-Zone </span>Modules</h2>
+<div class="row">
+    <div class="col-lg-12 text-center m-t-md">
+        <h2>
+            Welcome to <span class="text-success">GB-Zone</span>
+        </h2>
+
+        <p>
+            Here you can select a <strong>Module</strong> of GRIN-Global to manage germplasm bank information.
+        </p>
     </div>
 </div>
 
-<div class="row text-center">
-    @foreach (var elm in Settings.CropInfo(Session["crop"].ToString()).Elements("modules"))
+<div class="row">
+    @foreach (var module in Settings.Server(Session["server"].ToString()).Elements("module"))
     {
-        <div id="@elm.Attribute("id").Value" class="col-md-4">
-            <a class="@elm.Attribute("icon").Value text-success icon-big" href="@Url.Action(elm.Attribute("action").Value, elm.Attribute("controller").Value, new { moduleId = elm.Attribute("id").Value })"></a>
-            <h4>@elm.Attribute("title").Value</h4>
-            <p>@elm.Attribute("description").Value</p>
+        <div class="col-lg-6">
+            <div class="hpanel hgreen">
+                <div class="panel-heading">                   
+                </div>
+                <div class="panel-body h-200">
+                    <div class="stats-icon pull-right">
+                        <i class="@module.Attribute("icon").Value fa-4x text-success"></i>
+                    </div>
+                    <div class="m-t-xl">
+                        <h3 class="fa-3x">@module.Attribute("title").Value</h3>
+                        <p>@module.Attribute("description").Value</p>
+                    </div>
+                    @foreach (var form in module.Elements("form"))
+                    {
+                        <h3 class="font-extra-bold">
+                            <a class="text-success" href="@Url.Action(form.Attribute("action").Value, form.Attribute("controller").Value, new { moduleId = module.Attribute("id").Value, formId = form.Attribute("id").Value })">@form.Attribute("title").Value</a>
+                        </h3>
+                    }
+                </div>
+                <div class="panel-footer">
+                    
+                </div>
+            </div>
         </div>
     }
 </div>

@@ -5,20 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
+    <!-- Page title -->
     <title>GB-Zone | @ViewBag.Title</title>
 
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700' rel='stylesheet' type='text/css'>
+    <!-- Primary vendor style -->
+    @System.Web.Optimization.Styles.Render("~/Content/css")
+    @System.Web.Optimization.Styles.Render("~/Vendor/css")
+
+    <!-- Vendor styles -->
+    <link rel="stylesheet" href="~/Vendor/fontawesome/css/font-awesome.css" />
+    <link rel="stylesheet" href="~/Vendor/pe-icon-7-stroke/css/pe-icon-7-stroke.css" />
+    <link rel="stylesheet" href="~/Vendor/pe-icon-7-stroke/css/helper.css">
+    
+    <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700' type='text/css'>
 
     <!-- Add local styles, mostly for plugins css file -->
     @if (IsSectionDefined("Styles"))
     {@RenderSection("Styles", required: false)}
 
-    <!-- Primary HOMER style -->
-    @Styles.Render("~/bundles/font-awesome/css")
-    @Styles.Render("~/bundles/animate/css")
-    @Styles.Render("~/bundles/bootstrap/css")
-    @Styles.Render("~/bundles/peicon7stroke/css")
-    @Styles.Render("~/bundles/homer/css")
+
+  
 </head>
 <body class="blank">
 

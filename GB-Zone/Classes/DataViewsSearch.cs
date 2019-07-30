@@ -1,10 +1,12 @@
 ﻿using DevExpress.Web.Mvc;
 using GrinGlobal.Zone.Helpers;
 using GrinGlobal.Zone.Models;
+using IO.Swagger.Model;
 using System;
 using System.Data;
 using System.Linq;
 using System.Xml.Linq;
+using System.Collections.Generic;
 
 namespace GrinGlobal.Zone.Classes
 {
@@ -16,9 +18,9 @@ namespace GrinGlobal.Zone.Classes
 
         void DataviewSearch() { }
 
-        public DataTable GetData(string value, string cropSelected, string viewSelected, string moduleId)
+        public DataTable GetData(string serverId, string moduleId, string formId, string fieldId, string value)
         {
-            string cropId = cropSelected;
+            //string cropId = serverId;
 
             int nBracket = 0;
             int nIndex = 0;
@@ -31,23 +33,27 @@ namespace GrinGlobal.Zone.Classes
                                   .Elements("field")
                                   .Where(c => (string)c.Attribute("id") == viewSelected).FirstOrDefault();*/
 
-            XElement service = Settings.Module(cropId, moduleId)
+            /*XElement service = Settings.Module(serverId, moduleId)
                                   .Elements("form")
                                   .Elements("field")
-                                  .Where(c => (string)c.Attribute("id") == viewSelected).FirstOrDefault();
+                                  .Where(c => (string)c.Attribute("id") == fieldId).FirstOrDefault();*/
+            XElement service = Settings.Form(serverId, moduleId, formId)
+                                  .Elements("field")
+                                  .Where(c => (string)c.Attribute("id") == fieldId).FirstOrDefault();
 
             //extract settings from Setting.xml
             string urlService = service.Parent.Parent.Parent.Attribute("url").Value.ToString();
             string dataviewName = service.Element("actions").Element("parameters").Element("dataviewName").Value;
-            Boolean suppressExceptions = bool.Parse(service.Element("actions").Element("parameters").Element("suppressExceptions").Value);
-            Int32 offset = int.Parse(service.Element("actions").Element("parameters").Element("offset").Value);
-            Int32 limit = int.Parse(service.Element("actions").Element("parameters").Element("limit").Value);
+            bool suppressExceptions = bool.Parse(service.Element("actions").Element("parameters").Element("suppressExceptions").Value);
+            int offset = int.Parse(service.Element("actions").Element("parameters").Element("offset").Value);
+            int limit = int.Parse(service.Element("actions").Element("parameters").Element("limit").Value);
             string options = service.Element("actions").Element("parameters").Element("options").Value;
 
             //put the value in the delimitedParameterList
             string delimitedParams = service.Element("actions").Element("parameters").Element("delimitedParameterList").Value;
-
-            var arrValue = value.Split(new char[] { '-' });
+            Char separator = (char) Convert.ToInt32(service.Element("actions").Element("parameters").Element("separator").Value);
+                        
+            var arrValue = value.Split(separator);
 
             while ((nBracket = delimitedParams.IndexOf("{0}", nBracket)) != -1)
             {
@@ -82,8 +88,11 @@ namespace GrinGlobal.Zone.Classes
                     }
                     if (column.Attribute("link") != null && bool.Parse(column.Attribute("link").Value))
                     {
-                        col.ExtendedProperties.Add("view_reference", column.Attribute("viewreference").Value);
-                        col.ExtendedProperties.Add("col_reference", column.Attribute("colreference").Value); 
+                        //moduleRef="Inventory" formRef="gbz_get_inventory" fieldRef="intrid" colRef="inventory_number_part1"
+                        col.ExtendedProperties.Add("moduleRef", column.Attribute("moduleRef").Value);
+                        col.ExtendedProperties.Add("formRef", column.Attribute("formRef").Value);
+                        col.ExtendedProperties.Add("fieldRef", column.Attribute("fieldRef").Value);
+                        col.ExtendedProperties.Add("colRef", column.Attribute("colRef").Value);
                     }
                 }
 
@@ -93,13 +102,24 @@ namespace GrinGlobal.Zone.Classes
                 }
             }
 
+            
+            if(service.Element("actions").Element("extendedProperties").Element("masterDetail") != null)
+            {
+                ds.Tables[dataviewName].ExtendedProperties.Add("masterDetail", true);
+                ds.Tables[dataviewName].ExtendedProperties.Add("actionName", service.Element("actions").Element("extendedProperties").Element("masterDetail").Attribute("actionName").Value);
+                ds.Tables[dataviewName].ExtendedProperties.Add("moduleRef", service.Element("actions").Element("extendedProperties").Element("masterDetail").Attribute("moduleRef").Value);
+                ds.Tables[dataviewName].ExtendedProperties.Add("formRef", service.Element("actions").Element("extendedProperties").Element("masterDetail").Attribute("formRef").Value);
+                ds.Tables[dataviewName].ExtendedProperties.Add("fieldRef", service.Element("actions").Element("extendedProperties").Element("masterDetail").Attribute("fieldRef").Value);
+                ds.Tables[dataviewName].ExtendedProperties.Add("colRef", service.Element("actions").Element("extendedProperties").Element("masterDetail").Attribute("colRef").Value);
+            }
+
             return ds.Tables[dataviewName];
 
         }
 
-        public DataTable SaveData(string value, string cropSelected, string viewSelected, string moduleId)
+        public DataTable SaveData(string serverId, string moduleId, string formId, string fieldId, string value)
         {
-            string cropId = cropSelected;
+            //string cropId = cropSelected;
 
             int nBracket = 0;
             int nIndex = 0;
@@ -112,23 +132,27 @@ namespace GrinGlobal.Zone.Classes
                                   .Elements("field")
                                   .Where(c => (string)c.Attribute("id") == viewSelected).FirstOrDefault();*/
 
-            XElement service = Settings.Module(cropId, moduleId)
+            /*XElement service = Settings.Module(serverId, moduleId)
                                   .Elements("form")
                                   .Elements("field")
-                                  .Where(c => (string)c.Attribute("id") == viewSelected).FirstOrDefault();
+                                  .Where(c => (string)c.Attribute("id") == fieldId).FirstOrDefault();*/
+            XElement service = Settings.Form(serverId, moduleId, formId)
+                                  .Elements("field")
+                                  .Where(c => (string)c.Attribute("id") == fieldId).FirstOrDefault();
 
             //extract settings from Setting.xml
             string urlService = service.Parent.Parent.Parent.Attribute("url").Value.ToString();
             string dataviewName = service.Element("actions").Element("parameters").Element("dataviewName").Value;
-            Boolean suppressExceptions = bool.Parse(service.Element("actions").Element("parameters").Element("suppressExceptions").Value);
-            Int32 offset = int.Parse(service.Element("actions").Element("parameters").Element("offset").Value);
-            Int32 limit = int.Parse(service.Element("actions").Element("parameters").Element("limit").Value);
+            bool suppressExceptions = bool.Parse(service.Element("actions").Element("parameters").Element("suppressExceptions").Value);
+            int offset = int.Parse(service.Element("actions").Element("parameters").Element("offset").Value);
+            int limit = int.Parse(service.Element("actions").Element("parameters").Element("limit").Value);
             string options = service.Element("actions").Element("parameters").Element("options").Value;
 
             //put the value in the delimitedParameterList
             string delimitedParams = service.Element("actions").Element("parameters").Element("delimitedParameterList").Value;
+            Char separator = (char)Convert.ToInt32(service.Element("actions").Element("parameters").Element("separator").Value);
 
-            var arrValue = value.Split(new char[] { '-' });
+            var arrValue = value.Split(separator);
 
             while ((nBracket = delimitedParams.IndexOf("{0}", nBracket)) != -1)
             {
@@ -144,28 +168,33 @@ namespace GrinGlobal.Zone.Classes
 
             DataTable model = oldds.Tables[dataviewName];
 
-            DataRow[] dr = model.Select("inventory_id = " + EditorExtension.GetValue<object>("inventory_id").ToString().Replace("\"", ""));
+            var primaryKey = model.PrimaryKey[0].ColumnName;
+
+            DataRow[] dr = model.Select(primaryKey + " = " + GridViewExtension.GetEditValue<dynamic>(primaryKey));// EditorExtension.GetValue<object>(primaryKey).ToString().Replace("\"", ""));
 
             foreach (DataColumn col in model.Columns)
             {
                 if (!col.ReadOnly)
                 {
-                    string val = EditorExtension.GetValue<object>(col.ColumnName) as String;
+                    //dr[0][col.ColumnName] = GridViewExtension.GetEditValue<dynamic>(col.ColumnName);
+                    
+                    var val = GridViewExtension.GetEditValue<dynamic>(col.ColumnName);
 
                     if (val != null)
                     {
-                        val = val.Replace("\"", "");
                         dr[0][col.ColumnName] = val;
                     }
+                    
                 }
             }
 
             //parsing storage location
-            string val2 = EditorExtension.GetValue<object>("storage_location") as String;
+            string val2 = GridViewExtension.GetEditValue<dynamic>("storage_location");
+            //string val2 = EditorExtension.GetValue<object>("storage_location") as String;
 
             if (val2 != null)
             {
-                val2 = val2.Replace("\"", "");
+                //val2 = val2.Replace("\"", "");
 
                 var arrValue2 = val2.Split(new char[] { '-' });
 
@@ -209,6 +238,133 @@ namespace GrinGlobal.Zone.Classes
             return ds.Tables[dataviewName];
             */
             return result.Tables[dataviewName];
+        }
+
+        internal void UpdateInventorySource(string serverId, string moduleId, string formId, string fieldId, string value, string inventoryId)
+        {
+            /*XElement service = Settings.Module(serverId, moduleId)
+                                  .Elements("form")
+                                  .Elements("field")
+                                  .Where(c => (string)c.Attribute("id") == fieldId).FirstOrDefault();*/
+            XElement service = Settings.Form(serverId, moduleId, formId)
+                                  .Elements("field")
+                                  .Where(c => (string)c.Attribute("id") == fieldId).FirstOrDefault();
+
+            //extract settings from Setting.xml
+            string urlService = service.Parent.Parent.Parent.Attribute("url").Value.ToString();
+            bool suppressExceptions = bool.Parse(service.Element("actions").Element("parameters").Element("suppressExceptions").Value);
+            string dataviewName = "gbz_get_order_request_item";
+            string delimitedParameterList = ":orderrequestid=;:orderrequestitemid=" + value;
+            int offset = int.Parse(service.Element("actions").Element("parameters").Element("offset").Value);
+            int limit = int.Parse(service.Element("actions").Element("parameters").Element("limit").Value);
+            string options = service.Element("actions").Element("parameters").Element("options").Value;
+
+            GGZoneModel ggZoneModel = new GGZoneModel();
+
+            //invoke model requesting the datatable
+            DataSet ds = ggZoneModel.GetData(urlService, suppressExceptions, dataviewName, delimitedParameterList, offset, limit, options);
+
+            ds.Tables[dataviewName].Rows[0]["inventory_id"] = inventoryId;
+
+            ggZoneModel.SaveData(urlService, suppressExceptions, ds, options);
+        }
+
+        public BrapiResponseBrGermplasmV2TO GetGermplasmDetails(string cropId, int germplasmDbId)
+        {
+            XElement service = Settings.Server(cropId);
+
+            //extract settings from Setting.xml
+            string crop = service.Attribute("name").Value.ToString();
+
+
+            GGZoneModel ggZoneModel = new GGZoneModel();
+
+            var result = ggZoneModel.GetGermplasmDetails(crop, germplasmDbId);
+
+            return result;
+        }
+
+        internal List<InventoryItem> NewBox(string serverId, string moduleId, string formId, string fieldId, List<InventoryItem> insert, string box)
+        {
+            int nBracket = 0;
+            int nIndex = 0;
+            string colName = string.Empty;
+
+            //read the project
+            XElement service = Settings.Form(serverId, moduleId, formId)
+                                  .Elements("field")
+                                  .Where(c => (string)c.Attribute("id") == fieldId).FirstOrDefault();
+
+            //extract settings from Setting.xml
+            string urlService = service.Parent.Parent.Parent.Attribute("url").Value.ToString();
+            string dataviewName = service.Element("actions").Element("parameters").Element("dataviewName").Value;
+            bool suppressExceptions = bool.Parse(service.Element("actions").Element("parameters").Element("suppressExceptions").Value);
+            int offset = int.Parse(service.Element("actions").Element("parameters").Element("offset").Value);
+            int limit = int.Parse(service.Element("actions").Element("parameters").Element("limit").Value);
+            string options = service.Element("actions").Element("parameters").Element("options").Value;
+
+            //put the value in the delimitedParameterList
+            string delimitedParams = service.Element("actions").Element("parameters").Element("delimitedParameterList").Value;
+            Char separator = (char)Convert.ToInt32(service.Element("actions").Element("parameters").Element("separator").Value);
+
+            string value = "";
+
+            foreach (var inventoryItem in insert)
+            {
+                if (/*updateValues.IsValid(inventoryItem) && */inventoryItem.InventoryNumber != null)
+                {
+                    if (value == "")
+                        value = inventoryItem.InventoryNumber;
+                    else
+                        value += "','" + inventoryItem.InventoryNumber;
+                }
+            }
+
+            var arrValue = value.Split(separator);
+
+            while ((nBracket = delimitedParams.IndexOf("{0}", nBracket)) != -1)
+            {
+                delimitedParams = delimitedParams.Remove(nBracket, 3).Insert(nBracket, arrValue[nIndex]);
+                nBracket++;
+                nIndex++;
+            }
+
+            GGZoneModel ggZoneModel = new GGZoneModel();
+
+            //invoke model requesting the datatable
+            DataSet ds = ggZoneModel.GetData(urlService, suppressExceptions, dataviewName, delimitedParams, offset, limit, options);
+
+            DataTable model = ds.Tables[dataviewName];
+            //string box = "";
+            var inventoryItems = new List<InventoryItem>();
+            var arrValue2 = box.ToUpper().Split(new char[] { '-' });
+
+            foreach (var inventoryItem in insert)
+            {
+                if (/*updateValues.IsValid(inventoryItem) && */inventoryItem.InventoryNumber != null)
+                {
+                    DataRow[] dr = model.Select("inventory_number = '" + inventoryItem.InventoryNumber + "'");
+
+                    //parsing storage location
+                    //string val2 = inventoryItem.Box;
+
+                    //if (val2 != null)
+                    //{
+                    //var arrValue2 = box.ToUpper().Split(new char[] { '-' });
+
+                    dr[0]["storage_location_part1"] = arrValue2[0];
+                    dr[0]["storage_location_part2"] = arrValue2[1];
+                    dr[0]["storage_location_part3"] = arrValue2[2];
+                    //}
+                    dr[0]["storage_location_part4"] = inventoryItem.EntryId;//insert.IndexOf(inventoryItem) + 1;
+
+                    inventoryItems.Add(inventoryItem);
+                }
+            }
+
+            ggZoneModel.SaveData(urlService, suppressExceptions, ds, options);
+
+            return inventoryItems;
         }
     }
 }

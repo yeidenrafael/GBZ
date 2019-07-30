@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.ComponentModel.DataAnnotations;
-using System.Xml.Linq;
 using System.ServiceModel;
 using GrinGlobal.Zone.GGService;
 using GrinGlobal.Zone.Helpers;
@@ -14,7 +10,7 @@ namespace GrinGlobal.Zone.Models
     {
 
         [Required]
-        public string Crop { get; set; }
+        public string Server { get; set; }
         [Required]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
@@ -23,7 +19,7 @@ namespace GrinGlobal.Zone.Models
         [Display(Name = "UserName")]        
         public string UserName { get; set; }
 
-        public System.Data.DataTable validateGG(string crop,string userName, string password) {
+        public System.Data.DataTable validateGG(string server,string userName, string password) {
 
 
 
@@ -32,7 +28,7 @@ namespace GrinGlobal.Zone.Models
 
             
             string url = String.Empty;
-                var result = Settings.CropInfo(crop);
+                var result = Settings.Server(server);
                           
            
 

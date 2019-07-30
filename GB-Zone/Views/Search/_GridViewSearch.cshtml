@@ -6,19 +6,25 @@
     {
 
         st.Name = "gvSearch";
-        st.CallbackRouteValues = new { Controller = "Search", Action = "GridViewSearch", crop = ViewData["crop"].ToString(), value = ViewData["value"].ToString(), viewName = ViewData["viewName"].ToString(), moduleId = ViewData["moduleId"].ToString() };
+        st.CallbackRouteValues = new { Controller = "Search", Action = "GridView", serverId = ViewData["server"].ToString(), moduleId = ViewData["moduleId"].ToString(), formId = ViewData["formId"].ToString(), fieldId = ViewData["viewName"].ToString(), value = ViewData["value"].ToString(), viewName = "_GridViewSearch" };
 
         st.Width = System.Web.UI.WebControls.Unit.Percentage(100);
-        st.SettingsPager.PageSize = 10;
-        st.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCells;
+        
         st.ControlStyle.Paddings.Padding = System.Web.UI.WebControls.Unit.Pixel(0);
         st.ControlStyle.Border.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(0);
         st.ControlStyle.BorderBottom.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(1);
 
+        //st.SettingsPager.PageSize = 10;
+        //st.SettingsPager.Position = PagerPosition.TopAndBottom;
+        st.SettingsPager.Visible = true;
+        st.SettingsPager.FirstPageButton.Visible = true;
+        st.SettingsPager.LastPageButton.Visible = true;
+        st.SettingsPager.PageSizeItemSettings.Visible = true;
+        st.SettingsPager.PageSizeItemSettings.Items = new string[] { "10", "20", "50", "100" };
+
         //st.SettingsEditing.AddNewRowRouteValues = new { Controller = "Home", Action = "GridViewPartialAddNew" };
         //st.SettingsEditing.DeleteRowRouteValues = new { Controller = "Home", Action = "GridViewPartialDelete" };
-        st.SettingsEditing.UpdateRowRouteValues = new { Controller = "Search", Action = "GridViewPartialUpdate", crop = ViewData["crop"].ToString(), value = ViewData["value"].ToString(), viewName = ViewData["viewName"].ToString(), moduleId = ViewData["moduleId"].ToString() };
-        //st.SettingsEditing.UpdateRowRouteValues = new { Controller = "Search", Action = "InlineEditingUpdatePartial" };
+        st.SettingsEditing.UpdateRowRouteValues = new { Controller = "Search", Action = "GridViewPartialUpdate", serverId = ViewData["server"].ToString(), moduleId = ViewData["moduleId"].ToString(), formId = ViewData["formId"].ToString(), fieldId = ViewData["viewName"].ToString(), value = ViewData["value"].ToString(), viewName = "_GridViewSearch" };
         st.SettingsEditing.Mode = GridViewEditingMode.Inline;
 
         //st.SettingsEditing.BatchUpdateRouteValues = new { Controller = "Search", Action = "GridViewSearchUpdate", crop = ViewData["crop"].ToString(), value = ViewData["value"].ToString(), viewName = ViewData["viewName"].ToString()};
@@ -26,11 +32,13 @@
         //st.SettingsEditing.BatchEditSettings.StartEditAction = GridViewBatchStartEditAction.Click;
 
         //st.SettingsBehavior.ConfirmDelete = true;
+        st.SettingsBehavior.AllowSelectByRowClick = true;
 
         st.CommandColumn.Visible = true;
         st.CommandColumn.ShowEditButton = true;
-        //st.CommandColumn.ShowNewButton = false;
+        //st.CommandColumn.ShowNewButton = true;
         //st.CommandColumn.ShowDeleteButton = false;
+        //st.CommandColumn.ShowSelectCheckbox = true;
 
         //st.ClientSideEvents.RowClick = "function(s, e) { s.StartEditRow(e.visibleIndex); }";
         /*
@@ -39,12 +47,12 @@
             e.Cell.Attributes.Add("onclick", "s.StartEditRow(" + e.VisibleIndex + ")");
         };
         */
-        st.KeyFieldName = "inventory_id";
+        //st.KeyFieldName = "inventory_id";
 
-        st.SettingsPager.Visible = true;
-        st.Settings.ShowGroupPanel = true;
+        //st.Settings.ShowGroupPanel = true;
         st.Settings.ShowFilterRow = true;
-        st.SettingsBehavior.AllowSelectByRowClick = true;
+        st.Settings.ShowHeaderFilterButton = true;
+        st.Settings.ShowFooter = true;
 
         st.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCells;
         st.SettingsAdaptivity.AdaptiveColumnPosition = GridViewAdaptiveColumnPosition.Right;
@@ -52,14 +60,16 @@
         st.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = false;
         st.SettingsAdaptivity.HideDataCellsAtWindowInnerWidth = 0;
 
-        st.Settings.ShowHeaderFilterButton = true;
-
-        st.TotalSummary.Add(DevExpress.Data.SummaryItemType.Count, "inventory_id");
-        st.Settings.ShowFooter = true;
+        st.TotalSummary.Add(DevExpress.Data.SummaryItemType.Sum, "quantity_on_hand");
 
         foreach (System.Data.DataColumn dc in Model.Columns)
         {
-            if (dc.ColumnMapping != System.Data.MappingType.Hidden && dc.ExtendedProperties["is_header"] == null)
+            if (dc.ExtendedProperties["is_primary_key"].ToString() == "Y")
+            {
+                st.KeyFieldName = dc.ColumnName; //"inventory_id";
+            }
+
+            if (/*dc.ColumnMapping != System.Data.MappingType.Hidden && */dc.ExtendedProperties["is_header"] == null)
             {
 
                 st.Columns.Add(col =>
@@ -67,27 +77,33 @@
                     col.FieldName = dc.ColumnName;
                     col.Name = dc.ColumnName;
                     col.Caption = dc.Caption;
+                    
+                    if (dc.ColumnMapping == System.Data.MappingType.Hidden)
+                    {
+                        col.Visible = false;
+                    }
 
                     //create a link column
-                    if (dc.ExtendedProperties["view_reference"] != null)
+                    if (dc.ExtendedProperties["moduleRef"] != null)
 
                     {
                         col.SetDataItemTemplateContent(container =>
                         {
                             //var categoryID = (string)DataBinder.Eval(container.DataItem, dc.ExtendedProperties["col_reference"].ToString());
-                            var categoryID = Convert.ToString(DataBinder.Eval(container.DataItem, dc.ExtendedProperties["col_reference"].ToString()));
+                            var value = Convert.ToString(DataBinder.Eval(container.DataItem, dc.ExtendedProperties["colRef"].ToString()));
                             Html.DevExpress().HyperLink(hyperlink =>
                             {
-                                hyperlink.Name = "hl" + container.VisibleIndex;
-                                hyperlink.Properties.Text = (string)DataBinder.Eval(container.DataItem, dc.ColumnName);
+                                //hyperlink.Name = "hl" + container.VisibleIndex;
+                                hyperlink.Properties.Text = Convert.ToString(DataBinder.Eval(container.DataItem, dc.ColumnName));
                                 hyperlink.NavigateUrl = DevExpressHelper.GetUrl(new
                                 {
                                     Controller = "Search",
                                     Action = "Index2",
-                                    crop = ViewData["crop"].ToString(),
-                                    value = categoryID,
-                                    viewName = dc.ExtendedProperties["view_reference"],
-                                    moduleId = ViewData["moduleId"].ToString()
+                                    serverId = ViewData["server"].ToString(),
+                                    moduleId = dc.ExtendedProperties["moduleRef"],//ViewData["moduleId"].ToString(),
+                                    formId = dc.ExtendedProperties["formRef"],//ViewData["formId"].ToString(),
+                                    fieldId = dc.ExtendedProperties["fieldRef"],//dc.ExtendedProperties["view_reference"],
+                                    value = value
                                 });
                             }).Render();
                         });
@@ -100,19 +116,41 @@
                         var spinEditProps = col.PropertiesEdit as SpinEditProperties;
                         if (spinEditProps != null) spinEditProps.SpinButtons.ShowIncrementButtons = false;
                     }
-
+                    if (col.FieldName == "quantity_shipped")
+                    {
+                        col.Settings.FilterMode = ColumnFilterMode.DisplayText;
+                        col.ColumnType = MVCxGridViewColumnType.SpinEdit;
+                        var spinEditProps = col.PropertiesEdit as SpinEditProperties;
+                        if (spinEditProps != null) spinEditProps.SpinButtons.ShowIncrementButtons = false;
+                    }
                     if (col.FieldName == "storage_location")
                     {
                         var prty = col.PropertiesEdit as TextBoxProperties;
                         prty.MaskSettings.Mask = "CC##CC##C##-###";
-
+                        //prty.MaskSettings.ShowHints = false;
                     }
                 });
-
-
-
             }
         }
+
+        if (Model.ExtendedProperties["masterDetail"]!= null)
+        {
+            string actionName = "GridView";//Model.ExtendedProperties["actionName"];
+            string moduleRef = Model.ExtendedProperties["moduleRef"];
+            string formRef = Model.ExtendedProperties["formRef"];
+            string fieldRef = Model.ExtendedProperties["fieldRef"];
+            string colRef = Model.ExtendedProperties["colRef"];
+
+            st.SettingsDetail.AllowOnlyOneMasterRowExpanded = true;
+            st.SettingsDetail.ShowDetailRow = true;
+            st.SetDetailRowTemplateContent(c =>
+            {
+                //Html.RenderAction("GridViewSearchDetail", new { server = ViewData["server"].ToString(), value = DataBinder.Eval(c.DataItem, "inventory_number_part1"), viewName = "intrid", moduleId = ViewData["moduleId"].ToString() });
+                //Html.RenderAction(actionName, new { serverId = ViewData["server"].ToString(), moduleId = ViewData["moduleId"].ToString(), formId = ViewData["formId"].ToString(), fieldId = fieldRef, value = DataBinder.Eval(c.DataItem, colRef), viewName = "_GridViewSearchDetail" });
+                Html.RenderAction(actionName, new { serverId = ViewData["server"].ToString(), moduleId = moduleRef, formId = formRef, fieldId = fieldRef, value = DataBinder.Eval(c.DataItem, colRef), viewName = "_GridViewSearchDetail" });
+            });
+        }
+
         /*
         st.Columns.Add(column =>
         {
@@ -159,7 +197,6 @@
         };
 */
 
-
         st.Styles.Cell.Wrap = DefaultBoolean.False;
         st.HtmlRowPrepared = (s, e) =>
         {
@@ -187,11 +224,7 @@
                             e.Row.BackColor = System.Drawing.ColorTranslator.FromHtml(HexColor[1].ToString());
                         }
                     }
-
                 }
-
-
-
                 //#e74c3c danger
             }
 
