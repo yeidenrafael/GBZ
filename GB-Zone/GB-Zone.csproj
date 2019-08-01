@@ -53,10 +53,6 @@
       <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Cimmyt_BrAPI_dotNetClient, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Cimmyt_BrAPI_dotNetClient.1.0.0\lib\net461\Cimmyt_BrAPI_dotNetClient.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="DevExpress.Charts.v18.1.Core, Version=18.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <HintPath>..\packages\DevExpress.Charts.Core.18.1.4\lib\net40\DevExpress.Charts.v18.1.Core.dll</HintPath>
       <Private>True</Private>
@@ -695,6 +691,7 @@
     <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="Classes\DataViewsSearch.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\BoxController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\StorageController.cs" />
@@ -1042,6 +1039,10 @@
     <Content Include="Views\Shared\_Navigation.cshtml" />
     <Content Include="Views\Storage\Index.cshtml" />
     <Content Include="Views\Storage\_GridViewPartial.cshtml" />
+    <Content Include="Views\Box\Index.cshtml" />
+    <Content Include="Views\Box\_GridViewSearch.cshtml" />
+    <Content Include="Views\Box\_HeaderGridView.cshtml" />
+    <Content Include="Views\Box\_SearchFields.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

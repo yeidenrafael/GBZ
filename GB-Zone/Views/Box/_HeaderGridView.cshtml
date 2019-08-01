@@ -1,0 +1,48 @@
+﻿@model System.Data.DataTable
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="hpanel">
+            <div class="panel-heading hbuilt">
+                <div class="panel-tools">
+                    <a class="showhide"><i class="fa fa-chevron-up"></i></a>
+                </div>
+                Box:
+                @if(ViewData["value"] != null)
+                {
+                    @ViewData["value"].ToString()
+                }
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <span class="font-extra-bold">Total numbre of records: <span id="spanCount">@Model.Rows.Count</span></span>
+                    </div>
+                    <div class="float-e-margins">
+                        <input type="hidden" name="moduleId" value="@ViewData["moduleId"].ToString()">
+                        <input type="hidden" name="formId" value="@ViewData["formId"].ToString()">
+                        <input type="hidden" name="fieldId" value="@ViewData["viewName"].ToString()">
+                        <input type="hidden" name="value" value="@ViewData["value"].ToString()">
+                        @{
+                            Html.DevExpress().Button(
+                            buttonSettings =>
+                            {
+                                buttonSettings.Name = "btnOrder";
+                                buttonSettings.ControlStyle.CssClass = "btn btn-circle";
+                                buttonSettings.Text = "Reorder items";
+                                buttonSettings.ClientSideEvents.Click = "reorderItem";
+                            }
+                            ).Render();
+                        }
+                    </div>
+                </div>
+                <div class="row">
+                    @if (ViewData["viewName"] != null)
+                    {
+                        Html.RenderPartial("_GridViewSearch", Model, new ViewDataDictionary { { "viewName", ViewData["viewName"] }, { "value", ViewData["value"] }, { "server", ViewData["server"] }, { "moduleId", ViewData["moduleId"] }, { "formId", ViewData["formId"] } });
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
