@@ -51,7 +51,7 @@ namespace GrinGlobal.Zone.Models
                 return null;
             }
             }
-            catch {
+            catch(Exception) {
                 return null;
             }
 
