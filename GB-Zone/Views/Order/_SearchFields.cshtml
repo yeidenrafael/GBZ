@@ -1,0 +1,44 @@
+﻿@using GrinGlobal.Zone.Helpers
+
+@{  
+    SettingsHelp setH = new SettingsHelp(Session["server"].ToString(), ViewData["moduleId"].ToString(), ViewData["formId"].ToString());
+    using (Html.BeginForm(setH.Form.Attribute("action").Value, setH.Form.Attribute("controller").Value, FormMethod.Post, new { id = setH.Form.Attribute("id").Value }))
+    {
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="hpanel">
+                    <div class="panel-heading hbuilt">
+                        <div class="panel-tools">
+                            <a class="showhide"><i class="fa fa-chevron-up"></i></a>
+                        </div>
+                        Filters
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <input type="hidden" name="moduleId" value="@ViewData["moduleId"].ToString()">
+                            <input type="hidden" name="formId" value="@ViewData["formId"].ToString()">
+                            @foreach (var field in setH.Fields)
+                            {
+                                if (field.Attribute("visible").Value == "true")
+                                {
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <input type="@field.Attribute("type").Value" class="form-control" placeholder="@field.Attribute("placeholder").Value" id="@field.Attribute("id").Value" name="@field.Attribute("id").Value"  />
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                            <div class="col-sm-3">
+                                <button class="btn btn-success btn-circle" type="submit"><i class="fa fa-search"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+
+

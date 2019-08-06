@@ -1,0 +1,64 @@
+﻿@using System.Data
+
+@{
+
+    var grid = Html.DevExpress().GridView(st =>
+    {
+        st.Name = "gvSearch";
+        st.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+        st.ControlStyle.Paddings.Padding = System.Web.UI.WebControls.Unit.Pixel(0);
+        st.ControlStyle.Border.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(0);
+        st.ControlStyle.BorderBottom.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(1);
+        st.SettingsPager.Visible = true;
+        st.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords;
+        st.SettingsPager.FirstPageButton.Visible = false;
+        st.SettingsPager.LastPageButton.Visible = false;
+        st.SettingsPager.PageSizeItemSettings.Visible = false;
+        st.SettingsPager.PageSizeItemSettings.Items = new string[] { "10", "20", "50", "100" };
+        st.SettingsEditing.Mode = GridViewEditingMode.EditFormAndDisplayRow;
+        st.SettingsBehavior.AllowSelectByRowClick = false;
+        st.CommandColumn.Visible = false;
+        st.CommandColumn.ShowEditButton = false;
+        st.Settings.ShowFilterBar = GridViewStatusBarMode.Hidden; 
+        st.Settings.ShowTitlePanel = false;
+        st.Settings.ShowFilterRow = false;
+        st.Settings.ShowHeaderFilterButton = false;
+        st.Settings.ShowFooter = false;
+        st.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.Off;
+        st.SettingsAdaptivity.AdaptiveColumnPosition = GridViewAdaptiveColumnPosition.Right;
+        st.SettingsAdaptivity.AdaptiveDetailColumnCount = 1;
+        st.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = false;
+        st.SettingsAdaptivity.HideDataCellsAtWindowInnerWidth = 0;
+        foreach (System.Data.DataColumn dc in Model.Columns)
+        {
+            if (dc.ExtendedProperties["is_primary_key"].ToString() == "Y")
+            {
+                st.KeyFieldName = dc.ColumnName;
+            }
+
+            if (dc.ExtendedProperties["is_header"] == null)
+            {
+
+                st.Columns.Add(col =>
+                {
+                    col.FieldName = dc.ColumnName;
+                    col.Name = dc.ColumnName;
+                    col.Caption = dc.Caption;
+                    col.Settings.AllowSort = DefaultBoolean.False;
+
+                    if (dc.ColumnMapping == System.Data.MappingType.Hidden)
+                    {
+                        col.Visible = false;
+                    }
+                });
+            }
+        }
+    });
+    if (ViewData["EditError"] != null)
+    {
+
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+
+    grid.Bind(Model).GetHtml();
+}

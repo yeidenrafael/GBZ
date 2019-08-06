@@ -1,4 +1,5 @@
-﻿@model System.Data.DataTable
+﻿<!--######################## views/Order  ###########-->
+@model System.Data.DataTable
 
 @{
     ViewBag.ViewTitle = "| " + ViewData["moduleId"];
@@ -8,37 +9,7 @@
 @section scriptsHeader {
 
     <script type="text/javascript">
-        function OnTest(s, e) {
-            PopupControl.Show();
-        }
-        function ShowDetailPopup(url) {
-            PopupControl.SetContentUrl(url);
-            PopupControl.Show();
-        }
-        function CustomButtonClick(s, e, acurl) {
-            var key = s.GetRowKey(e.visibleIndex);
-            //alert("Inventory Id " + key);
 
-            if (e.buttonID === "btnGetKey") {
-                //var destUrl = url + "/" + key;
-                //alert("Destination Url is: " + acurl);
-
-                //window.location.href = destUrl;
-
-                $.ajax({
-                    type: "POST",
-                    url: acurl,
-                    data: { newInventory: key },
-                    success: function (response) {
-                        $("#container").html(response);
-                        //alert("Inventory source changed");
-                    }
-                });
-                gvSearch.Refresh();
-                //ASPx.GVHideDetailRow('gvSearch', e.visibleIndex, event);
-                //event.cancelBubble = true;
-            }
-        }
     </script>
 }
 

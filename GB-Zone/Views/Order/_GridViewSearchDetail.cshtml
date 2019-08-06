@@ -1,0 +1,150 @@
+﻿@using System.Data
+
+@{
+
+    var grid = Html.DevExpress().GridView(st =>
+    {
+
+        st.Name = "gvSearchDetail";
+        st.CallbackRouteValues = new { Controller = "Search", Action = "GridView", serverId = ViewData["server"].ToString(), moduleId = ViewData["moduleId"].ToString(), formId = ViewData["formId"].ToString(), fieldId = ViewData["viewName"].ToString(), value = ViewData["value"].ToString(), viewName = "_GridViewSearchDetail" };
+
+        st.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+
+        st.ControlStyle.Paddings.Padding = System.Web.UI.WebControls.Unit.Pixel(0);
+        st.ControlStyle.Border.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(0);
+        st.ControlStyle.BorderBottom.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(1);
+
+        st.SettingsPager.Visible = true;
+        st.SettingsPager.FirstPageButton.Visible = true;
+        st.SettingsPager.LastPageButton.Visible = true;
+        st.SettingsPager.PageSizeItemSettings.Visible = true;
+        st.SettingsPager.PageSizeItemSettings.Items = new string[] { "10", "20", "50", "100" };
+
+        st.SettingsEditing.UpdateRowRouteValues = new { Controller = "Search", Action = "GridViewPartialUpdate", serverId = ViewData["server"].ToString(), moduleId = ViewData["moduleId"].ToString(), formId = ViewData["formId"].ToString(), fieldId = ViewData["viewName"].ToString(), value = ViewData["value"].ToString(), viewName = "_GridViewSearchDetail" };
+        st.SettingsEditing.Mode = GridViewEditingMode.Inline;
+
+        st.SettingsBehavior.AllowSelectByRowClick = true;
+        
+        st.CommandColumn.Visible = true;
+        st.CommandColumn.ShowEditButton = true;
+        
+        st.CommandColumn.CustomButtons.Add(new GridViewCommandColumnCustomButton() { ID = "btnGetKey", Text = "Select" });
+        st.ClientSideEvents.CustomButtonClick = string.Format("function(s, e) {{ CustomButtonClick(s, e, '{0}'); }}", Url.Action("GridViewPartialUpdateInv", "Search", new { serverId = ViewData["server"].ToString(), moduleId = ViewData["moduleId"].ToString(), formId = ViewData["formId"].ToString(), fieldId = ViewData["viewName"].ToString(), value = ViewData["value"].ToString(), viewName = "_GridViewSearchDetail", newInventory = "s.GetRowKey(e.visibleIndex)" }));
+        
+        st.Settings.ShowFilterRow = true;
+        st.Settings.ShowHeaderFilterButton = true;
+        st.Settings.ShowFooter = true;
+
+        st.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCells;
+        st.SettingsAdaptivity.AdaptiveColumnPosition = GridViewAdaptiveColumnPosition.Right;
+        st.SettingsAdaptivity.AdaptiveDetailColumnCount = 1;
+        st.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = false;
+        st.SettingsAdaptivity.HideDataCellsAtWindowInnerWidth = 0;
+
+        st.TotalSummary.Add(DevExpress.Data.SummaryItemType.Sum, "quantity_on_hand");
+
+        foreach (System.Data.DataColumn dc in Model.Columns)
+        {
+            if (dc.ExtendedProperties["is_primary_key"].ToString() == "Y")
+            {
+                st.KeyFieldName = dc.ColumnName;
+            }
+
+            if (dc.ExtendedProperties["is_header"] == null)
+            {
+
+                st.Columns.Add(col =>
+                {
+                    col.FieldName = dc.ColumnName;
+                    col.Name = dc.ColumnName;
+                    col.Caption = dc.Caption;
+
+                    if (dc.ColumnMapping == System.Data.MappingType.Hidden)
+                    {
+                        col.Visible = false;
+                    }
+
+                    //create a link column
+                    if (dc.ExtendedProperties["moduleRef"] != null)
+
+                    {
+                        col.SetDataItemTemplateContent(container =>
+                        {
+                            var value = Convert.ToString(DataBinder.Eval(container.DataItem, dc.ExtendedProperties["colRef"].ToString()));
+                            Html.DevExpress().HyperLink(hyperlink =>
+                            {
+                                hyperlink.Properties.Text = Convert.ToString(DataBinder.Eval(container.DataItem, dc.ColumnName));
+                                hyperlink.NavigateUrl = DevExpressHelper.GetUrl(new
+                                {
+                                    Controller = "Search",
+                                    Action = "Index2",
+                                    serverId = ViewData["server"].ToString(),
+                                    moduleId = dc.ExtendedProperties["moduleRef"],
+                                    formId = dc.ExtendedProperties["formRef"],
+                                    fieldId = dc.ExtendedProperties["fieldRef"],
+                                    value = value
+                                });
+                            }).Render();
+                        });
+                    }
+
+                    if (col.FieldName == "quantity_on_hand")
+                    {
+                        col.Settings.FilterMode = ColumnFilterMode.DisplayText;
+                        col.ColumnType = MVCxGridViewColumnType.SpinEdit;
+                        var spinEditProps = col.PropertiesEdit as SpinEditProperties;
+                        if (spinEditProps != null) spinEditProps.SpinButtons.ShowIncrementButtons = false;
+                    }
+
+                    if (col.FieldName == "storage_location")
+                    {
+                        var prty = col.PropertiesEdit as TextBoxProperties;
+                        prty.MaskSettings.Mask = "CC##CC##C##-###";
+                    }
+                });
+            }
+        }
+
+
+        st.Styles.Cell.Wrap = DefaultBoolean.False;
+        st.HtmlRowPrepared = (s, e) =>
+        {
+            if (e.VisibleIndex != -1)
+            {
+                ASPxGridView oGrid = s as ASPxGridView;
+                DataRow dr = oGrid.GetDataRow(e.VisibleIndex);
+                string[] HexColor = new String[] { "#fff3cd", "#f8d7da" };
+                if (dr != null)
+                {
+                    if (dr.Table.Columns.Contains("backup_location1_site_id") && dr.Table.Columns.Contains("backup_location2_site_id"))
+                    {
+                        if (dr["backup_location1_site_id"].ToString() != "" && dr["backup_location2_site_id"].ToString() == "")
+                        {
+                            e.Row.BackColor = System.Drawing.ColorTranslator.FromHtml(HexColor[0].ToString());
+                        }
+                        else
+                        if (dr["backup_location1_site_id"].ToString() == "" && dr["backup_location2_site_id"].ToString() != "")
+                        {
+                            e.Row.BackColor = System.Drawing.ColorTranslator.FromHtml(HexColor[0].ToString());
+                        }
+                        else
+                        if (dr["backup_location1_site_id"].ToString() == "" && dr["backup_location2_site_id"].ToString() == "")
+                        {
+                            e.Row.BackColor = System.Drawing.ColorTranslator.FromHtml(HexColor[1].ToString());
+                        }
+                    }
+                }
+                //#e74c3c danger
+            }
+
+        };
+
+    });
+    if (ViewData["EditError"] != null)
+    {
+
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+
+    grid.Bind(Model).GetHtml();
+}
