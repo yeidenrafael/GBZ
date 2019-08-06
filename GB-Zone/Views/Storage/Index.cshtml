@@ -9,38 +9,37 @@
 
         function OnKeyDown(s, e) {
             if (e.htmlEvent.keyCode == 13) {
-
                 ASPxClientUtils.PreventEventAndBubble(e.htmlEvent);
-                var rows = GridView.batchEditHelper.GetEditState().insertedRowValues;
-                // length:
-                var count = Object.keys(rows).length;
-                //alert(count);
-                // keys:
-                for (var key in rows) {
-                    //alert(key);
-                }
-                var entry = "00" + count;
-                //alert(entry.substring(entry.length - 3));
-
-                setTimeout(function () {
-                    GridView.AddNewRow();
-                    GridView.batchEditApi.SetCellValue(key, 'EntryId', entry.substring(entry.length - 3));
-                    GridView.batchEditApi.StartEdit(GridView.batchEditApi.GetInsertedRowIndices()[count], GridView.GetColumnByField("InventoryNumber").index);
-                }, 100);
+                GridView.AddNewRow();
             }
         }
 
         function StartBox(s, e) {
             if (e.htmlEvent.keyCode == 13) {
-
-                $.ajax({
-                    url: '@Url.Action("GridViewPartial")',
-                    type: 'POST',
-                    data: { Parameter: newBox.GetText() },
-                });
-
                 OnKeyDown(s, e);
             }
+        }
+        function ClickAddNewItem(s, e) {
+            $.ajax({
+                url: '@Url.Action("GridViewPartial")',
+                type: 'POST',
+                data: { Parameter: newBox.GetText() },
+            });
+            var rows = GridView.batchEditHelper.GetEditState().insertedRowValues;
+            // length:
+            var count = Object.keys(rows).length;
+            //alert(count);
+            // keys:
+            for (var key in rows) {
+                //alert(key);
+            }
+            var entry = "00" + count;
+            //alert(entry.substring(entry.length - 3));
+
+            setTimeout(function () {
+                GridView.batchEditApi.SetCellValue(key, 'EntryId', entry.substring(entry.length - 3));
+                GridView.batchEditApi.StartEdit(GridView.batchEditApi.GetInsertedRowIndices()[count], GridView.GetColumnByField("InventoryNumber").index);
+            }, 100);
         }
     </script>
 }

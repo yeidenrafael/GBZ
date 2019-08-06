@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Settings>
-  <server id="01" name="Wheat" url="http://itu-dev-srv:81/gringlobal/gui.asmx">
+  <server id="01" name="Wheat" url="http://itu-dev-srv-01/gringlobal/gui.asmx">
     <module id="Inventory" title="Inventory" description="You can search and update information about Inventory items" icon="pe-7s-note2">
       <form id="gbz_get_inventory" title="Inventory items" layout="vertical" cssClass="form-group" action="Index" controller="Search">
         <field id="storageLocation" type="text" placeholder="CAR-SEC-BOX" visible="true">
