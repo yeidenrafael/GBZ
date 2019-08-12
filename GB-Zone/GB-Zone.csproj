@@ -693,14 +693,17 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BoxController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\StorageController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\GrinGlobalSoapHelp.cs" />
     <Compile Include="Helpers\HMTLHelperExtensions.cs" />
     <Compile Include="Helpers\ProxyServer.cs" />
     <Compile Include="Helpers\Settings.cs" />
+    <Compile Include="Helpers\SettingsHelp.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\GGZoneModel.cs" />
     <Compile Include="Models\InventoryItem.cs" />
@@ -713,6 +716,8 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\audio\Error.mp3" />
+    <Content Include="Content\audio\Success.mp3" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -722,6 +727,8 @@
     <Content Include="Content\Dataviews\wgb\gbz_boxes.dataview" />
     <Content Include="Content\Dataviews\wgb\gbz_get_inventory.dataview" />
     <Content Include="Content\Dataviews\wgb\gbz_get_order_request_item.dataview" />
+    <Content Include="Content\font-awesome.css" />
+    <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\img\Cimmyt.png" />
     <Content Include="Content\img\green%402x.png" />
     <Content Include="Content\img\green.png" />
@@ -729,9 +736,24 @@
     <Content Include="Content\metisMenu.min.css" />
     <Content Include="Content\style.css" />
     <Content Include="favicon.ico" />
+    <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\img\profile.png" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\esm\popper-utils.js" />
+    <Content Include="Scripts\esm\popper-utils.min.js" />
+    <Content Include="Scripts\esm\popper.js" />
+    <Content Include="Scripts\esm\popper.min.js" />
+    <Content Include="Scripts\popper-utils.js" />
+    <Content Include="Scripts\popper-utils.min.js" />
+    <Content Include="Scripts\popper.js" />
+    <Content Include="Scripts\popper.min.js" />
+    <Content Include="Scripts\umd\popper-utils.js" />
+    <Content Include="Scripts\umd\popper-utils.min.js" />
+    <Content Include="Scripts\umd\popper.js" />
+    <Content Include="Scripts\umd\popper.min.js" />
     <Content Include="Vendor\pe-icon-7-stroke\css\helper.css" />
     <Content Include="Vendor\pe-icon-7-stroke\css\pe-icon-7-stroke.css" />
     <Content Include="Vendor\pe-icon-7-stroke\fonts\Pe-icon-7-stroke.svg" />
@@ -749,15 +771,24 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
+    <Content Include="fonts\FontAwesome.otf" />
+    <Content Include="fonts\fontawesome-webfont.woff2" />
+    <Content Include="fonts\fontawesome-webfont.woff" />
+    <Content Include="fonts\fontawesome-webfont.ttf" />
+    <Content Include="fonts\fontawesome-webfont.eot" />
+    <Content Include="Content\Dataviews\wgb\gbz_get_box.dataviewxml" />
+    <Content Include="Content\Dataviews\wgb\gbz_get_order_check_list.dataviewxml" />
     <None Include="Properties\PublishProfiles\CIM-GG-STG-SRV.pubxml" />
     <None Include="Properties\PublishProfiles\Default.pubxml" />
     <None Include="Properties\PublishProfiles\Dev Azure.pubxml" />
     <None Include="Properties\PublishProfiles\ITU-DEV-SRV.pubxml" />
-    <Content Include="Scripts\bootstrap.js" />
-    <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\gbzone.js" />
     <Content Include="Scripts\homer.js" />
     <None Include="Properties\PublishProfiles\localhost.pubxml" />
+    <Content Include="Scripts\esm\popper.min.js.map" />
+    <Content Include="Scripts\esm\popper.js.map" />
+    <Content Include="Scripts\esm\popper-utils.min.js.map" />
+    <Content Include="Scripts\esm\popper-utils.js.map" />
     <None Include="Scripts\jquery-3.2.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.2.1.js" />
     <Content Include="Scripts\jquery-3.2.1.min.js" />
@@ -776,6 +807,15 @@
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\jquery-3.2.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.2.1.min.map" />
+    <Content Include="Scripts\umd\popper.min.js.map" />
+    <Content Include="Scripts\umd\popper.js.map" />
+    <Content Include="Scripts\umd\popper-utils.min.js.map" />
+    <Content Include="Scripts\umd\popper-utils.js.map" />
+    <Content Include="Scripts\README.md" />
+    <Content Include="Scripts\popper.min.js.map" />
+    <Content Include="Scripts\popper.js.map" />
+    <Content Include="Scripts\popper-utils.min.js.map" />
+    <Content Include="Scripts\popper-utils.js.map" />
     <None Include="Service References\GGService\gui.disco" />
     <None Include="Service References\GGService\configuration91.svcinfo" />
     <None Include="Service References\GGService\configuration.svcinfo" />
@@ -1043,6 +1083,11 @@
     <Content Include="Views\Box\_GridViewSearch.cshtml" />
     <Content Include="Views\Box\_HeaderGridView.cshtml" />
     <Content Include="Views\Box\_SearchFields.cshtml" />
+    <Content Include="Views\Order\_CheckList.cshtml" />
+    <Content Include="Views\Order\_HeaderGridView.cshtml" />
+    <Content Include="Views\Order\_SearchFields.cshtml" />
+    <Content Include="Views\Order\_GridViewSearch.cshtml" />
+    <Content Include="Views\Order\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -1080,6 +1125,9 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadataStorage Include="Service References\GGService\" />
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="Scripts\index.d.ts" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

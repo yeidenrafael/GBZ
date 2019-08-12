@@ -21,7 +21,7 @@
 
             if (e.buttonID === "btnGetKey") {
                 //var destUrl = url + "/" + key;
-                //alert("Destination Url is: " + destUrl);
+                //alert("Destination Url is: " + acurl);
 
                 //window.location.href = destUrl;
 
@@ -50,12 +50,10 @@
 }
 <div class="row">
     <div class="col-lg-12">
-        
             @if (ViewData["viewName"] != null)
             {
                 Html.RenderPartial("_GridViewSearch", Model, new ViewDataDictionary { { "viewName", ViewData["viewName"] }, { "value", ViewData["value"] }, { "server", ViewData["server"] }, { "moduleId", ViewData["moduleId"] }, { "formId", ViewData["formId"] } });
             }
-        
     </div>
 </div>
 

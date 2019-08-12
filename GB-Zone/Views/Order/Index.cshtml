@@ -1,0 +1,120 @@
+﻿<!--######################## views/Order  ###########-->
+@model System.Data.DataTable
+
+@{
+    ViewBag.ViewTitle = "| " + ViewData["moduleId"];
+}
+
+@section scriptsHeader {
+    <script type="text/javascript">
+        const CHECK_LIST_COLUMN_NAME = @Html.Raw(Json.Encode(ViewData["CheckListColumName"]));
+        const LI_TRAFIC_LIGHT = "iTrafficLight";
+        const INPUT_TEXT_QR = "textBoxCheck_I";
+        const SPAN_LAST_CHECK_ITEM = "spanCheck_Item";
+        const SPAN_FIND_ITEM = "spanFind_Item";
+        const DIV_LOAD_MODAL = "divLoadMe";
+        const KEY_ENTER = 13;
+        const COLOR_SUCCESS =  "forestgreen";
+        const COLOR_ERROR =  "red";
+        var regreso = "";
+        var rows = 0;
+        var rowsSuccess = 0;
+        var checkList = new Array();
+        var findList = new Array();
+
+        function Init(){
+
+        }
+
+        function KeyPressTexBCheck(s, e) {
+            if (e.htmlEvent.keyCode == KEY_ENTER) {
+                var texto = $("#"+INPUT_TEXT_QR).val().trim();
+                var index = checkList.indexOf(texto);
+                if(index != -1){
+                    $("#"+LI_TRAFIC_LIGHT).css({'color':COLOR_SUCCESS});
+                    CheckRow(index);
+                    FindItem(checkList[index]);
+                    $("#audioSuccess")[0].play();
+                }else{
+                    $("#"+LI_TRAFIC_LIGHT).css({'color':COLOR_ERROR});
+                    $("#audioError")[0].play();
+                }
+                $("#"+SPAN_LAST_CHECK_ITEM).html("<b>"+$("#"+INPUT_TEXT_QR).val()+"</b>");
+                $("#"+INPUT_TEXT_QR).val('');
+            }
+        }
+
+        function CheckRow(index){
+            var row = gvSearch.GetRow(index);
+            var id = $(row).attr("id");
+            $("#"+id).css({'background-color':COLOR_SUCCESS});
+        }
+
+        function InitArray(){
+            ModalLoad();
+            rows = gvSearch.GetVisibleRowsOnPage();
+            findItems = rows;
+            var data = gvSearch.cpModelData;
+            if (data) {
+                for (var i = 0; i < rows; i++) {
+                    console.log(data[i].trim());
+                    checkList.push(data[i].trim());//replace("\b\b","\b") 
+                    rowsSuccess++;
+                }
+            }
+            ModalClose();
+        }
+
+        function ModalLoad(){
+            $("#"+DIV_LOAD_MODAL).modal({
+                backdrop: "static", 
+                keyboard: false, 
+                show: true 
+            });
+        }
+
+        function ModalClose(){
+            if(rowsSuccess < rows){
+                setTimeout(function() {
+                    ModalClose();
+                }, 1000);
+            }else{
+                $("#"+DIV_LOAD_MODAL).modal("hide");
+            }
+        }
+
+        function FindItem(element){
+            
+            if(findList.indexOf(element)== -1){
+                findList.push(element);
+                $("#"+SPAN_FIND_ITEM).html(checkList.length - findList.length);
+            }
+        }
+
+        $( document ).ready(function() {
+            Init();
+        });
+    </script>
+}
+
+@Html.Partial("_SearchFields")
+
+@if (ViewData["parameters"] != null)
+{
+    Html.RenderPartial("_HeaderGridView");
+    Html.RenderPartial("_CheckList");
+}
+<div class="row">
+    <div class="col-lg-12">
+            @if (ViewData["parameters"] != null)
+            {
+                Html.RenderPartial("_GridViewSearch", Model, new ViewDataDictionary { { "parameters", ViewData["parameters"] }, { "server", ViewData["server"] }, { "moduleId", ViewData["moduleId"] }, { "formId", ViewData["formId"] }, { "CheckListColumName", ViewData["CheckListColumName"] } });
+            }
+    </div>
+</div>
+<audio controls id="audioSuccess" hidden="hidden">
+    <source src="@Url.Content("Content/audio/Success.mp3")" type="audio/mpeg">
+</audio>
+<audio controls id="audioError" hidden="hidden">
+    <source src="@Url.Content("Content/audio/Error.mp3")" type="audio/mpeg">
+</audio>

@@ -1,0 +1,178 @@
+<SecureDataDataSet>
+  <sys_dataview>
+    <dataview_name>gbz_get_box</dataview_name>
+    <is_enabled>Y</is_enabled>
+    <is_readonly>N</is_readonly>
+    <category_code>Inventory</category_code>
+    <database_area_code>Inventory</database_area_code>
+    <database_area_code_sort_order>0</database_area_code_sort_order>
+    <is_transform>N</is_transform>
+    <transform_field_for_names />
+    <transform_field_for_captions />
+    <transform_field_for_values />
+    <configuration_options />
+    <created_date>2018-11-12T18:50:22.1337148-06:00</created_date>
+    <modified_date>2019-07-25T21:40:01.4053148-05:00</modified_date>
+  </sys_dataview>
+  <sys_dataview_lang>
+    <sys_lang_id>1</sys_lang_id>
+    <title>Update Box</title>
+    <description>Update Box</description>
+    <iso_639_3_tag>ENG</iso_639_3_tag>
+    <ietf_tag>en-us</ietf_tag>
+    <dataview_name>gbz_get_box</dataview_name>
+  </sys_dataview_lang>
+  <sys_dataview_lang>
+    <sys_lang_id>2</sys_lang_id>
+    <title>Actualizar Caja</title>
+    <description>Actualizar Caja</description>
+    <iso_639_3_tag>SPA</iso_639_3_tag>
+    <ietf_tag>es-419</ietf_tag>
+    <dataview_name>gbz_get_box</dataview_name>
+  </sys_dataview_lang>
+  <sys_dataview_sql>
+    <dataview_name>gbz_get_box</dataview_name>
+    <database_engine_tag>sqlserver</database_engine_tag>
+    <sql_statement>SELECT
+  i.inventory_id,
+  i.storage_location_part1,
+  i.storage_location_part2,
+  i.storage_location_part3,
+  i.storage_location_part4,
+  i.owned_by,
+  '' + RTRIM(i.inventory_number_part1) + ' ' + RTRIM(CAST(i.inventory_number_part2 AS nchar(6))) + ' ' + COALESCE(inventory_number_part3, '') AS inventory_number
+FROM inventory i
+WHERE 
+(RTRIM(i.inventory_number_part1) + ' ' + RTRIM(CAST(i.inventory_number_part2 AS nchar(6))) + ' ' + COALESCE(inventory_number_part3, '') IN (:inventorynumber))
+OR (i.storage_location_part1 = :car
+AND i.storage_location_part2 = :sec
+AND i.storage_location_part3 = :box)
+ORDER BY i.storage_location_part1,
+i.storage_location_part2,
+i.storage_location_part3,
+convert(int, i.storage_location_part4)
+</sql_statement>
+  </sys_dataview_sql>
+  <sys_dataview_param>
+    <dataview_name>gbz_get_box</dataview_name>
+    <param_name>:inventorynumber</param_name>
+    <param_type>STRINGCOLLECTION</param_type>
+    <sort_order>0</sort_order>
+  </sys_dataview_param>
+  <sys_dataview_param>
+    <dataview_name>gbz_get_box</dataview_name>
+    <param_name>:car</param_name>
+    <param_type>STRING</param_type>
+    <sort_order>1</sort_order>
+  </sys_dataview_param>
+  <sys_dataview_param>
+    <dataview_name>gbz_get_box</dataview_name>
+    <param_name>:sec</param_name>
+    <param_type>STRING</param_type>
+    <sort_order>2</sort_order>
+  </sys_dataview_param>
+  <sys_dataview_param>
+    <dataview_name>gbz_get_box</dataview_name>
+    <param_name>:box</param_name>
+    <param_type>STRING</param_type>
+    <sort_order>3</sort_order>
+  </sys_dataview_param>
+  <sys_dataview_field>
+    <dataview_name>gbz_get_box</dataview_name>
+    <field_name>inventory_id</field_name>
+    <table_name>inventory</table_name>
+    <table_field_name>inventory_id</table_field_name>
+    <is_readonly>Y</is_readonly>
+    <is_primary_key>Y</is_primary_key>
+    <is_transform>N</is_transform>
+    <sort_order>0</sort_order>
+    <table_alias_name>i</table_alias_name>
+    <is_visible>N</is_visible>
+  </sys_dataview_field>
+  <sys_dataview_field>
+    <dataview_name>gbz_get_box</dataview_name>
+    <field_name>storage_location_part1</field_name>
+    <table_name>inventory</table_name>
+    <table_field_name>storage_location_part1</table_field_name>
+    <is_readonly>N</is_readonly>
+    <is_primary_key>N</is_primary_key>
+    <is_transform>N</is_transform>
+    <sort_order>1</sort_order>
+    <table_alias_name>i</table_alias_name>
+    <is_visible>N</is_visible>
+  </sys_dataview_field>
+  <sys_dataview_field>
+    <dataview_name>gbz_get_box</dataview_name>
+    <field_name>storage_location_part2</field_name>
+    <table_name>inventory</table_name>
+    <table_field_name>storage_location_part2</table_field_name>
+    <is_readonly>N</is_readonly>
+    <is_primary_key>N</is_primary_key>
+    <is_transform>N</is_transform>
+    <sort_order>2</sort_order>
+    <table_alias_name>i</table_alias_name>
+    <is_visible>N</is_visible>
+  </sys_dataview_field>
+  <sys_dataview_field>
+    <dataview_name>gbz_get_box</dataview_name>
+    <field_name>storage_location_part3</field_name>
+    <table_name>inventory</table_name>
+    <table_field_name>storage_location_part3</table_field_name>
+    <is_readonly>N</is_readonly>
+    <is_primary_key>N</is_primary_key>
+    <is_transform>N</is_transform>
+    <sort_order>3</sort_order>
+    <table_alias_name>i</table_alias_name>
+    <is_visible>N</is_visible>
+  </sys_dataview_field>
+  <sys_dataview_field>
+    <dataview_name>gbz_get_box</dataview_name>
+    <field_name>storage_location_part4</field_name>
+    <table_name>inventory</table_name>
+    <table_field_name>storage_location_part4</table_field_name>
+    <is_readonly>N</is_readonly>
+    <is_primary_key>N</is_primary_key>
+    <is_transform>N</is_transform>
+    <sort_order>4</sort_order>
+    <table_alias_name>i</table_alias_name>
+    <is_visible>Y</is_visible>
+  </sys_dataview_field>
+  <sys_dataview_field>
+    <dataview_name>gbz_get_box</dataview_name>
+    <field_name>owned_by</field_name>
+    <table_name>inventory</table_name>
+    <table_field_name>owned_by</table_field_name>
+    <is_readonly>Y</is_readonly>
+    <is_primary_key>N</is_primary_key>
+    <is_transform>N</is_transform>
+    <sort_order>5</sort_order>
+    <foreign_key_dataview_name>cooperator_lookup</foreign_key_dataview_name>
+    <table_alias_name>i</table_alias_name>
+    <is_visible>N</is_visible>
+  </sys_dataview_field>
+  <sys_dataview_field>
+    <dataview_name>gbz_get_box</dataview_name>
+    <field_name>inventory_number</field_name>
+    <is_readonly>N</is_readonly>
+    <is_primary_key>N</is_primary_key>
+    <is_transform>N</is_transform>
+    <sort_order>6</sort_order>
+    <is_visible>Y</is_visible>
+  </sys_dataview_field>
+  <sys_dataview_field_lang>
+    <dataview_name>gbz_get_box</dataview_name>
+    <field_name>inventory_number</field_name>
+    <iso_639_3_tag>ENG</iso_639_3_tag>
+    <ietf_tag>en-us</ietf_tag>
+    <title>Inventory Number</title>
+    <description />
+  </sys_dataview_field_lang>
+  <sys_dataview_field_lang>
+    <dataview_name>gbz_get_box</dataview_name>
+    <field_name>inventory_number</field_name>
+    <iso_639_3_tag>SPA</iso_639_3_tag>
+    <ietf_tag>es-419</ietf_tag>
+    <title>Número de Inventario</title>
+    <description />
+  </sys_dataview_field_lang>
+</SecureDataDataSet>

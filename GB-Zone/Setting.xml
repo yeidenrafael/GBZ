@@ -210,149 +210,29 @@
           </actions>
         </field>
       </form>
-    </module>
-<!--
-    <module id="Client" title="Client" description="Curator Tool dataviews" icon="pe-7s-science">
-      <form id="get_accession" title="Get Accession" layout="vertical" cssClass="form-group" action="Index" controller="Search">
-        <field id="orderrequestid" type="number" placeholder="Order Number" visible="true">
-          <actions>
-            <parameters>
-              <suppressExceptions>false</suppressExceptions>
-              <dataviewName>get_accession</dataviewName>
-              <delimitedParameterList>:accessionid=;:accessionname=;:taxonomyspeciesid=;:inventoryid=;:orderrequestid={0};:geographyid=;:cooperatorid=;:taxonomygenusid=;</delimitedParameterList>
-              <offset>0</offset>
-              <limit>0</limit>
-              <options>1</options>
-              <separator>127</separator>
-            </parameters>
-            <columns>
-            </columns>
-            <extendedProperties></extendedProperties>
-          </actions>
-        </field>
-
-        <field id="accessionname" type="text" placeholder="Accession Name" visible="true">
-          <actions>
-            <parameters>
-              <suppressExceptions>false</suppressExceptions>
-              <dataviewName>get_accession</dataviewName>
-              <delimitedParameterList>:accessionid=;:accessionname={0};:taxonomyspeciesid=;:inventoryid=;:orderrequestid=;:geographyid=;:cooperatorid=;:taxonomygenusid=;</delimitedParameterList>
-              <offset>0</offset>
-              <limit>0</limit>
-              <options>1</options>
-              <separator>127</separator>
-            </parameters>
-            <columns>
-            </columns>
-            <extendedProperties></extendedProperties>
-          </actions>
-        </field>
-      </form>
-
-      <form id="get_inventory" title="Get Inventory" layout="vertical" cssClass="form-group" action="Index" controller="Search">
-        <field id="orderrequestid" type="number" placeholder="Order Number" visible="true">
-          <actions>
-            <parameters>
-              <suppressExceptions>false</suppressExceptions>
-              <dataviewName>get_inventory</dataviewName>
-              <delimitedParameterList>:inventoryid=;:accessionid=;:inventorymaintpolicyid=;:orderrequestid={0};:accessioninvgroupid=;</delimitedParameterList>
-              <offset>0</offset>
-              <limit>0</limit>
-              <options>1</options>
-              <separator>127</separator>
-            </parameters>
-            <columns>
-              <column link="true" moduleRef="Inventory" formRef="gbz_get_inventory" fieldRef="intrid" colRef="inventory_number_part1" >inventory_number_part1</column>
-            </columns>
-            <extendedProperties>
-            </extendedProperties>
-          </actions>
-        </field>
-      </form>
-
-      <form id="get_order_request_item" title="Get Order Request Item" layout="vertical" cssClass="form-group" action="Index" controller="Search">
-        <field id="orderrequestid" type="number" placeholder="Order Number" visible="true">
-          <actions>
-            <parameters>
-              <suppressExceptions>false</suppressExceptions>
-              <dataviewName>get_order_request_item</dataviewName>
-              <delimitedParameterList>:orderrequestitemid=;:orderrequestid={0};:weborderrequestitemid=;:inventoryid=;:cooperatorid=;:accessionid=;:ownedby=;:weborderrequestid=;</delimitedParameterList>
-              <offset>0</offset>
-              <limit>0</limit>
-              <options>1</options>
-              <separator>127</separator>
-            </parameters>
-            <columns>
-            </columns>
-            <extendedProperties>
-            </extendedProperties>
-          </actions>
-        </field>
-      </form>
-
-      <form id="get_passport_data" title="Get Passport Data" layout="vertical" cssClass="form-group" action="Index" controller="Search">
-        <field id="orderrequestid" type="number" placeholder="Order Number" visible="true">
-          <actions>
-            <parameters>
-              <suppressExceptions>false</suppressExceptions>
-              <dataviewName>get_passport_data</dataviewName>
-              <delimitedParameterList>:accessionid=;:taxonomyspeciesid=;:inventoryid=;:orderrequestid={0};:geographyid=;:cooperatorid=;:taxonomygenusid=;</delimitedParameterList>
-              <offset>0</offset>
-              <limit>0</limit>
-              <options>1</options>
-              <separator>127</separator>
-            </parameters>
-            <columns>
-            </columns>
-            <extendedProperties>
-            </extendedProperties>
-          </actions>
-        </field>
+      <form id="gbz_get_order_check" title="Check List" layout="vertical" cssClass="form-group" action="Index" controller="Order" prefixInput="text_" prefixRadio="radio_" version="2.0">
+        <fields>
+          <field id=":orderrequestid" type="number" placeholder="Order Number" visible="true"></field>
+        </fields>
+        <actions>
+          <parameters>
+            <suppressExceptions>false</suppressExceptions>
+            <dataviewName>gbz_get_order_check_list</dataviewName>
+            <offset>0</offset>
+            <limit>0</limit>
+            <options>1</options>
+            <separator>59</separator>
+            <assignment>61</assignment>
+          </parameters>
+          <columns>
+            <column readOnly="false" javaScriptVar="CheckListColumName">inventory_number</column>
+          </columns>
+          <extendedProperties>
+            <masterDetail actionName="GridViewSearchDetail" moduleRef="Inventory" formRef="gbz_get_inventory" fieldRef="orderrequestitemid" colRef="order_request_item_id"></masterDetail>
+          </extendedProperties>
+        </actions>
       </form>
     </module>
-
-    <module id="BrAPI" title="BrAPI" description="Breeding API" icon="pe-7s-science">
-      <form id="get_germplasm_details" title="Germplasm Details" layout="vertical" cssClass="form-group" action="Index" controller="Search">
-        <field id="germplasmDbId" type="number" placeholder="germplasmDbId" visible="true">
-          <actions>
-            <parameters>
-              <suppressExceptions>false</suppressExceptions>
-              <dataviewName>get_germplasm_details</dataviewName>
-              <delimitedParameterList>:germplasmDbId={0};:name=;:taxonomyspeciesid=;:inventoryid=;:orderrequestid=;:geographyid=;:cooperatorid=;:taxonomygenusid=;</delimitedParameterList>
-              <offset>0</offset>
-              <limit>0</limit>
-              <options>1</options>
-              <separator>127</separator>
-            </parameters>
-            <columns>
-              <column link="true" moduleRef="Inventory" formRef="gbz_get_inventory" fieldRef="accessionnumber" colRef="accessionnumber" >accessionnumber</column>
-            </columns>
-            <extendedProperties>
-            </extendedProperties>
-          </actions>
-        </field>
-
-        <field id="name" type="text" placeholder="Name" visible="true">
-          <actions>
-            <parameters>
-              <suppressExceptions>false</suppressExceptions>
-              <dataviewName>get_germplasm_details</dataviewName>
-              <delimitedParameterList>:germplasmDbId=;:name={0};:taxonomyspeciesid=;:inventoryid=;:orderrequestid=;:geographyid=;:cooperatorid=;:taxonomygenusid=;</delimitedParameterList>
-              <offset>0</offset>
-              <limit>0</limit>
-              <options>1</options>
-              <separator>127</separator>
-            </parameters>
-            <columns>
-              <column link="true" moduleRef="Inventory" formRef="gbz_get_inventory" fieldRef="accessionnumber" colRef="accessionnumber" >accessionnumber</column>
-            </columns>
-            <extendedProperties>
-            </extendedProperties>
-          </actions>
-        </field>
-      </form>
-    </module>
--->    
   </server>
 
   <server id="02" name="Maize" url="http://itu-dev-srv:81/gringlobal/gui.asmx">
