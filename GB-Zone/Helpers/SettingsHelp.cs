@@ -128,6 +128,18 @@ namespace GrinGlobal.Zone.Helpers
             XElement col = (from e in column.Descendants(NAME_COLUMN) where e.Value.Trim().ToUpper() == name.ToUpper() select e).DefaultIfEmpty(null).FirstOrDefault();
             return col;
         }
+        /// <summary>
+        /// Find all column that and spesific atribute
+        /// </summary>
+        /// <param name="attribute">Name to Attribute for search</param>
+        /// <returns>
+        /// Get the list XElement or list empty in case not found
+        /// </returns>
+        public List<XElement> GetColumn_Attribute(string attribute)
+        {
+            List<XElement> cols = (from e in column.Descendants(NAME_COLUMN) where e.Attribute(attribute) != null select e).ToList();
+            return cols;
+        }
         #endregion
     }
 }

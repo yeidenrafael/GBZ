@@ -15,10 +15,16 @@ namespace GrinGlobal.Zone.Helpers
         private SettingsHelp setH;
         private readonly string PARAMETER_COLUMN_NAME = "param_name";
         private readonly string PARAMETER_DATA_TABLE_NAME = "dv_param_info";
+        private readonly string ATTRIBUTE_JAVASCRIPT_VAR = "javaScriptVar";
         private DataSet parameterGrinGlobal;
+        private Dictionary<string, string> javascriptVariables;
         #endregion
         #region public attribute
-        private DataSet ParameterGrinGlobal { get { return parameterGrinGlobal; } }
+        /// <summary>
+        /// DataSet getting from  DataView parameters in Grin Global 
+        /// </summary>
+        public DataSet ParameterGrinGlobal { get { return parameterGrinGlobal; } }
+        public Dictionary<string,string> JavascriptVariables { get { return javascriptVariables; } }
         #endregion
         #region constructor
         public GrinGlobalSoapHelp(string serverId, string moduleId, string formId)
@@ -35,20 +41,20 @@ namespace GrinGlobal.Zone.Helpers
             string dataviewName = setH.Parameter.Element("dataviewName").Value;
             bool suppressExceptions = bool.Parse(setH.Parameter.Element("suppressExceptions").Value);
             parameterGrinGlobal = ggZoneModel.GetParameters(urlService, suppressExceptions, dataviewName);
+            LoadJavascriptVariable();
         }
-        private string GetStringParameter(Dictionary<string, string> dic)
+
+
+        private void LoadJavascriptVariable()
         {
-            string parameter = "";
-            Char separator = (char)Convert.ToInt32(setH.Parameter.Element("separator").Value);
-            Char assignment = (char)Convert.ToInt32(setH.Parameter.Element("assignment").Value);
-            foreach (KeyValuePair<string, string> entry in dic)
+            javascriptVariables = new Dictionary<string, string>();
+            foreach(XElement col in setH.GetColumn_Attribute(ATTRIBUTE_JAVASCRIPT_VAR))
             {
-                parameter += entry.Key + assignment + entry.Value + separator;
+                javascriptVariables.Add(col.Attribute(ATTRIBUTE_JAVASCRIPT_VAR).Value.ToString(), col.Value.ToString().Trim());
             }
-            return parameter;
         }
         #endregion
-
+        #region public methods
         public Dictionary<string, string> GetParameters(FormCollection dataform)
         {
             Dictionary<string, string> dic = new Dictionary<string, string>();
@@ -65,9 +71,17 @@ namespace GrinGlobal.Zone.Helpers
             return dic;
         }
 
-
-
         public DataTable GetData(Dictionary<string, string> dic)
+        {
+            return _GetData(GetStringParameter(dic));
+        }
+
+        public DataTable GetData(string param)
+        {
+            return _GetData(param);
+        }
+
+        public DataTable _GetData(string parameters)
         {
             GGZoneModel ggZoneModel = new GGZoneModel();
             string urlService = setH.Server.Attribute("url").Value.ToString();//extract settings from Setting.xml
@@ -76,8 +90,7 @@ namespace GrinGlobal.Zone.Helpers
             int offset = int.Parse(setH.Parameter.Element("offset").Value);
             int limit = int.Parse(setH.Parameter.Element("limit").Value);
             string options = setH.Parameter.Element("options").Value;
-            DataSet ds = ggZoneModel.GetData(urlService, suppressExceptions, dataviewName, GetStringParameter(dic), offset, limit, options);             //invoke model requesting the datatable
-
+            DataSet ds = ggZoneModel.GetData(urlService, suppressExceptions, dataviewName, parameters, offset, limit, options);             //invoke model requesting the datatable
             foreach (DataColumn col in ds.Tables[dataviewName].Columns)
             {
                 if (col.ExtendedProperties["is_visible"].ToString() == "N")
@@ -98,7 +111,7 @@ namespace GrinGlobal.Zone.Helpers
                         col.ExtendedProperties.Add("fieldRef", column.Attribute("fieldRef").Value);
                         col.ExtendedProperties.Add("colRef", column.Attribute("colRef").Value);
                     }
-                    if(column.Attribute("readOnly")!= null)
+                    if (column.Attribute("readOnly") != null)
                     {
                         col.ReadOnly = bool.Parse(column.Attribute("readOnly").Value);
                     }
@@ -115,5 +128,17 @@ namespace GrinGlobal.Zone.Helpers
             }
             return ds.Tables[dataviewName];
         }
+        public string GetStringParameter(Dictionary<string, string> dic)
+        {
+            string parameter = "";
+            Char separator = (char)Convert.ToInt32(setH.Parameter.Element("separator").Value);
+            Char assignment = (char)Convert.ToInt32(setH.Parameter.Element("assignment").Value);
+            foreach (KeyValuePair<string, string> entry in dic)
+            {
+                parameter += entry.Key + assignment + entry.Value + separator;
+            }
+            return parameter;
+        }
+        #endregion
     }
 }
