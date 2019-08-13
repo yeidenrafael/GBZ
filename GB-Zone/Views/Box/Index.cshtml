@@ -11,12 +11,14 @@
         var COLUMN_SEC = "storage_location_part2";
         var COLUMN_BOX = "storage_location_part3";
         var COLUMN_PAQ = "storage_location_part4";
+
         function NewItem(s, e) {
             if (e.htmlEvent.keyCode == 13) {
                 ASPxClientUtils.PreventEventAndBubble(e.htmlEvent);
                 gvSearch.AddNewRow();
             }
         }
+
         function reorderItem(s, e) {
             var rows = gvSearch.GetVisibleRowsOnPage();
             for (var i = 0; i < rows; i++) {
@@ -24,15 +26,19 @@
                 gvSearch.batchEditApi.SetCellValue(i, COLUMN_PAQ, entry.substring(entry.length - 3));
             }
         }
+
         function OnGetRowValues(values) {
             return values;
         }
+
         function EndSave(s, e) {
             var rows = gvSearch.GetVisibleRowsOnPage();
-            $("#spanCount").text(rows);
+            SetTotal(rows-1);
         }
+
         function AddNewItem(s, e) {
             var rows = gvSearch.GetVisibleRowsOnPage();
+            SetTotal(rows);
             var rowInsertNew = gvSearch.batchEditHelper.GetEditState().insertedRowValues;
             var count = Object.keys(rowInsertNew).length;
             var entry = "00" + (rows);
@@ -43,6 +49,10 @@
                 gvSearch.batchEditApi.StartEdit(gvSearch.batchEditApi.GetInsertedRowIndices()[count], gvSearch.GetColumnByField(COLUMN_INVENTORY_NUMBER).index);
                 }, 100
             );
+        }
+
+        function SetTotal(num_rows) {
+            $("#spanCount").text(num_rows);
         }
     </script>
 }
