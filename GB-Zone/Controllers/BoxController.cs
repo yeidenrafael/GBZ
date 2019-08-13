@@ -108,7 +108,7 @@ namespace GrinGlobal.Zone.Controllers
             }
             DataTable ds = search.GetData(serverId, moduleId, formId, fieldId, "-" + value);
             ds.Columns[SETTING_COLUMN_DISABLE_READ_ONLY].ReadOnly = false;
-            return PartialView(viewName, ds);
+            return RedirectToAction("Index2", "Search", new { serverId, moduleId, formId = "gbz_get_inventory", fieldId = "storageLocation", value = value }); // This is going back to another page after the info is updated
         }
 
         private DataTable InsertRows(List<string> keysToInsert, DataTable ds )

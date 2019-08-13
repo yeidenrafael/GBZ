@@ -6,7 +6,7 @@
     {
         settings.Name = "gvSearch";
         settings.KeyFieldName = "InventoryId";
-        settings.CallbackRouteValues = new { Controller = "Box", Action = "GridView", serverId = ViewData["server"].ToString(), moduleId = ViewData["moduleId"].ToString(), formId = ViewData["formId"].ToString(), parameters = ViewData["parameters"].ToString(), viewName = "_GridViewSearch" };
+        settings.CallbackRouteValues = new { Controller = "Box", Action = "GridView", serverId = ViewData["server"].ToString(), moduleId = ViewData["moduleId"].ToString(), formId = ViewData["formId"].ToString(), value = ViewData["value"].ToString(), viewName = "_GridViewSearch" };
         settings.SettingsEditing.BatchUpdateRouteValues = new { Controller = "Box", Action = "BatchUpdateAction", serverId = ViewData["server"].ToString(), moduleId = ViewData["moduleId"].ToString(), formId = ViewData["formId"].ToString(), fieldId = ViewData["viewName"].ToString(), value = ViewData["value"].ToString(), viewName = "_GridViewSearch" };
         settings.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords;
         settings.SettingsEditing.Mode = GridViewEditingMode.Batch;
