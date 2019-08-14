@@ -210,7 +210,7 @@
           </actions>
         </field>
       </form>
-      <form id="gbz_get_order_check" title="Check List" layout="vertical" cssClass="form-group" action="Index" controller="Order" prefixInput="text_" prefixRadio="radio_" version="2.0">
+      <form id="gbz_get_order_check" title="Check List" layout="vertical" cssClass="form-group" action="Index" controller="Order" version="2.0">
         <fields>
           <field id=":orderrequestid" type="number" placeholder="Order Number" visible="true"></field>
         </fields>
