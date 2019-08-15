@@ -225,9 +225,11 @@
             <assignment>61</assignment>
           </parameters>
           <columns>
-            <column readOnly="false" javaScriptVar="CheckListColumName">inventory_number</column>
+              <column readOnly="false" javaScriptVar="CheckListColumName">inventory_number</column>
+              <column readOnly="true" javaScriptVar="CheckAfter">check_item</column>
           </columns>
           <extendedProperties>
+            <actionDataview>01_get_order_request_item_action</actionDataview>
             <masterDetail actionName="GridViewSearchDetail" moduleRef="Inventory" formRef="gbz_get_inventory" fieldRef="orderrequestitemid" colRef="order_request_item_id"></masterDetail>
           </extendedProperties>
         </actions>

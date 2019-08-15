@@ -18,13 +18,21 @@ namespace GrinGlobal.Zone.Helpers
         private readonly string ATTRIBUTE_JAVASCRIPT_VAR = "javaScriptVar";
         private DataSet parameterGrinGlobal;
         private Dictionary<string, string> javascriptVariables;
+        private string dataViewName;
         #endregion
         #region public attribute
         /// <summary>
         /// DataSet getting from  DataView parameters in Grin Global 
         /// </summary>
         public DataSet ParameterGrinGlobal { get { return parameterGrinGlobal; } }
+        /// <summary>
+        /// Dictionary the vaule of parameter to var in javascript by tag javaScriptVar
+        /// </summary>
         public Dictionary<string,string> JavascriptVariables { get { return javascriptVariables; } }
+        /// <summary>
+        /// Name form the dataview to work with the parameter in costructor
+        /// </summary>
+        public string DataViewName { get { return dataViewName; } }
         #endregion
         #region constructor
         public GrinGlobalSoapHelp(string serverId, string moduleId, string formId)
@@ -38,9 +46,9 @@ namespace GrinGlobal.Zone.Helpers
         {
             GGZoneModel ggZoneModel = new GGZoneModel();
             string urlService = setH.Server.Attribute("url").Value.ToString();
-            string dataviewName = setH.Parameter.Element("dataviewName").Value;
+            dataViewName = setH.Parameter.Element("dataviewName").Value;
             bool suppressExceptions = bool.Parse(setH.Parameter.Element("suppressExceptions").Value);
-            parameterGrinGlobal = ggZoneModel.GetParameters(urlService, suppressExceptions, dataviewName);
+            parameterGrinGlobal = ggZoneModel.GetParameters(urlService, suppressExceptions, dataViewName);
             LoadJavascriptVariable();
         }
 

@@ -1,7 +1,6 @@
-﻿@using System.Data
+﻿@model System.Data.DataSet
 
 @{
-
     var grid = Html.DevExpress().GridView(st =>
     {
         st.Name = "gvSearch";
@@ -15,11 +14,12 @@
         st.SettingsPager.LastPageButton.Visible = false;
         st.SettingsPager.PageSizeItemSettings.Visible = false;
         st.SettingsPager.PageSizeItemSettings.Items = new string[] { "10", "20", "50", "100" };
+        st.SettingsPager.EnableAdaptivity = true;
         st.SettingsEditing.Mode = GridViewEditingMode.EditFormAndDisplayRow;
         st.SettingsBehavior.AllowSelectByRowClick = false;
         st.CommandColumn.Visible = false;
         st.CommandColumn.ShowEditButton = false;
-        st.Settings.ShowFilterBar = GridViewStatusBarMode.Hidden;
+        st.Settings.ShowFilterBar = GridViewStatusBarMode.Visible;
         st.Settings.ShowTitlePanel = false;
         st.Settings.ShowFilterRow = false;
         st.Settings.ShowHeaderFilterButton = false;
@@ -30,51 +30,44 @@
         st.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = false;
         st.SettingsAdaptivity.HideDataCellsAtWindowInnerWidth = 0;
         st.ClientSideEvents.Init = "InitArray";
+        st.ClientSideEvents.ColumnSorting = "ColorCallback";
         st.CustomJSProperties = (s, e) =>
         {
             MVCxGridView g = s as MVCxGridView;
             Dictionary<int, object> dict = new Dictionary<int, object>();
-
-            for (int i = 0; i < Model.Rows.Count; i++)
+            for (int i = 0; i < Model.Tables[ViewData["dataViewName"].ToString()].Rows.Count; i++)
             {
                 dict[i] = g.GetRowValues(i, ViewData["CheckListColumName"].ToString());
             }
             e.Properties.Add("cpModelData", dict);
         };
-
-        st.CallbackRouteValues = new { Controller = "Order", Action = "GridView", serverId = ViewData["server"].ToString(), moduleId = ViewData["moduleId"].ToString(), formId = ViewData["formId"].ToString(), parameters = ViewData["parameters"].ToString(), viewName = "GridViewSearc" };
+        st.CallbackRouteValues = new { Controller = "Order", Action = "GridView", serverId = ViewData["server"].ToString(), moduleId = ViewData["moduleId"].ToString(), formId = ViewData["formId"].ToString(), parameters = ViewData["parameters"].ToString(), dataViewName = ViewData["dataViewName"] };
         st.CommandColumn.ShowNewButtonInHeader = false;
-
-        foreach (System.Data.DataColumn dc in Model.Columns)
+        foreach (System.Data.DataColumn dc in Model.Tables[ViewData["dataViewName"].ToString()].Columns)
         {
             if (dc.ExtendedProperties["is_primary_key"].ToString() == "Y")
             {
                 st.KeyFieldName = dc.ColumnName;
             }
-
             if (dc.ExtendedProperties["is_header"] == null)
             {
-
                 st.Columns.Add(col =>
                 {
                     col.FieldName = dc.ColumnName;
                     col.Name = dc.ColumnName;
                     col.Caption = dc.Caption;
-                    col.Settings.AllowSort = DefaultBoolean.False;
+                    col.Settings.AllowSort = DefaultBoolean.True;
                     if (dc.ColumnMapping == System.Data.MappingType.Hidden)
                     {
                         col.Visible = false;
                     }
-                    //col.ReadOnly = dc.ReadOnly;
                 });
             }
         }
     });
     if (ViewData["EditError"] != null)
     {
-
         grid.SetEditErrorText((string)ViewData["EditError"]);
     }
-
-    grid.Bind(Model).GetHtml();
+    grid.Bind(Model.Tables[ViewData["dataViewName"].ToString()]).GetHtml();
 }

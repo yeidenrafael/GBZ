@@ -1,5 +1,5 @@
 ﻿<!--######################## views/Order  ###########-->
-@model System.Data.DataTable
+@model System.Data.DataSet
 
 @{
     ViewBag.ViewTitle = "| " + ViewData["moduleId"];
@@ -16,11 +16,16 @@
         const KEY_ENTER = 13;
         const COLOR_SUCCESS =  "forestgreen";
         const COLOR_ERROR =  "red";
-        var regreso = "";
-        var rows = 0;
-        var rowsSuccess = 0;
-        var checkList = new Array();
-        var findList = new Array();
+        const COLOR_NEUTRO = "white"
+        
+        var itemsWithCheck = new Array();
+        var itemsWithOutCheck = new Array();
+        var ALL_ITEMS = new Array();
+        var rowNumAllToStopModal = 0;
+        var rowNumGetToSotpoModal = 0;
+        $( document ).ready(function() {
+            Init();
+        });
 
         function Init(){
 
@@ -28,38 +33,80 @@
 
         function KeyPressTexBCheck(s, e) {
             if (e.htmlEvent.keyCode == KEY_ENTER) {
-                var texto = $("#"+INPUT_TEXT_QR).val().trim();
-                var index = checkList.indexOf(texto);
-                if(index != -1){
-                    $("#"+LI_TRAFIC_LIGHT).css({'color':COLOR_SUCCESS});
-                    CheckRow(index);
-                    FindItem(checkList[index]);
-                    $("#audioSuccess")[0].play();
-                }else{
-                    $("#"+LI_TRAFIC_LIGHT).css({'color':COLOR_ERROR});
-                    $("#audioError")[0].play();
-                }
+                var text = $("#"+INPUT_TEXT_QR).val().trim();
+                CheckElement(text);
                 $("#"+SPAN_LAST_CHECK_ITEM).html("<b>"+$("#"+INPUT_TEXT_QR).val()+"</b>");
                 $("#"+INPUT_TEXT_QR).val('');
             }
         }
 
-        function CheckRow(index){
-            var row = gvSearch.GetRow(index);
-            var id = $(row).attr("id");
-            $("#"+id).css({'background-color':COLOR_SUCCESS});
+        function CheckElement(text){
+            var indice = ALL_ITEMS.indexOf(text);
+            if(indice != -1){
+                $("#"+LI_TRAFIC_LIGHT).css({'color':COLOR_SUCCESS});
+                indice = itemsWithOutCheck.indexOf(text);
+                if(indice != -1){
+                    itemsWithCheck.push(itemsWithOutCheck[indice]);
+                    itemsWithOutCheck.pop(indice);
+                    Color();
+                }
+            }
+            else{
+                $("#"+LI_TRAFIC_LIGHT).css({'color':COLOR_ERROR});
+                $("#audioError")[0].play();
+            }
+        }
+
+        function Color(){
+            var itemTemp = itemsWithCheck;
+            var indexDelete = -1;
+            var indexCellColor = 0;
+            for(var i=0; i<ALL_ITEMS.length; i++){
+                var row_now = gvSearch.GetRow(i);
+                var id = $(row_now).attr("id");
+                $("#"+id).css({'background-color':COLOR_NEUTRO});
+            }
+            for(var i=0; i<ALL_ITEMS.length; i++){
+                var row_now = gvSearch.GetRow(i);
+                indexDelete = -1;
+                for(var j=0; j<=itemTemp.length; j++){
+                    var color= COLOR_NEUTRO;
+                    if($(row_now).text().indexOf(itemTemp[j])!=-1){
+                        indexDelete = j;
+                        indexCellColor++;
+                        var id = $(row_now).attr("id");
+                        $("#"+id).css({'background-color':COLOR_SUCCESS});
+                    }
+                }
+            }
+            $("#"+SPAN_FIND_ITEM).html(ALL_ITEMS.length - indexCellColor);
+        }
+
+        function ColorCallback(){
+
+            Sincronizar();
+        }
+
+        function Sincronizar(){
+            if(gvSearch.GetVisibleRowsOnPage<rowNumAllToStopModal){
+                setTimeout(function() {
+                    Sincronizar();
+                }, 10);
+            }
+            else{
+                Color();
+            }
         }
 
         function InitArray(){
             ModalLoad();
-            rows = gvSearch.GetVisibleRowsOnPage();
-            findItems = rows;
             var data = gvSearch.cpModelData;
+            rowNumAllToStopModal = Object.keys(data).length;
             if (data) {
-                for (var i = 0; i < rows; i++) {
-                    console.log(data[i].trim());
-                    checkList.push(data[i].trim());//replace("\b\b","\b") 
-                    rowsSuccess++;
+                for (var i = 0; i < rowNumAllToStopModal; i++) {
+                    ALL_ITEMS.push(data[i].trim());
+                    itemsWithOutCheck.push(data[i].trim());
+                    rowNumGetToSotpoModal++;
                 }
             }
             ModalClose();
@@ -74,7 +121,7 @@
         }
 
         function ModalClose(){
-            if(rowsSuccess < rows){
+            if(rowNumGetToSotpoModal < rowNumAllToStopModal){
                 setTimeout(function() {
                     ModalClose();
                 }, 1000);
@@ -82,18 +129,6 @@
                 $("#"+DIV_LOAD_MODAL).modal("hide");
             }
         }
-
-        function FindItem(element){
-            
-            if(findList.indexOf(element)== -1){
-                findList.push(element);
-                $("#"+SPAN_FIND_ITEM).html(checkList.length - findList.length);
-            }
-        }
-
-        $( document ).ready(function() {
-            Init();
-        });
     </script>
 }
 
@@ -108,7 +143,7 @@
     <div class="col-lg-12">
             @if (ViewData["parameters"] != null)
             {
-                Html.RenderPartial("_GridViewSearch", Model, new ViewDataDictionary { { "parameters", ViewData["parameters"] }, { "server", ViewData["server"] }, { "moduleId", ViewData["moduleId"] }, { "formId", ViewData["formId"] }, { "CheckListColumName", ViewData["CheckListColumName"] } });
+                Html.RenderPartial("_GridViewSearch", Model, new ViewDataDictionary { { "parameters", ViewData["parameters"] }, { "server", ViewData["server"] }, { "moduleId", ViewData["moduleId"] }, { "formId", ViewData["formId"] }, { "CheckListColumName", ViewData["CheckListColumName"] }, { "dataViewName", ViewData["dataViewName"] } });
             }
     </div>
 </div>

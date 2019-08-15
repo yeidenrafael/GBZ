@@ -1,14 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?> 
 <dataview_actions>
-  <dataview_action id="get_order_request_item_action">
-      <form id="gbz_get_order_check" title="Check List" layout="vertical" cssClass="form-group" action="Index" controller="Order" version="2.0">
+  <dataview_action id="01_get_order_request_item_action">
+      <form id="form_get_order_request_item_action" title="" layout="vertical" cssClass="form-group" action="" controller="" version="2.0">
         <fields>
+          <field id=":orderrequestitemactionid" type="number" placeholder="Order Number" visible="true"></field>
+          <field id=":orderrequestitemid" type="number" placeholder="Order Number" visible="true"></field>
+          <field id=":cooperatorid" type="number" placeholder="Order Number" visible="true"></field>
           <field id=":orderrequestid" type="number" placeholder="Order Number" visible="true"></field>
+          <field id=":inventoryid" type="number" placeholder="Order Number" visible="true"></field>
+          <field id=":accessionid" type="number" placeholder="Order Number" visible="true"></field>
         </fields>
         <actions>
           <parameters>
             <suppressExceptions>false</suppressExceptions>
-            <dataviewName>gbz_get_order_check_list</dataviewName>
+            <dataviewName>get_order_request_item_action</dataviewName>
             <offset>0</offset>
             <limit>0</limit>
             <options>1</options>
@@ -16,10 +21,8 @@
             <assignment>61</assignment>
           </parameters>
           <columns>
-            <column readOnly="false" javaScriptVar="CheckListColumName">inventory_number</column>
           </columns>
           <extendedProperties>
-            <masterDetail actionName="GridViewSearchDetail" moduleRef="Inventory" formRef="gbz_get_inventory" fieldRef="orderrequestitemid" colRef="order_request_item_id"></masterDetail>
           </extendedProperties>
         </actions>
       </form>

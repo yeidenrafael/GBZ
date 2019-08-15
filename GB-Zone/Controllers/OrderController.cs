@@ -16,8 +16,12 @@ namespace GrinGlobal.Zone.Controllers
         {
             ViewData["moduleId"] = moduleId;
             ViewData["formId"] = formId;
+            string serverId = Session["server"].ToString();
 
-            return View();
+            GrinGlobalSoapHelp sopH = new GrinGlobalSoapHelp(serverId, moduleId, formId);
+            ViewData["dataViewName"] = sopH.DataViewName;
+            DataSet datS = new DataSet();
+            return View(datS);
         }
 
         [HttpPost]
@@ -32,11 +36,15 @@ namespace GrinGlobal.Zone.Controllers
             ViewData["server"] = serverId;
             ViewData["moduleId"] = moduleId;
             ViewData["formId"] = formId;
+            ViewData["dataViewName"] = sopH.DataViewName;
             ViewData["parameters"] = sopH.GetStringParameter(parameter);
-//            ViewData["viewName"] = 
             ViewData[COLUMN_NAME_CHECK_LIST] = sopH.JavascriptVariables.ContainsKey(COLUMN_NAME_CHECK_LIST)?sopH.JavascriptVariables[COLUMN_NAME_CHECK_LIST]:"";
-            return View(sopH.GetData(parameter));
+            DataSet datS = new DataSet();
+            DataTable dt = sopH.GetData(parameter);
+            datS.Tables.Add(dt.Copy());
+            return View(datS);
         }
+
         public ActionResult GridView(string serverId, string moduleId, string formId, string viewName, string parameters)
         {
             GrinGlobalSoapHelp sopH = new GrinGlobalSoapHelp(serverId, moduleId, formId);
@@ -44,8 +52,14 @@ namespace GrinGlobal.Zone.Controllers
             ViewData["moduleId"] = moduleId;
             ViewData["formId"] = formId;
             ViewData["parameters"] = parameters;
+            ViewData["dataViewName"] = sopH.DataViewName;
             ViewData[COLUMN_NAME_CHECK_LIST] = sopH.JavascriptVariables.ContainsKey(COLUMN_NAME_CHECK_LIST) ? sopH.JavascriptVariables[COLUMN_NAME_CHECK_LIST] : "";
-            return PartialView("_GridViewSearch", sopH.GetData(parameters));
+            DataSet datS = new DataSet();
+            DataTable dt = sopH.GetData(parameters);
+            datS.Tables.Add(dt.Copy());
+            return PartialView("_GridViewSearch", datS);
         }
+
+
     }
 }
