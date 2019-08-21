@@ -210,7 +210,8 @@
           </actions>
         </field>
       </form>
-      <form id="gbz_get_order_check" title="Check List" layout="vertical" cssClass="form-group" action="Index" controller="Order" version="2.0">
+      
+      <form id="gbz_get_order_check" title="Check List" layout="vertical" cssClass="form-group" action="Index" controller="Order" systemVersion="2.0">
         <fields>
           <field id=":orderrequestid" type="number" placeholder="Order Number" visible="true"></field>
         </fields>
@@ -225,11 +226,24 @@
             <assignment>61</assignment>
           </parameters>
           <columns>
-              <column readOnly="false" javaScriptVar="CheckListColumName">inventory_number</column>
-              <column readOnly="true" javaScriptVar="CheckAfter">check_item</column>
+              <column systemJavaScriptVar="CheckListColumName">inventory_number</column>
+              <column readOnly="false" systemJavaScriptVar="CheckAfter">check_item</column>
+              <column readOnly="false" systemJavaScriptVar="CheckToSaveAction">data_view_action</column>
           </columns>
           <extendedProperties>
-            <actionDataview>01_get_order_request_item_action</actionDataview>
+            <actionDataviews>
+              <actionDataview id="get_order_request_item_action" systemCSharpVar="orderRequestItemAction">
+                <actionValue name="action_name_code" type="const" value="ORIA_VER_SHIP" />
+                <actionValue name="started_date_code" type="dateTimeNow" value="" />
+                <parameters>
+                  <suppressExceptions>false</suppressExceptions>
+                  <dataviewName>get_order_request_item_action</dataviewName>
+                  <offset>0</offset>
+                  <limit>0</limit>
+                  <options>1</options>
+                </parameters>
+              </actionDataview>
+            </actionDataviews>
             <masterDetail actionName="GridViewSearchDetail" moduleRef="Inventory" formRef="gbz_get_inventory" fieldRef="orderrequestitemid" colRef="order_request_item_id"></masterDetail>
           </extendedProperties>
         </actions>

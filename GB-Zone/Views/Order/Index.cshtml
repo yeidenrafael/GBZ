@@ -7,7 +7,8 @@
 
 @section scriptsHeader {
     <script type="text/javascript">
-        const CHECK_LIST_COLUMN_NAME = @Html.Raw(Json.Encode(ViewData["CheckListColumName"]));
+        const COLUMN_NAME_CHECK_LIST = @Html.Raw(Json.Encode(ViewData["CheckListColumName"]));
+        const COLUMN_NAME_CHECK_TO_SAVE_ACTION = @Html.Raw(Json.Encode(ViewData["CheckToSaveAction"]));
         const LI_TRAFIC_LIGHT = "iTrafficLight";
         const INPUT_TEXT_QR = "textBoxCheck_I";
         const SPAN_LAST_CHECK_ITEM = "spanCheck_Item";
@@ -17,7 +18,7 @@
         const COLOR_SUCCESS =  "forestgreen";
         const COLOR_ERROR =  "red";
         const COLOR_NEUTRO = "white"
-        
+
         var itemsWithCheck = new Array();
         var itemsWithOutCheck = new Array();
         var ALL_ITEMS = new Array();
@@ -76,26 +77,20 @@
                         indexCellColor++;
                         var id = $(row_now).attr("id");
                         $("#"+id).css({'background-color':COLOR_SUCCESS});
+                        var key = parseInt(id.replace("gvSearch_DXDataRow", ""),10);
+                        console.log(key);
+                        console.log(COLUMN_NAME_CHECK_TO_SAVE_ACTION);
+                        gvSearch.batchEditApi.SetCellValue(key, COLUMN_NAME_CHECK_TO_SAVE_ACTION, true);
                     }
                 }
             }
-            $("#"+SPAN_FIND_ITEM).html(ALL_ITEMS.length - indexCellColor);
+            $("#"+SPAN_FIND_ITEM).html((ALL_ITEMS.length - indexCellColor) + "/" + (ALL_ITEMS.length));
         }
 
         function ColorCallback(){
-
-            Sincronizar();
-        }
-
-        function Sincronizar(){
-            if(gvSearch.GetVisibleRowsOnPage<rowNumAllToStopModal){
-                setTimeout(function() {
-                    Sincronizar();
-                }, 10);
-            }
-            else{
+            setTimeout(function() {
                 Color();
-            }
+            }, 1000);
         }
 
         function InitArray(){
@@ -114,9 +109,9 @@
 
         function ModalLoad(){
             $("#"+DIV_LOAD_MODAL).modal({
-                backdrop: "static", 
-                keyboard: false, 
-                show: true 
+                backdrop: "static",
+                keyboard: false,
+                show: true
             });
         }
 
@@ -136,17 +131,10 @@
 
 @if (ViewData["parameters"] != null)
 {
-    Html.RenderPartial("_HeaderGridView");
     Html.RenderPartial("_CheckList");
+    Html.RenderPartial("_HeaderGridView");
+
 }
-<div class="row">
-    <div class="col-lg-12">
-            @if (ViewData["parameters"] != null)
-            {
-                Html.RenderPartial("_GridViewSearch", Model, new ViewDataDictionary { { "parameters", ViewData["parameters"] }, { "server", ViewData["server"] }, { "moduleId", ViewData["moduleId"] }, { "formId", ViewData["formId"] }, { "CheckListColumName", ViewData["CheckListColumName"] }, { "dataViewName", ViewData["dataViewName"] } });
-            }
-    </div>
-</div>
 <audio controls id="audioSuccess" hidden="hidden">
     <source src="@Url.Content("Content/audio/Success.mp3")" type="audio/mpeg">
 </audio>

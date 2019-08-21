@@ -15,10 +15,8 @@ namespace GrinGlobal.Zone.Helpers
         private SettingsHelp setH;
         private readonly string PARAMETER_COLUMN_NAME = "param_name";
         private readonly string PARAMETER_DATA_TABLE_NAME = "dv_param_info";
-        private readonly string ATTRIBUTE_JAVASCRIPT_VAR = "javaScriptVar";
         private DataSet parameterGrinGlobal;
-        private Dictionary<string, string> javascriptVariables;
-        private string dataViewName;
+        
         #endregion
         #region public attribute
         /// <summary>
@@ -26,13 +24,9 @@ namespace GrinGlobal.Zone.Helpers
         /// </summary>
         public DataSet ParameterGrinGlobal { get { return parameterGrinGlobal; } }
         /// <summary>
-        /// Dictionary the vaule of parameter to var in javascript by tag javaScriptVar
+        /// Get all configuration from the file setting
         /// </summary>
-        public Dictionary<string,string> JavascriptVariables { get { return javascriptVariables; } }
-        /// <summary>
-        /// Name form the dataview to work with the parameter in costructor
-        /// </summary>
-        public string DataViewName { get { return dataViewName; } }
+        public SettingsHelp SetH { get { return setH; } }
         #endregion
         #region constructor
         public GrinGlobalSoapHelp(string serverId, string moduleId, string formId)
@@ -46,20 +40,9 @@ namespace GrinGlobal.Zone.Helpers
         {
             GGZoneModel ggZoneModel = new GGZoneModel();
             string urlService = setH.Server.Attribute("url").Value.ToString();
-            dataViewName = setH.Parameter.Element("dataviewName").Value;
+            string dataViewName = setH.Parameter.Element("dataviewName").Value;
             bool suppressExceptions = bool.Parse(setH.Parameter.Element("suppressExceptions").Value);
             parameterGrinGlobal = ggZoneModel.GetParameters(urlService, suppressExceptions, dataViewName);
-            LoadJavascriptVariable();
-        }
-
-
-        private void LoadJavascriptVariable()
-        {
-            javascriptVariables = new Dictionary<string, string>();
-            foreach(XElement col in setH.GetColumn_Attribute(ATTRIBUTE_JAVASCRIPT_VAR))
-            {
-                javascriptVariables.Add(col.Attribute(ATTRIBUTE_JAVASCRIPT_VAR).Value.ToString(), col.Value.ToString().Trim());
-            }
         }
         #endregion
         #region public methods
@@ -79,25 +62,92 @@ namespace GrinGlobal.Zone.Helpers
             return dic;
         }
 
-        public DataTable GetData(Dictionary<string, string> dic)
+        public DataSet GetData(string param)
         {
-            return _GetData(GetStringParameter(dic));
-        }
-
-        public DataTable GetData(string param)
-        {
-            return _GetData(param);
-        }
-
-        public DataTable _GetData(string parameters)
-        {
-            GGZoneModel ggZoneModel = new GGZoneModel();
             string urlService = setH.Server.Attribute("url").Value.ToString();//extract settings from Setting.xml
             string dataviewName = setH.Parameter.Element("dataviewName").Value;
             bool suppressExceptions = bool.Parse(setH.Parameter.Element("suppressExceptions").Value);
             int offset = int.Parse(setH.Parameter.Element("offset").Value);
             int limit = int.Parse(setH.Parameter.Element("limit").Value);
             string options = setH.Parameter.Element("options").Value;
+            return _GetData(param, urlService, dataviewName, suppressExceptions, offset, limit, options);
+        }
+
+        public string GetStringParameter(Dictionary<string, string> dic)
+        {
+            string parameter = "";
+            Char separator = (char)Convert.ToInt32(setH.Parameter.Element("separator").Value);
+            Char assignment = (char)Convert.ToInt32(setH.Parameter.Element("assignment").Value);
+            foreach (KeyValuePair<string, string> entry in dic)
+            {
+                parameter += entry.Key + assignment + entry.Value + separator;
+            }
+            return parameter;
+        }
+
+
+        public DataSet GetDataAction(string parameters,string idAction = "")
+        {
+            DataSet ds = GetData(parameters);
+            return _GetDataAction(parameters, ds, idAction);
+        }
+
+        public DataSet SaveData(string parameters, DataTable newDataTable)
+        {
+            string urlService = setH.Server.Attribute("url").Value.ToString();//extract settings from Setting.xml
+            string dataviewName = setH.Parameter.Element("dataviewName").Value;
+            bool suppressExceptions = bool.Parse(setH.Parameter.Element("suppressExceptions").Value);
+            int offset = int.Parse(setH.Parameter.Element("offset").Value);
+            int limit = int.Parse(setH.Parameter.Element("limit").Value);
+            string options = setH.Parameter.Element("options").Value;
+            return _SaveData(parameters, urlService, dataviewName, suppressExceptions, offset, limit, options, newDataTable);
+        }
+
+        public DataSet SaveDataAction(string parameters,string idAction ,DataTable newDataTable)
+        {
+            string urlService = setH.Server.Attribute("url").Value.ToString();
+            XElement nodeAction = setH.GeteNodeAction(idAction);
+            XElement nodeParameter = nodeAction.Element("parameters");
+            string dataviewName = nodeParameter.Element("dataviewName").Value;
+            bool suppressExceptions = bool.Parse(nodeParameter.Element("suppressExceptions").Value);
+            int offset = int.Parse(nodeParameter.Element("offset").Value);
+            int limit = int.Parse(nodeParameter.Element("limit").Value);
+            string options = nodeParameter.Element("options").Value;
+            return _SaveData(parameters, urlService, dataviewName, suppressExceptions, offset, limit, options, newDataTable);
+        }
+        #endregion
+        #region private methods
+        private DataSet _GetDataAction(string parameters, DataSet ds, string idAction = "")
+        {
+            if(idAction == "")
+            {
+                foreach (XElement act in setH.DataViewAction)
+                {
+                    ds.Tables.Add(GetDataActionOBO(act, parameters));
+                }
+            }
+            else
+            {
+                ds.Tables.Add(GetDataActionOBO(setH.GeteNodeAction(idAction), parameters));
+            }
+            return ds;
+        }
+
+        private DataTable GetDataActionOBO(XElement actX, string parameters)
+        {
+            string urlService = setH.Server.Attribute("url").Value.ToString();
+            XElement nodeParameter = actX.Element("parameters");
+            string dataviewName = nodeParameter.Element("dataviewName").Value;
+            bool suppressExceptions = bool.Parse(nodeParameter.Element("suppressExceptions").Value);
+            int offset = int.Parse(nodeParameter.Element("offset").Value);
+            int limit = int.Parse(nodeParameter.Element("limit").Value);
+            string options = nodeParameter.Element("options").Value;
+            return _GetData(parameters, urlService, dataviewName, suppressExceptions, offset, limit, options).Tables[dataviewName].Copy();
+        }
+
+        private DataSet _GetData(string parameters, string urlService, string dataviewName, bool suppressExceptions, int offset, int limit, string options)
+        {
+            GGZoneModel ggZoneModel = new GGZoneModel();
             DataSet ds = ggZoneModel.GetData(urlService, suppressExceptions, dataviewName, parameters, offset, limit, options);             //invoke model requesting the datatable
             foreach (DataColumn col in ds.Tables[dataviewName].Columns)
             {
@@ -134,18 +184,17 @@ namespace GrinGlobal.Zone.Helpers
                 ds.Tables[dataviewName].ExtendedProperties.Add("fieldRef", setH.ExtendedPropertie.Element("masterDetail").Attribute("fieldRef").Value);
                 ds.Tables[dataviewName].ExtendedProperties.Add("colRef", setH.ExtendedPropertie.Element("masterDetail").Attribute("colRef").Value);
             }
-            return ds.Tables[dataviewName];
+            return ds;
         }
-        public string GetStringParameter(Dictionary<string, string> dic)
+
+        private DataSet _SaveData(string parameters, string urlService, string dataviewName, bool suppressExceptions, int offset, int limit, string options, DataTable newDataTable)
         {
-            string parameter = "";
-            Char separator = (char)Convert.ToInt32(setH.Parameter.Element("separator").Value);
-            Char assignment = (char)Convert.ToInt32(setH.Parameter.Element("assignment").Value);
-            foreach (KeyValuePair<string, string> entry in dic)
-            {
-                parameter += entry.Key + assignment + entry.Value + separator;
-            }
-            return parameter;
+            GGZoneModel ggZoneModel = new GGZoneModel();
+            DataSet ds = ggZoneModel.GetData(urlService, suppressExceptions, dataviewName, parameters, offset, limit, options);//invoke model requesting the datatable
+            ds.Tables.Remove(dataviewName);
+            ds.Tables.Add(newDataTable.Copy());
+            DataSet result = ggZoneModel.SaveData(urlService, suppressExceptions, ds, options);
+            return result;
         }
         #endregion
     }

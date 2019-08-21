@@ -754,7 +754,6 @@
     <Content Include="Scripts\umd\popper-utils.min.js" />
     <Content Include="Scripts\umd\popper.js" />
     <Content Include="Scripts\umd\popper.min.js" />
-    <Content Include="SettingAction.xml" />
     <Content Include="Vendor\pe-icon-7-stroke\css\helper.css" />
     <Content Include="Vendor\pe-icon-7-stroke\css\pe-icon-7-stroke.css" />
     <Content Include="Vendor\pe-icon-7-stroke\fonts\Pe-icon-7-stroke.svg" />
