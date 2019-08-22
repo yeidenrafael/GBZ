@@ -13,9 +13,11 @@ namespace GrinGlobal.Zone.Controllers
 {
     public class OrderController : Controller
     {
-        private readonly string COLUMN_NAME_CHECK_LIST= "CheckListColumName";
-        private readonly string COLUMN_NAME_CHECK_TO_SAVE_DATAVIEW = "CheckToSaveAction";
-        private readonly string DATAVIEW_ACTION_NAME_ORDER_REQUEST_ITEM = "orderRequestItemAction";
+        private readonly string SYSTEM_COLUMNNAME_CHECK_LIST = "systemCheckListColumName";
+        private readonly string SYSTEM_COLUMNNAME_CHECK_TO_SAVE_DATAVIEW = "systemCheckToSaveAction";
+        private readonly string SYSTEM_DATAVIEWACTIONNAME_ORDER_REQUEST_ITEM_ACTION = "systemOrderRequestItemAction";
+        private readonly string SYSTEM_COLUMNNAME_CHECK_BEFORE = "systemCheckBefore";
+        private readonly string SYSTEM_DATAVIEWACTIONVALUE_CHECK_HISTORY_ACTION = "systemCheckHistoryAction";
         private GrinGlobalSoapHelp sopH;
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(SearchController));
 
@@ -45,8 +47,8 @@ namespace GrinGlobal.Zone.Controllers
             ViewData["formId"] = formId;
             ViewData["dataViewName"] = sopH.SetH.DataViewName;
             ViewData["parameters"] = sopH.GetStringParameter(parameter);
-            ViewData[COLUMN_NAME_CHECK_LIST] = sopH.SetH.GetJavascriptVariable(COLUMN_NAME_CHECK_LIST);
-            ViewData[COLUMN_NAME_CHECK_TO_SAVE_DATAVIEW] = sopH.SetH.GetJavascriptVariable(COLUMN_NAME_CHECK_TO_SAVE_DATAVIEW);
+            ViewData[SYSTEM_COLUMNNAME_CHECK_LIST] = sopH.SetH.GetColumnVariable(SYSTEM_COLUMNNAME_CHECK_LIST);
+            ViewData[SYSTEM_COLUMNNAME_CHECK_TO_SAVE_DATAVIEW] = sopH.SetH.GetColumnVariable(SYSTEM_COLUMNNAME_CHECK_TO_SAVE_DATAVIEW);
             DataSet datS = AddHistoryAction(sopH.GetDataAction(ViewData["parameters"].ToString()));
             
             return View(datS);
@@ -60,8 +62,8 @@ namespace GrinGlobal.Zone.Controllers
             ViewData["formId"] = formId;
             ViewData["parameters"] = parameters;
             ViewData["dataViewName"] = sopH.SetH.DataViewName;
-            ViewData[COLUMN_NAME_CHECK_LIST] = sopH.SetH.GetJavascriptVariable(COLUMN_NAME_CHECK_LIST);
-            ViewData[COLUMN_NAME_CHECK_TO_SAVE_DATAVIEW] = sopH.SetH.GetJavascriptVariable(COLUMN_NAME_CHECK_TO_SAVE_DATAVIEW);
+            ViewData[SYSTEM_COLUMNNAME_CHECK_LIST] = sopH.SetH.GetColumnVariable(SYSTEM_COLUMNNAME_CHECK_LIST);
+            ViewData[SYSTEM_COLUMNNAME_CHECK_TO_SAVE_DATAVIEW] = sopH.SetH.GetColumnVariable(SYSTEM_COLUMNNAME_CHECK_TO_SAVE_DATAVIEW);
             DataSet datS = AddHistoryAction(sopH.GetDataAction(parameters));
             return PartialView("_GridViewSearch", datS);
         }
@@ -74,6 +76,8 @@ namespace GrinGlobal.Zone.Controllers
             ViewData["formId"] = formId;
             ViewData["parameters"] = parameters;
             ViewData["dataViewName"] = sopH.SetH.DataViewName;
+            ViewData[SYSTEM_COLUMNNAME_CHECK_LIST] = sopH.SetH.GetColumnVariable(SYSTEM_COLUMNNAME_CHECK_LIST);
+            ViewData[SYSTEM_COLUMNNAME_CHECK_TO_SAVE_DATAVIEW] = sopH.SetH.GetColumnVariable(SYSTEM_COLUMNNAME_CHECK_TO_SAVE_DATAVIEW);
             DataSet datS = AddHistoryAction(sopH.GetDataAction(parameters));
             DataTable dt = datS.Tables[sopH.SetH.DataViewName];
             try
@@ -88,6 +92,7 @@ namespace GrinGlobal.Zone.Controllers
                 }
                 foreach (DataColumn column in dt.Columns)
                 {
+                    GridViewHelp gvH = new GridViewHelp();
                     if(column.ReadOnly == false)
                     {
                         var newValues = GridViewExtension.GetBatchUpdateValues<string, string>(column.ColumnName); // S is key field type, T is the column type
@@ -95,7 +100,7 @@ namespace GrinGlobal.Zone.Controllers
                         {
                             foreach (var item in newValues)
                             {
-                                dt = AddRow(column.ColumnName, columnKey, item.Key, item.Value, dt);
+                                dt = gvH.AddRow(column.ColumnName, columnKey, item.Key, item.Value, dt);
                             }
                         }
                         List<string> insertValues = GridViewExtension.GetBatchInsertValues<string>(column.ColumnName);
@@ -104,30 +109,31 @@ namespace GrinGlobal.Zone.Controllers
                             int index = -1;
                             foreach (string insertV in insertValues.Where(s => !string.IsNullOrEmpty(s)).ToList())
                             {
-                                dt = AddRow(column.ColumnName, columnKey, index.ToString(), insertV, dt);
+                                dt = gvH.AddRow(column.ColumnName, columnKey, index.ToString(), insertV, dt);
                                 index--;
                             }
-
                         }
                     }
                 }
-                XElement nodeAction = sopH.SetH.GeteNodeAction(sopH.SetH.SYSTEM_C_SHARP_VAR, DATAVIEW_ACTION_NAME_ORDER_REQUEST_ITEM);
-                string idAction = nodeAction.Attribute("id").Value != null ? nodeAction.Attribute("id").Value.ToString() : "";
-                string dataViewName = nodeAction.Element("parameters").Element("dataviewName").Value!= null? nodeAction.Element("parameters").Element("dataviewName").Value.ToString(): "";
+                XElement nodeAction = sopH.SetH.GetNodeAction(sopH.SetH.SYSTEM_ACTION_DATAVIEW, SYSTEM_DATAVIEWACTIONNAME_ORDER_REQUEST_ITEM_ACTION);
+                string idAction = nodeAction.Attribute(sopH.SetH.SETTING_GENERIC_ID).Value != null ? nodeAction.Attribute(sopH.SetH.SETTING_GENERIC_ID).Value.ToString() : "";
+                string dataViewName = nodeAction.Element(sopH.SetH.SETTING_NAME_PARAMETERS).Element(sopH.SetH.SETTING_DATAVIEW_NAME).Value!= null? nodeAction.Element(sopH.SetH.SETTING_NAME_PARAMETERS).Element(sopH.SetH.SETTING_DATAVIEW_NAME).Value.ToString(): "";
                 if (!string.IsNullOrEmpty(dataViewName))
                 {
                     int ii = -1;
                     DataTable dtAct = datS.Tables[dataViewName];
                     string keyColumnAct = dtAct.PrimaryKey[0] != null ? dtAct.PrimaryKey[0].ColumnName : "";
-                    for (int i = 0; i < dt.Rows.Count; i++)
+                    string keyColum = dt.PrimaryKey[0] != null ? dt.PrimaryKey[0].ColumnName : "";
+                    var query = from order in dt.AsEnumerable()
+                                                 where order.Field<bool>(sopH.SetH.GetColumnVariable(SYSTEM_COLUMNNAME_CHECK_TO_SAVE_DATAVIEW)) == true 
+                                                 select order;
+                    if (query.Count() > 0)
                     {
-                        bool dato = Convert.ToBoolean(dt.Rows[i][sopH.SetH.GetJavascriptVariable(COLUMN_NAME_CHECK_TO_SAVE_DATAVIEW)].ToString().ToLower());
-                        if (dato == true)
+                        foreach (DataRow dtF in query)
                         {
                             DataRow dr = dtAct.NewRow();
                             dr[keyColumnAct] = ii--;
-                            dr["order_request_item_id"] = dt.Rows[i]["order_request_item_id"].ToString();
-                            //order_request_item_action - oria.started_date
+                            dr[keyColum] = dtF[keyColum].ToString();
                             dr = sopH.SetH.GetRowAction(dr, idAction);
                             dtAct.Rows.Add(dr);
                         }
@@ -141,57 +147,40 @@ namespace GrinGlobal.Zone.Controllers
                 log.Fatal(Guid.NewGuid(), e);
                 ViewData["EditError"] = String.Format(e.Message);
             }
+            datS = AddHistoryAction(sopH.GetDataAction(parameters));
             return PartialView("_GridViewSearch", datS);
         }
 
         private DataSet AddHistoryAction (DataSet datS)
         {
-            for (int i = 0; i < datS.Tables[sopH.SetH.DataViewName].Rows.Count; i++)
+            string keyColumn = datS.Tables[sopH.SetH.DataViewName].PrimaryKey[0].ColumnName;
+            XElement nodeAction = sopH.SetH.GetNodeAction(sopH.SetH.SYSTEM_ACTION_DATAVIEW, SYSTEM_DATAVIEWACTIONNAME_ORDER_REQUEST_ITEM_ACTION);
+            string idAction = nodeAction.Attribute(sopH.SetH.SETTING_GENERIC_ID).Value != null ? nodeAction.Attribute(sopH.SetH.SETTING_GENERIC_ID).Value.ToString() : "";
+            string dataViewName = nodeAction.Element(sopH.SetH.SETTING_NAME_PARAMETERS).Element(sopH.SetH.SETTING_DATAVIEW_NAME).Value != null ? nodeAction.Element(sopH.SetH.SETTING_NAME_PARAMETERS).Element(sopH.SetH.SETTING_DATAVIEW_NAME).Value.ToString() : "";
+            XElement dataviewActionvalue = sopH.SetH.GetDataviewValueVariable(SYSTEM_DATAVIEWACTIONVALUE_CHECK_HISTORY_ACTION);
+            string field = dataviewActionvalue.Attribute(sopH.SetH.SETTING_ACTIONVALUE_NAME).Value.ToString(); //action_name_code
+            string value = dataviewActionvalue.Attribute(sopH.SetH.SETTING_ACTIONVALUE_VALUE).Value.ToString();
+            var query = from order in datS.Tables[dataViewName].AsEnumerable()
+                        where order.Field<string>(field) == value
+                        select order;
+
+            if (query.Count() > 0)
             {
-                int orderRequesItemId = Int32.Parse(datS.Tables[sopH.SetH.DataViewName].Rows[i]["order_request_item_id"].ToString());
-                var cell = (from t in datS.Tables["get_order_request_item_action"].AsEnumerable() where t.Field<int>("order_request_item_id") == orderRequesItemId select t);
-                if (cell.Count() != 0)
+                for (int i = 0; i < datS.Tables[sopH.SetH.DataViewName].Rows.Count; i++)
                 {
-                    datS.Tables[sopH.SetH.DataViewName].Rows[i]["check_item"] = true;
+                    int orderRequesItemId = Int32.Parse(datS.Tables[sopH.SetH.DataViewName].Rows[i][keyColumn].ToString());
+                    var cell = (from t in query.AsEnumerable() where t.Field<int>(keyColumn) == orderRequesItemId select t);
+                    if (cell.Count() != 0)
+                    {
+                        datS.Tables[sopH.SetH.DataViewName].Rows[i][sopH.SetH.GetColumnVariable(SYSTEM_COLUMNNAME_CHECK_BEFORE)] = true;
+                    }
                 }
             }
+            
             return datS;
         }
 
-        private DataTable InsertRows(List<string> keysToInsert, DataTable ds)
-        {
-            foreach (string key in keysToInsert)
-            {
-                ds.Rows.Add(key);
-            }
-            return ds;
-        }
 
-        private DataTable UpdateColumn(string columnName, Dictionary<string, string> newValues, DataTable ds)
-        {
-            foreach (string item in newValues.Keys)
-            {
-                var row = ds.Rows.Find(item);
-                row[columnName] = newValues[item];
-            }
-            return ds;
-        }
-        private DataTable AddRow(string columnName, string columnKey, string index, string newValue, DataTable dt)
-        {
-            DataRow dr = dt.Select(columnKey + "= " + index).DefaultIfEmpty(null).FirstOrDefault();
-            if (dr != null)//Update value existe
-            {
-                dr[columnName] = newValue;
-            }
-            else// Add new row
-            {
-                dr = dt.NewRow();
-                dr[columnKey] = index;
-                dr[columnName] = newValue;
-                dt.Rows.Add(dr);
-            }
-            return dt;
-        }
 
     }
 }

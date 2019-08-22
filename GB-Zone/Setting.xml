@@ -226,15 +226,17 @@
             <assignment>61</assignment>
           </parameters>
           <columns>
-              <column systemJavaScriptVar="CheckListColumName">inventory_number</column>
-              <column readOnly="false" systemJavaScriptVar="CheckAfter">check_item</column>
-              <column readOnly="false" systemJavaScriptVar="CheckToSaveAction">data_view_action</column>
+              <column systemColumn="systemCheckListColumName">inventory_number</column>
+              <column readOnly="false" systemColumn="systemCheckBefore">check_item</column>
+              <column readOnly="false" systemColumn="systemCheckToSaveAction">data_view_action</column>
           </columns>
           <extendedProperties>
             <actionDataviews>
-              <actionDataview id="get_order_request_item_action" systemCSharpVar="orderRequestItemAction">
-                <actionValue name="action_name_code" type="const" value="ORIA_VER_SHIP" />
-                <actionValue name="started_date_code" type="dateTimeNow" value="" />
+              <actionDataview id="get_order_request_item_action" systemActionDataview="systemOrderRequestItemAction">
+                <actionValue name="action_name_code" type="const" value="ORIA_VER_SHIP" systemActionDataviewValue="systemCheckHistoryAction" />
+                <actionValue name="started_date" type="dateTimeNow" value="" />
+                <actionValue name="created_date" type="dateTimeNow" value="" />
+                <actionValue name="owned_date" type="dateTimeNow" value="" />
                 <parameters>
                   <suppressExceptions>false</suppressExceptions>
                   <dataviewName>get_order_request_item_action</dataviewName>

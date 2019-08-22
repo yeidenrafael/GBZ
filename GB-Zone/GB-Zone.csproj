@@ -699,6 +699,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\GridViewHelp.cs" />
     <Compile Include="Helpers\GrinGlobalSoapHelp.cs" />
     <Compile Include="Helpers\HMTLHelperExtensions.cs" />
     <Compile Include="Helpers\ProxyServer.cs" />

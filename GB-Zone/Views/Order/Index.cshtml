@@ -7,8 +7,8 @@
 
 @section scriptsHeader {
     <script type="text/javascript">
-        const COLUMN_NAME_CHECK_LIST = @Html.Raw(Json.Encode(ViewData["CheckListColumName"]));
-        const COLUMN_NAME_CHECK_TO_SAVE_ACTION = @Html.Raw(Json.Encode(ViewData["CheckToSaveAction"]));
+        const SYSTEM_COLUMNNAME_CHECK_LIST = @Html.Raw(Json.Encode(ViewData["systemCheckListColumName"]));
+        const SYSTEM_COLUMNNAME_CHECK_TO_SAVE_ACTION = @Html.Raw(Json.Encode(ViewData["systemCheckToSaveAction"]));
         const LI_TRAFIC_LIGHT = "iTrafficLight";
         const INPUT_TEXT_QR = "textBoxCheck_I";
         const SPAN_LAST_CHECK_ITEM = "spanCheck_Item";
@@ -29,7 +29,10 @@
         });
 
         function Init(){
-
+            var columnes = '.id_'+SYSTEM_COLUMNNAME_CHECK_TO_SAVE_ACTION;
+            console.log(columnes);
+            $(columnes).css('display','none');
+//            gvSearch.dxDataGrid("columnOption", SYSTEM_COLUMNNAME_CHECK_TO_SAVE_ACTION, "visible", false);
         }
 
         function KeyPressTexBCheck(s, e) {
@@ -78,9 +81,7 @@
                         var id = $(row_now).attr("id");
                         $("#"+id).css({'background-color':COLOR_SUCCESS});
                         var key = parseInt(id.replace("gvSearch_DXDataRow", ""),10);
-                        console.log(key);
-                        console.log(COLUMN_NAME_CHECK_TO_SAVE_ACTION);
-                        gvSearch.batchEditApi.SetCellValue(key, COLUMN_NAME_CHECK_TO_SAVE_ACTION, true);
+                        gvSearch.batchEditApi.SetCellValue(key, SYSTEM_COLUMNNAME_CHECK_TO_SAVE_ACTION, true);
                     }
                 }
             }

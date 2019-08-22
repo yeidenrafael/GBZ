@@ -36,7 +36,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    @Html.Partial("_GridViewSearch", Model, new ViewDataDictionary { { "parameters", ViewData["parameters"] }, { "server", ViewData["server"] }, { "moduleId", ViewData["moduleId"] }, { "formId", ViewData["formId"] }, { "CheckListColumName", ViewData["CheckListColumName"] }, { "dataViewName", ViewData["dataViewName"] } })
+                    @Html.Partial("_GridViewSearch", Model, new ViewDataDictionary(ViewData))
                 </div>
             </div>
         </div>
