@@ -1,4 +1,4 @@
-﻿<!--######################## views/Order  ###########-->
+﻿<!-- views/Order -->
 @model System.Data.DataSet
 
 @{
@@ -9,7 +9,6 @@
     <script type="text/javascript">
         const SYSTEM_COLUMNNAME_CHECK_LIST = @Html.Raw(Json.Encode(ViewData["systemCheckListColumName"]));
         const SYSTEM_COLUMNNAME_CHECK_TO_SAVE_ACTION = @Html.Raw(Json.Encode(ViewData["systemCheckToSaveAction"]));
-        var remainigElementToCheckCount = @Html.Raw(Json.Encode(ViewData["remainigElementToCheckCount"]));
         const LI_TRAFIC_LIGHT = "iTrafficLight";
         const INPUT_TEXT_QR = "textBoxCheck_I";
         const SPAN_LAST_CHECK_ITEM = "spanCheck_Item";
@@ -20,6 +19,7 @@
         const COLOR_ERROR =  "red";
         const COLOR_NEUTRO = "white"
 
+        var remainigElementToCheckCount = @Html.Raw(Json.Encode(ViewData["remainigElementToCheckCount"]));
         var itemsWithCheck = new Array();
         var itemsWithOutCheck = new Array();
         var ALL_ITEMS = new Array();

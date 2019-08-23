@@ -124,9 +124,9 @@ namespace GrinGlobal.Zone.Helpers
         /// <summary>
         /// Get the DataviewAction set in settings xml, by id and add new parameters form the query
         /// </summary>
-        /// <param name="originalParameter">Parameters original form consult in the GetData </param>
-        /// <param name="newParameter">Dictionary with new parameters</param>
-        /// <param name="idAction">Id del node to find the setting node actionDataview</param>
+        /// <param name="originalParameter">Parameters original from query in the GetData </param>
+        /// <param name="newParameter">Dictionary with new parameters specific to the action Dataview</param>
+        /// <param name="idAction">Id the node to find in the setting xml</param>
         /// <returns>DateTable with the result from SOAP service</returns>
         public DataTable GetDataActionOne(string originalParameter, Dictionary<string, string> newParameter, string idAction)
         {
@@ -143,11 +143,11 @@ namespace GrinGlobal.Zone.Helpers
             return  _GetData(parameters, urlService, dataviewName, suppressExceptions, offset, limit, options).Tables[dataviewName].Copy();
         }
         /// <summary>
-        /// 
+        /// Save the dataview  modifier by the user or the palicacion
         /// </summary>
-        /// <param name="parameters"></param>
-        /// <param name="newDataTable"></param>
-        /// <returns></returns>
+        /// <param name="parameters">Parameters form query in the GetData </param>
+        /// <param name="newDataTable">Data table with change to save</param>
+        /// <returns>DataSet result from service SOAP in GrinGlobal</returns>
         public DataSet SaveData(string parameters, DataTable newDataTable)
         {
             string urlService = setH.Server.Attribute("url").Value.ToString();//extract settings from Setting.xml
@@ -158,7 +158,14 @@ namespace GrinGlobal.Zone.Helpers
             string options = setH.Parameter.Element("options").Value;
             return _SaveData(parameters, urlService, dataviewName, suppressExceptions, offset, limit, options, newDataTable);
         }
-
+        /// <summary>
+        /// Save the actionDataview  modifier by the user or the palicacion
+        /// </summary>
+        /// <param name="originalParameter">Parameters original from query in the GetData</param>
+        /// <param name="newParameter">Dictionary with new parameters specific to the action Dataview</param>
+        /// <param name="idAction">Id the node to find in the setting xml</param>
+        /// <param name="newDataTable">Data table with change to save</param>
+        /// <returns>DataSet result from service SOAP in GrinGlobal</returns>
         public DataSet SaveDataAction(string originalParameter, Dictionary<string, string> newParameter, string idAction ,DataTable newDataTable)
         {
             string urlService = setH.Server.Attribute("url").Value.ToString();
