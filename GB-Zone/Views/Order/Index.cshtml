@@ -56,6 +56,9 @@
                 $("#"+LI_TRAFIC_LIGHT).css({'color':COLOR_SUCCESS});
                 indice = itemsWithOutCheck.indexOf(text);
                 if(indice != -1){
+                    if(itemsWithOutCheck.indexOf(text) != -1){
+                        remainingItems(1);
+                    }
                     itemsWithCheck.push(itemsWithOutCheck[indice]);
                     itemsWithOutCheck.pop(indice);
                     Color();
@@ -90,7 +93,6 @@
                     }
                 }
             }
-            remainingItems(indexCellColor);
         }
 
         function ColorCallback(){

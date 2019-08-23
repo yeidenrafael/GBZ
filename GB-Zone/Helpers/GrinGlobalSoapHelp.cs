@@ -63,7 +63,11 @@ namespace GrinGlobal.Zone.Helpers
             }
             return dic;
         }
-
+        /// <summary>
+        /// Convert the string parameters <see cref="GetStringParameter"/> in Dictionary 
+        /// </summary>
+        /// <param name="parameters">String parameters</param>
+        /// <returns>Dictionary with parameters</returns>
         public Dictionary<string, string> ParametersStringToDictionary(string parameters)
         {
             Dictionary<string, string> dat = new Dictionary<string, string>();
@@ -84,7 +88,11 @@ namespace GrinGlobal.Zone.Helpers
             }
             return dat;
         }
-
+        /// <summary>
+        /// Main function to get the DataSet from SOAP service of GringGlobal
+        /// </summary>
+        /// <param name="param">The parameters obtained the form, the other parameters sent to the constructor</param>
+        /// <returns>Dataset from SAOP GrinGlobal</returns>
         public DataSet GetData(string param)
         {
             string urlService = setH.Server.Attribute("url").Value.ToString();//extract settings from Setting.xml
@@ -113,51 +121,33 @@ namespace GrinGlobal.Zone.Helpers
             }
             return parameter;
         }
-
-
-        public DataSet GetDataActionAll(string parameters)
-        {
-            DataSet ds = GetData(parameters);
-            return _GetDataAction(parameters, ds);
-        }
-
+        /// <summary>
+        /// Get the DataviewAction set in settings xml, by id and add new parameters form the query
+        /// </summary>
+        /// <param name="originalParameter">Parameters original form consult in the GetData </param>
+        /// <param name="newParameter">Dictionary with new parameters</param>
+        /// <param name="idAction">Id del node to find the setting node actionDataview</param>
+        /// <returns>DateTable with the result from SOAP service</returns>
         public DataTable GetDataActionOne(string originalParameter, Dictionary<string, string> newParameter, string idAction)
         {
             DataTable datos = new DataTable();
             XElement act = setH.GetNodeAction(idAction);
-            Dictionary<string, string> dat = ParametersStringToDictionary(originalParameter);
-            Dictionary<string, string> dic = new Dictionary<string, string>();
-            string parameters = "";
-
-            string urlService = setH.Server.Attribute("url").Value.ToString();
             XElement nodeParameter = act.Element(setH.SETTING_NAME_PARAMETERS);
+            string urlService = setH.Server.Attribute("url").Value.ToString();
             string dataviewName = nodeParameter.Element(setH.SETTING_DATAVIEW_NAME).Value;
             bool suppressExceptions = bool.Parse(nodeParameter.Element("suppressExceptions").Value);
             int offset = int.Parse(nodeParameter.Element("offset").Value);
             int limit = int.Parse(nodeParameter.Element("limit").Value);
             string options = nodeParameter.Element("options").Value;
-            DataTable dtTable = InitParametersFromGrinGlobal(urlService, dataviewName, suppressExceptions).Tables[PARAMETER_DATA_TABLE_NAME];
-            foreach (DataRow dtRow in dtTable.Rows)
-            {
-                string key = dtRow[PARAMETER_COLUMN_NAME].ToString();
-                if (!string.IsNullOrEmpty(key))
-                {
-                    string value = "";
-                    if (dat.ContainsKey(key))
-                    {
-                        value = dat[key];
-                    }
-                    if (newParameter.ContainsKey(key))
-                    {
-                        value = newParameter[key];
-                    }
-                    dic.Add(key, value);
-                }
-            }
-            parameters = GetStringParameter(dic);
+            string parameters = MergeParameterAction(originalParameter, newParameter, urlService, dataviewName, suppressExceptions);
             return  _GetData(parameters, urlService, dataviewName, suppressExceptions, offset, limit, options).Tables[dataviewName].Copy();
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <param name="newDataTable"></param>
+        /// <returns></returns>
         public DataSet SaveData(string parameters, DataTable newDataTable)
         {
             string urlService = setH.Server.Attribute("url").Value.ToString();//extract settings from Setting.xml
@@ -169,7 +159,7 @@ namespace GrinGlobal.Zone.Helpers
             return _SaveData(parameters, urlService, dataviewName, suppressExceptions, offset, limit, options, newDataTable);
         }
 
-        public DataSet SaveDataAction(string parameters,string idAction ,DataTable newDataTable)
+        public DataSet SaveDataAction(string originalParameter, Dictionary<string, string> newParameter, string idAction ,DataTable newDataTable)
         {
             string urlService = setH.Server.Attribute("url").Value.ToString();
             XElement nodeAction = setH.GetNodeAction(idAction);
@@ -179,6 +169,7 @@ namespace GrinGlobal.Zone.Helpers
             int offset = int.Parse(nodeParameter.Element("offset").Value);
             int limit = int.Parse(nodeParameter.Element("limit").Value);
             string options = nodeParameter.Element("options").Value;
+            string parameters = MergeParameterAction(originalParameter, newParameter, urlService, dataviewName, suppressExceptions);
             return _SaveData(parameters, urlService, dataviewName, suppressExceptions, offset, limit, options, newDataTable);
         }
         #endregion
@@ -254,6 +245,33 @@ namespace GrinGlobal.Zone.Helpers
             ds.Tables.Add(newDataTable.Copy());
             DataSet result = ggZoneModel.SaveData(urlService, suppressExceptions, ds, options);
             return result;
+        }
+
+        private string MergeParameterAction(string originalParameter,  Dictionary<string, string> newParameter,string urlService, string dataviewName, bool suppressExceptions)
+        {
+            Dictionary<string, string> dat = ParametersStringToDictionary(originalParameter);
+            Dictionary<string, string> dic = new Dictionary<string, string>();
+            string parameters = "";
+            DataTable dtTable = InitParametersFromGrinGlobal(urlService, dataviewName, suppressExceptions).Tables[PARAMETER_DATA_TABLE_NAME];
+            foreach (DataRow dtRow in dtTable.Rows)
+            {
+                string key = dtRow[PARAMETER_COLUMN_NAME].ToString();
+                if (!string.IsNullOrEmpty(key))
+                {
+                    string value = "";
+                    if (dat.ContainsKey(key))
+                    {
+                        value = dat[key];
+                    }
+                    if (newParameter.ContainsKey(key))
+                    {
+                        value = newParameter[key];
+                    }
+                    dic.Add(key, value);
+                }
+            }
+            parameters = GetStringParameter(dic);
+            return parameters;
         }
         #endregion
     }

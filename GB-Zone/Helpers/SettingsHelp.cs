@@ -149,8 +149,6 @@ namespace GrinGlobal.Zone.Helpers
             dataViewAction = from el in extendedPropertie.Descendants(SETTING_ACTIONDATAVIEW) select el;
         }
 
-       
-
         private void LoadColumnVariable()
         {
             columnVariables = new Dictionary<string, string>();
@@ -174,7 +172,6 @@ namespace GrinGlobal.Zone.Helpers
             return dr;
         }
         #endregion
-
         #endregion
         #region public methods
         /// <summary>
@@ -260,7 +257,11 @@ namespace GrinGlobal.Zone.Helpers
             }
             return node;
         }
-
+        /// <summary>
+        /// Get the node from the xml setting the name actionDataviews 
+        /// </summary>
+        /// <param name="idAction"> attribute id to find the node</param>
+        /// <returns>XElement with node</returns>
         public XElement GetNodeAction(string idAction)
         {
             XElement node = null;
@@ -274,6 +275,11 @@ namespace GrinGlobal.Zone.Helpers
             }
             return node;
         }
+        /// <summary>
+        /// Get any node with attribute idSystemDataviewValue  
+        /// </summary>
+        /// <param name="idSystemDataviewValue">Id to find node</param>
+        /// <returns>XElement node find</returns>
         public XElement GetDataviewValueVariable(string idSystemDataviewValue)
         {
             XElement node = null;

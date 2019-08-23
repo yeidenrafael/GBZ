@@ -146,7 +146,7 @@ namespace GrinGlobal.Zone.Controllers
                             dtAct.Rows.Add(dr);
                         }
                     }
-                    DataSet newDaS = sopH.SaveDataAction(parameters, idAction, dtAct);
+                    DataSet newDaS = sopH.SaveDataAction(parameters,new Dictionary<string, string>() ,idAction, dtAct);
                 }
             }
             catch (Exception e)
