@@ -20,6 +20,7 @@ namespace GrinGlobal.Zone.Controllers
         private readonly string SYSTEM_DATAVIEWACTIONVALUE_CHECK_HISTORY_ACTION = "systemCheckHistoryAction";
         private GrinGlobalSoapHelp sopH;
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(SearchController));
+        private int remainigElementToCheckCount = 0;
 
         public ActionResult Index(string moduleId, string formId)
         {
@@ -49,8 +50,10 @@ namespace GrinGlobal.Zone.Controllers
             ViewData["parameters"] = sopH.GetStringParameter(parameter);
             ViewData[SYSTEM_COLUMNNAME_CHECK_LIST] = sopH.SetH.GetColumnVariable(SYSTEM_COLUMNNAME_CHECK_LIST);
             ViewData[SYSTEM_COLUMNNAME_CHECK_TO_SAVE_DATAVIEW] = sopH.SetH.GetColumnVariable(SYSTEM_COLUMNNAME_CHECK_TO_SAVE_DATAVIEW);
-            DataSet datS = AddHistoryAction(sopH.GetDataAction(ViewData["parameters"].ToString()));
-            
+            ViewData[SYSTEM_COLUMNNAME_CHECK_BEFORE] = sopH.SetH.GetColumnVariable(SYSTEM_COLUMNNAME_CHECK_BEFORE);
+            DataSet datS = GetDataSetAction(ViewData["parameters"].ToString());
+            datS = AddHistoryAction(datS);
+            ViewData["remainigElementToCheckCount"] = remainigElementToCheckCount;
             return View(datS);
         }
 
@@ -64,7 +67,10 @@ namespace GrinGlobal.Zone.Controllers
             ViewData["dataViewName"] = sopH.SetH.DataViewName;
             ViewData[SYSTEM_COLUMNNAME_CHECK_LIST] = sopH.SetH.GetColumnVariable(SYSTEM_COLUMNNAME_CHECK_LIST);
             ViewData[SYSTEM_COLUMNNAME_CHECK_TO_SAVE_DATAVIEW] = sopH.SetH.GetColumnVariable(SYSTEM_COLUMNNAME_CHECK_TO_SAVE_DATAVIEW);
-            DataSet datS = AddHistoryAction(sopH.GetDataAction(parameters));
+            ViewData[SYSTEM_COLUMNNAME_CHECK_BEFORE] = sopH.SetH.GetColumnVariable(SYSTEM_COLUMNNAME_CHECK_BEFORE);
+            DataSet datS = GetDataSetAction(ViewData["parameters"].ToString());
+            datS = AddHistoryAction(datS);
+            ViewData["remainigElementToCheckCount"] = remainigElementToCheckCount;
             return PartialView("_GridViewSearch", datS);
         }
 
@@ -78,7 +84,9 @@ namespace GrinGlobal.Zone.Controllers
             ViewData["dataViewName"] = sopH.SetH.DataViewName;
             ViewData[SYSTEM_COLUMNNAME_CHECK_LIST] = sopH.SetH.GetColumnVariable(SYSTEM_COLUMNNAME_CHECK_LIST);
             ViewData[SYSTEM_COLUMNNAME_CHECK_TO_SAVE_DATAVIEW] = sopH.SetH.GetColumnVariable(SYSTEM_COLUMNNAME_CHECK_TO_SAVE_DATAVIEW);
-            DataSet datS = AddHistoryAction(sopH.GetDataAction(parameters));
+            ViewData[SYSTEM_COLUMNNAME_CHECK_BEFORE] = sopH.SetH.GetColumnVariable(SYSTEM_COLUMNNAME_CHECK_BEFORE);
+            DataSet datS = GetDataSetAction(ViewData["parameters"].ToString());
+            datS = AddHistoryAction(datS);
             DataTable dt = datS.Tables[sopH.SetH.DataViewName];
             try
             {
@@ -147,12 +155,15 @@ namespace GrinGlobal.Zone.Controllers
                 log.Fatal(Guid.NewGuid(), e);
                 ViewData["EditError"] = String.Format(e.Message);
             }
-            datS = AddHistoryAction(sopH.GetDataAction(parameters));
-            return PartialView("_GridViewSearch", datS);
+            DataSet newDatS = GetDataSetAction(ViewData["parameters"].ToString());
+            newDatS = AddHistoryAction(newDatS);
+            ViewData["remainigElementToCheckCount"] = remainigElementToCheckCount;
+            return PartialView("_GridViewSearch", newDatS);
         }
 
         private DataSet AddHistoryAction (DataSet datS)
         {
+            remainigElementToCheckCount = 0;
             string keyColumn = datS.Tables[sopH.SetH.DataViewName].PrimaryKey[0].ColumnName;
             XElement nodeAction = sopH.SetH.GetNodeAction(sopH.SetH.SYSTEM_ACTION_DATAVIEW, SYSTEM_DATAVIEWACTIONNAME_ORDER_REQUEST_ITEM_ACTION);
             string idAction = nodeAction.Attribute(sopH.SetH.SETTING_GENERIC_ID).Value != null ? nodeAction.Attribute(sopH.SetH.SETTING_GENERIC_ID).Value.ToString() : "";
@@ -169,10 +180,11 @@ namespace GrinGlobal.Zone.Controllers
                 for (int i = 0; i < datS.Tables[sopH.SetH.DataViewName].Rows.Count; i++)
                 {
                     int orderRequesItemId = Int32.Parse(datS.Tables[sopH.SetH.DataViewName].Rows[i][keyColumn].ToString());
-                    var cell = (from t in query.AsEnumerable() where t.Field<int>(keyColumn) == orderRequesItemId select t);
+                    var cell = (from t in query.AsEnumerable() where t.Field<int>(keyColumn) == orderRequesItemId && t.Field<string>(field) == value select t);
                     if (cell.Count() != 0)
                     {
                         datS.Tables[sopH.SetH.DataViewName].Rows[i][sopH.SetH.GetColumnVariable(SYSTEM_COLUMNNAME_CHECK_BEFORE)] = true;
+                        remainigElementToCheckCount++;
                     }
                 }
             }
@@ -180,6 +192,15 @@ namespace GrinGlobal.Zone.Controllers
             return datS;
         }
 
+        private DataSet GetDataSetAction(string parameter)
+        {
+            DataSet datS = sopH.GetData(parameter);
+            XElement nodeAction = sopH.SetH.GetNodeAction(sopH.SetH.SYSTEM_ACTION_DATAVIEW, SYSTEM_DATAVIEWACTIONNAME_ORDER_REQUEST_ITEM_ACTION);
+            string idAction = nodeAction.Attribute(sopH.SetH.SETTING_GENERIC_ID).Value != null ? nodeAction.Attribute(sopH.SetH.SETTING_GENERIC_ID).Value.ToString() : "";
+            datS.Tables.Add(sopH.GetDataActionOne(parameter, new Dictionary<string, string>(), idAction));
+            datS = AddHistoryAction(datS);
+            return datS;
+        }
 
 
     }

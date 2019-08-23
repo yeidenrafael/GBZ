@@ -15,14 +15,10 @@ namespace GrinGlobal.Zone.Helpers
         private SettingsHelp setH;
         private readonly string PARAMETER_COLUMN_NAME = "param_name";
         private readonly string PARAMETER_DATA_TABLE_NAME = "dv_param_info";
-        private DataSet parameterGrinGlobal;
+
         
         #endregion
         #region public attribute
-        /// <summary>
-        /// DataSet getting from  DataView parameters in Grin Global 
-        /// </summary>
-        public DataSet ParameterGrinGlobal { get { return parameterGrinGlobal; } }
         /// <summary>
         /// Get all configuration from the file setting
         /// </summary>
@@ -32,17 +28,13 @@ namespace GrinGlobal.Zone.Helpers
         public GrinGlobalSoapHelp(string serverId, string moduleId, string formId)
         {
             setH = new SettingsHelp(serverId, moduleId, formId);
-            InitParametersFromGrinGlobal();
         }
         #endregion
         #region private methods
-        private void InitParametersFromGrinGlobal()
+        private DataSet InitParametersFromGrinGlobal(string urlService, string dataViewName, bool suppressExceptions)
         {
             GGZoneModel ggZoneModel = new GGZoneModel();
-            string urlService = setH.Server.Attribute("url").Value.ToString();
-            string dataViewName = setH.Parameter.Element("dataviewName").Value;
-            bool suppressExceptions = bool.Parse(setH.Parameter.Element("suppressExceptions").Value);
-            parameterGrinGlobal = ggZoneModel.GetParameters(urlService, suppressExceptions, dataViewName);
+            return ggZoneModel.GetParameters(urlService, suppressExceptions, dataViewName);
         }
         #endregion
         #region public methods
@@ -56,7 +48,10 @@ namespace GrinGlobal.Zone.Helpers
         public Dictionary<string, string> GetParameters(FormCollection dataform)
         {
             Dictionary<string, string> dic = new Dictionary<string, string>();
-            DataTable dtTable = parameterGrinGlobal.Tables[PARAMETER_DATA_TABLE_NAME];
+            string urlService = setH.Server.Attribute("url").Value.ToString();
+            string dataViewName = setH.Parameter.Element("dataviewName").Value;
+            bool suppressExceptions = bool.Parse(setH.Parameter.Element("suppressExceptions").Value);
+            DataTable dtTable = InitParametersFromGrinGlobal(urlService, dataViewName, suppressExceptions).Tables[PARAMETER_DATA_TABLE_NAME];
             foreach (DataRow dtRow in dtTable.Rows)
             {
                 string field = dtRow[PARAMETER_COLUMN_NAME].ToString();
@@ -67,6 +62,27 @@ namespace GrinGlobal.Zone.Helpers
                 }
             }
             return dic;
+        }
+
+        public Dictionary<string, string> ParametersStringToDictionary(string parameters)
+        {
+            Dictionary<string, string> dat = new Dictionary<string, string>();
+            Char separator = (char)Convert.ToInt32(setH.Parameter.Element("separator").Value);
+            Char assignment = (char)Convert.ToInt32(setH.Parameter.Element("assignment").Value);
+            string[] datos = parameters.Split(separator);
+            foreach(string dato in datos)
+            {
+                string[] items = dato.Split(assignment);
+                if (items.Count() == 2)
+                {
+                    dat.Add(items[0], items[1]);
+                }
+                else
+                {
+                    dat.Add(items[0], "");
+                }
+            }
+            return dat;
         }
 
         public DataSet GetData(string param)
@@ -99,10 +115,47 @@ namespace GrinGlobal.Zone.Helpers
         }
 
 
-        public DataSet GetDataAction(string parameters,string idAction = "")
+        public DataSet GetDataActionAll(string parameters)
         {
             DataSet ds = GetData(parameters);
-            return _GetDataAction(parameters, ds, idAction);
+            return _GetDataAction(parameters, ds);
+        }
+
+        public DataTable GetDataActionOne(string originalParameter, Dictionary<string, string> newParameter, string idAction)
+        {
+            DataTable datos = new DataTable();
+            XElement act = setH.GetNodeAction(idAction);
+            Dictionary<string, string> dat = ParametersStringToDictionary(originalParameter);
+            Dictionary<string, string> dic = new Dictionary<string, string>();
+            string parameters = "";
+
+            string urlService = setH.Server.Attribute("url").Value.ToString();
+            XElement nodeParameter = act.Element(setH.SETTING_NAME_PARAMETERS);
+            string dataviewName = nodeParameter.Element(setH.SETTING_DATAVIEW_NAME).Value;
+            bool suppressExceptions = bool.Parse(nodeParameter.Element("suppressExceptions").Value);
+            int offset = int.Parse(nodeParameter.Element("offset").Value);
+            int limit = int.Parse(nodeParameter.Element("limit").Value);
+            string options = nodeParameter.Element("options").Value;
+            DataTable dtTable = InitParametersFromGrinGlobal(urlService, dataviewName, suppressExceptions).Tables[PARAMETER_DATA_TABLE_NAME];
+            foreach (DataRow dtRow in dtTable.Rows)
+            {
+                string key = dtRow[PARAMETER_COLUMN_NAME].ToString();
+                if (!string.IsNullOrEmpty(key))
+                {
+                    string value = "";
+                    if (dat.ContainsKey(key))
+                    {
+                        value = dat[key];
+                    }
+                    if (newParameter.ContainsKey(key))
+                    {
+                        value = newParameter[key];
+                    }
+                    dic.Add(key, value);
+                }
+            }
+            parameters = GetStringParameter(dic);
+            return  _GetData(parameters, urlService, dataviewName, suppressExceptions, offset, limit, options).Tables[dataviewName].Copy();
         }
 
         public DataSet SaveData(string parameters, DataTable newDataTable)
@@ -130,18 +183,11 @@ namespace GrinGlobal.Zone.Helpers
         }
         #endregion
         #region private methods
-        private DataSet _GetDataAction(string parameters, DataSet ds, string idAction = "")
+        private DataSet _GetDataAction(string parameters, DataSet ds)
         {
-            if(idAction == "")
+            foreach (XElement act in setH.DataViewAction)
             {
-                foreach (XElement act in setH.DataViewAction)
-                {
-                    ds.Tables.Add(GetDataActionOBO(act, parameters));
-                }
-            }
-            else
-            {
-                ds.Tables.Add(GetDataActionOBO(setH.GetNodeAction(idAction), parameters));
+                ds.Tables.Add(GetDataActionOBO(act, parameters));
             }
             return ds;
         }

@@ -9,6 +9,7 @@
     <script type="text/javascript">
         const SYSTEM_COLUMNNAME_CHECK_LIST = @Html.Raw(Json.Encode(ViewData["systemCheckListColumName"]));
         const SYSTEM_COLUMNNAME_CHECK_TO_SAVE_ACTION = @Html.Raw(Json.Encode(ViewData["systemCheckToSaveAction"]));
+        var remainigElementToCheckCount = @Html.Raw(Json.Encode(ViewData["remainigElementToCheckCount"]));
         const LI_TRAFIC_LIGHT = "iTrafficLight";
         const INPUT_TEXT_QR = "textBoxCheck_I";
         const SPAN_LAST_CHECK_ITEM = "spanCheck_Item";
@@ -30,9 +31,14 @@
 
         function Init(){
             var columnes = '.id_'+SYSTEM_COLUMNNAME_CHECK_TO_SAVE_ACTION;
-            console.log(columnes);
             $(columnes).css('display','none');
-//            gvSearch.dxDataGrid("columnOption", SYSTEM_COLUMNNAME_CHECK_TO_SAVE_ACTION, "visible", false);
+            remainingItems(0);//$("#"+SPAN_FIND_ITEM).html((ALL_ITEMS.length ) + "/" + (ALL_ITEMS.length));
+        }
+
+        function saveAll(){
+            InitArray();
+            remainigElementToCheckCount = gvSearch.cpDataActionCheckCount;
+            Init();
         }
 
         function KeyPressTexBCheck(s, e) {
@@ -74,7 +80,6 @@
                 var row_now = gvSearch.GetRow(i);
                 indexDelete = -1;
                 for(var j=0; j<=itemTemp.length; j++){
-                    var color= COLOR_NEUTRO;
                     if($(row_now).text().indexOf(itemTemp[j])!=-1){
                         indexDelete = j;
                         indexCellColor++;
@@ -85,7 +90,7 @@
                     }
                 }
             }
-            $("#"+SPAN_FIND_ITEM).html((ALL_ITEMS.length - indexCellColor) + "/" + (ALL_ITEMS.length));
+            remainingItems(indexCellColor);
         }
 
         function ColorCallback(){
@@ -95,6 +100,11 @@
         }
 
         function InitArray(){
+            itemsWithCheck = new Array();
+            itemsWithOutCheck = new Array();
+            ALL_ITEMS = new Array();
+            rowNumAllToStopModal = 0;
+            rowNumGetToSotpoModal = 0;
             ModalLoad();
             var data = gvSearch.cpModelData;
             rowNumAllToStopModal = Object.keys(data).length;
@@ -105,6 +115,7 @@
                     rowNumGetToSotpoModal++;
                 }
             }
+            remainingItems(0);
             ModalClose();
         }
 
@@ -123,6 +134,17 @@
                 }, 1000);
             }else{
                 $("#"+DIV_LOAD_MODAL).modal("hide");
+            }
+        }
+
+        function remainingItems(indexCellColor){
+            if(ALL_ITEMS.length != 0){
+                console.log(remainigElementToCheckCount);
+                var total = (indexCellColor + remainigElementToCheckCount );
+                if(total > ALL_ITEMS.length){
+                    total = ALL_ITEMS.length;
+                }
+                $("#"+SPAN_FIND_ITEM).html((total) + "/" + (ALL_ITEMS.length));
             }
         }
     </script>
