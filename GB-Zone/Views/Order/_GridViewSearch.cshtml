@@ -1,6 +1,7 @@
 ﻿@model System.Data.DataSet
 
 @{
+    string captionSearch = "";
     var grid = Html.DevExpress().GridView(st =>
     {
         st.Name = "gvSearch";
@@ -38,17 +39,6 @@
         st.ClientSideEvents.BatchEditConfirmShowing = "function(s, e){ e.cancel = true;}";// remove the alert to change the order or cancel button
         st.CallbackRouteValues = new { Controller = "Order", Action = "GridView", serverId = ViewData["server"].ToString(), moduleId = ViewData["moduleId"].ToString(), formId = ViewData["formId"].ToString(), parameters = ViewData["parameters"].ToString()};
         st.SettingsEditing.BatchUpdateRouteValues = new { Controller = "Order", Action = "BatchUpdateAction", serverId = ViewData["server"].ToString(), moduleId = ViewData["moduleId"].ToString(), formId = ViewData["formId"].ToString(), parameters = ViewData["parameters"].ToString() };
-        st.CustomJSProperties = (s, e) =>
-        {
-            MVCxGridView g = s as MVCxGridView;
-            Dictionary<int, object> dict = new Dictionary<int, object>();
-            for (int i = 0; i < Model.Tables[ViewData["dataViewName"].ToString()].Rows.Count; i++)
-            {
-                dict[i] = g.GetRowValues(i, ViewData["systemCheckListColumName"].ToString());
-            }
-            e.Properties.Add("cpModelData", dict);
-            e.Properties.Add("cpDataActionCheckCount", ViewData["remainigElementToCheckCount"]);
-        };
         foreach (System.Data.DataColumn dc in Model.Tables[ViewData["dataViewName"].ToString()].Columns)
         {
             if (dc.ExtendedProperties["is_primary_key"].ToString() == "Y")
@@ -82,9 +72,25 @@
                         col.ReadOnly = true;
                         dc.ReadOnly = true;
                     }
+                    if (dc.ColumnName == ViewData["systemCheckListColumName"].ToString())
+                    {
+                        captionSearch = dc.Caption;
+                    }
                 });
             }
         }
+        st.CustomJSProperties = (s, e) =>
+        {
+            MVCxGridView g = s as MVCxGridView;
+            Dictionary<int, object> dict = new Dictionary<int, object>();
+            for (int i = 0; i < Model.Tables[ViewData["dataViewName"].ToString()].Rows.Count; i++)
+            {
+                dict[i] = g.GetRowValues(i, ViewData["systemCheckListColumName"].ToString());
+            }
+            e.Properties.Add("cpModelData", dict);
+            e.Properties.Add("cpDataActionCheckCount", ViewData["remainigElementToCheckCount"]);
+            e.Properties.Add("cpCaptionSearch", captionSearch);
+        };
     });
     if (ViewData["EditError"] != null)
     {
