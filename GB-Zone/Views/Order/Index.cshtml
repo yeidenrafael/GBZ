@@ -30,9 +30,13 @@
         });
 
         function Init(){
+            hiddenColumn();
+            remainingItems(0);//$("#"+SPAN_FIND_ITEM).html((ALL_ITEMS.length ) + "/" + (ALL_ITEMS.length));
+        }
+
+        function hiddenColumn(){
             var columnes = '.id_'+SYSTEM_COLUMNNAME_CHECK_TO_SAVE_ACTION;
             $(columnes).css('display','none');
-            remainingItems(0);//$("#"+SPAN_FIND_ITEM).html((ALL_ITEMS.length ) + "/" + (ALL_ITEMS.length));
         }
 
         function saveAll(){
@@ -68,6 +72,7 @@
                 $("#"+LI_TRAFIC_LIGHT).css({'color':COLOR_ERROR});
                 $("#audioError")[0].play();
             }
+            hiddenColumn();
         }
 
         function Color(){
@@ -93,6 +98,7 @@
                     }
                 }
             }
+            hiddenColumn();
         }
 
         function ColorCallback(){
@@ -102,7 +108,7 @@
         }
 
         function InitArray(){
-            itemsWithCheck = new Array();
+            //itemsWithCheck = new Array();
             itemsWithOutCheck = new Array();
             ALL_ITEMS = new Array();
             rowNumAllToStopModal = 0;
@@ -142,7 +148,6 @@
 
         function remainingItems(indexCellColor){
             if(ALL_ITEMS.length != 0){
-                console.log(remainigElementToCheckCount);
                 var total = (indexCellColor + remainigElementToCheckCount );
                 if(total > ALL_ITEMS.length){
                     total = ALL_ITEMS.length;
