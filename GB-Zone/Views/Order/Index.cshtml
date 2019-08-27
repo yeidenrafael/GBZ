@@ -25,6 +25,7 @@
         var ALL_ITEMS = new Array();
         var rowNumAllToStopModal = 0;
         var rowNumGetToSotpoModal = 0;
+        var itemPreviewCheck = new Array();
         $( document ).ready(function() {
             Init();
         });
@@ -60,10 +61,8 @@
                 $("#"+LI_TRAFIC_LIGHT).css({'color':COLOR_SUCCESS});
                 indice = itemsWithOutCheck.indexOf(text);
                 if(indice != -1){
-                    if(itemsWithOutCheck.indexOf(text) != -1){
-                        remainingItems(1);
-                    }
                     itemsWithCheck.push(itemsWithOutCheck[indice]);
+                    remainingItems(itemsWithCheck.length);
                     itemsWithOutCheck.pop(indice);
                     Color();
                 }
@@ -148,7 +147,7 @@
 
         function remainingItems(indexCellColor){
             if(ALL_ITEMS.length != 0){
-                var total = (indexCellColor + remainigElementToCheckCount );
+                var total = (indexCellColor);//+ remainigElementToCheckCount );
                 if(total > ALL_ITEMS.length){
                     total = ALL_ITEMS.length;
                 }
