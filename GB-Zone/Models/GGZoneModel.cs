@@ -28,7 +28,13 @@ namespace GrinGlobal.Zone.Models
                 return ds;
             }
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="suppressExceptions"></param>
+        /// <param name="dataviewName"></param>
+        /// <returns></returns>
         public DataSet GetParameters(string url, bool suppressExceptions, string dataviewName)
         {
             BasicHttpBinding bid = null;
