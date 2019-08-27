@@ -1,4 +1,4 @@
-﻿@model System.Data.DataTable
+﻿@model System.Data.DataSet
 
 
 <div class="row">
@@ -8,13 +8,13 @@
                 <div class="panel-tools">
                     <a class="showhide"><i class="fa fa-chevron-up"></i></a>
                 </div>
-                @Model.ExtendedProperties["title"].ToString()
+                @Model.Tables[ViewData["dataViewName"].ToString()].ExtendedProperties["title"].ToString()
             </div>
 
             <div class="panel-body">
                 <div class="row">
 
-                    @foreach (System.Data.DataColumn col in Model.Columns)
+                    @foreach (System.Data.DataColumn col in Model.Tables[ViewData["dataViewName"].ToString()].Columns)
                     {
                         if (col.ColumnMapping != System.Data.MappingType.Hidden && col.ExtendedProperties["is_header"] != null)
                         {
@@ -22,9 +22,9 @@
                             {
                                 <div class="col-sm-3">
                                     <span class="font-extra-bold">@col.Caption: </span>
-                                    @if (Model.Rows.Count > 0)
+                                    @if (Model.Tables[ViewData["dataViewName"].ToString()].Rows.Count > 0)
                                     {
-                                        @Model.Rows[0][col].ToString().Trim()
+                                        @Model.Tables[ViewData["dataViewName"].ToString()].Rows[0][col].ToString().Trim()
                                     }
                                 </div>
                             }
@@ -32,8 +32,11 @@
                     }
                     <div class="col-sm-3">
                         <span class="font-extra-bold">Total numbre of records: </span>
-                        @Model.Rows.Count
+                        @Model.Tables[ViewData["dataViewName"].ToString()].Rows.Count
                     </div>
+                </div>
+                <div class="row">
+                    @Html.Partial("_GridViewSearch", Model, new ViewDataDictionary(ViewData))
                 </div>
             </div>
         </div>

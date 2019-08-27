@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Settings>
-  <server id="01" name="Wheat" url="http://itu-dev-srv-01/gringlobal/gui.asmx">
+  <server id="01" name="Wheat" url="http://itu-dev-srv:81/gringlobal/gui.asmx">
     <module id="Inventory" title="Inventory" description="You can search and update information about Inventory items" icon="pe-7s-note2">
       <form id="gbz_get_inventory" title="Inventory items" layout="vertical" cssClass="form-group" action="Index" controller="Search">
         <field id="storageLocation" type="text" placeholder="CAR-SEC-BOX" visible="true">
@@ -175,8 +175,6 @@
           </actions>
         </field>
       </form>
-    
-      
     </module>
 
     <module id="Orders" title="Orders" description="You can search and update information about Order items" icon="pe-7s-box1">
@@ -210,7 +208,8 @@
           </actions>
         </field>
       </form>
-      <form id="gbz_get_order_check" title="Check List" layout="vertical" cssClass="form-group" action="Index" controller="Order" version="2.0">
+      
+      <form id="gbz_get_order_check" title="Check List" layout="vertical" cssClass="form-group" action="Index" controller="Order" systemVersion="2.0">
         <fields>
           <field id=":orderrequestid" type="number" placeholder="Order Number" visible="true"></field>
         </fields>
@@ -225,9 +224,26 @@
             <assignment>61</assignment>
           </parameters>
           <columns>
-            <column readOnly="false" javaScriptVar="CheckListColumName">inventory_number</column>
+              <column systemColumn="systemCheckListColumName">inventory_number</column>
+              <column readOnly="false" systemColumn="systemCheckBefore">check_item</column>
+              <column readOnly="false" systemColumn="systemCheckToSaveAction">data_view_action</column>
           </columns>
           <extendedProperties>
+            <actionDataviews>
+              <actionDataview id="get_order_request_item_action" systemActionDataview="systemOrderRequestItemAction">
+                <actionValue name="action_name_code" type="const" value="ORIA_VER_SHIP" systemActionDataviewValue="systemCheckHistoryAction" />
+                <actionValue name="started_date" type="dateTimeNow" value="" />
+                <actionValue name="created_date" type="dateTimeNow" value="" />
+                <actionValue name="owned_date" type="dateTimeNow" value="" />
+                <parameters>
+                  <suppressExceptions>false</suppressExceptions>
+                  <dataviewName>get_order_request_item_action</dataviewName>
+                  <offset>0</offset>
+                  <limit>0</limit>
+                  <options>1</options>
+                </parameters>
+              </actionDataview>
+            </actionDataviews>
             <masterDetail actionName="GridViewSearchDetail" moduleRef="Inventory" formRef="gbz_get_inventory" fieldRef="orderrequestitemid" colRef="order_request_item_id"></masterDetail>
           </extendedProperties>
         </actions>
@@ -235,7 +251,7 @@
     </module>
   </server>
 
-  <server id="02" name="Maize" url="http://itu-dev-srv:81/gringlobal/gui.asmx">
+  <server id="02" name="Maize" url="http://itu-dev-srv:82/gringlobal/gui.asmx">
     <module id="Orders" title="Orders" description="You can search and update information about Order items" icon="pe-7s-box1">
       <form id="gbz_get_order_request_item" title="Order items" layout="vertical" cssClass="form-group" action="Index" controller="Search">
         <field id="orderrequestid" type="number" placeholder="Order Number" visible="true">
@@ -257,15 +273,51 @@
               <column header="true">cooperator_name</column>
               <column header="true">organization</column>
               <column header="true">destination_country</column>
-              <!--<column link="true" moduleRef="Orders" formRef="gbz_get_inventory" fieldRef="intrid" colRef="inventory_number_part1" >accession_number</column>
-              <column link="true" moduleRef="Orders" formRef="gbz_get_inventory" fieldRef="inventoryNumber" colRef="inventory_number" >inventory_number</column>
-              <column link="true" moduleRef="Orders" formRef="gbz_get_inventory" fieldRef="storageLocation" colRef="storage_location" >storage_location</column>-->
             </columns>
             <extendedProperties>
               <masterDetail actionName="GridViewSearchDetail" moduleRef="Inventory" formRef="gbz_get_inventory" fieldRef="orderrequestitemid" colRef="order_request_item_id"></masterDetail>
             </extendedProperties>
           </actions>
         </field>
+      </form>
+    <form id="gbz_get_order_check" title="Check List" layout="vertical" cssClass="form-group" action="Index" controller="Order" systemVersion="2.0">
+        <fields>
+          <field id=":orderrequestid" type="number" placeholder="Order Number" visible="true"></field>
+        </fields>
+        <actions>
+          <parameters>
+            <suppressExceptions>false</suppressExceptions>
+            <dataviewName>gbz_get_order_check_list</dataviewName>
+            <offset>0</offset>
+            <limit>0</limit>
+            <options>1</options>
+            <separator>59</separator>
+            <assignment>61</assignment>
+          </parameters>
+          <columns>
+              <column systemColumn="systemCheckListColumName">inventory_number</column>
+              <column readOnly="false" systemColumn="systemCheckBefore">check_item</column>
+              <column readOnly="false" systemColumn="systemCheckToSaveAction">data_view_action</column>
+          </columns>
+          <extendedProperties>
+            <actionDataviews>
+              <actionDataview id="get_order_request_item_action" systemActionDataview="systemOrderRequestItemAction">
+                <actionValue name="action_name_code" type="const" value="ORIA_VER_SHIP" systemActionDataviewValue="systemCheckHistoryAction" />
+                <actionValue name="started_date" type="dateTimeNow" value="" />
+                <actionValue name="created_date" type="dateTimeNow" value="" />
+                <actionValue name="owned_date" type="dateTimeNow" value="" />
+                <parameters>
+                  <suppressExceptions>false</suppressExceptions>
+                  <dataviewName>get_order_request_item_action</dataviewName>
+                  <offset>0</offset>
+                  <limit>0</limit>
+                  <options>1</options>
+                </parameters>
+              </actionDataview>
+            </actionDataviews>
+            <masterDetail actionName="GridViewSearchDetail" moduleRef="Inventory" formRef="gbz_get_inventory" fieldRef="orderrequestitemid" colRef="order_request_item_id"></masterDetail>
+          </extendedProperties>
+        </actions>
       </form>
     </module>
   
@@ -354,8 +406,6 @@
               <column header="true">gid</column>
               <column header="true">taxonomy</column>
               <column header="true">country</column>
-              <!--<column link="true" moduleRef="Inventory" formRef="gbz_get_inventory" fieldRef="inventoryNumber" colRef="inventory_number" >inventory_number</column>
-              <column link="true" moduleRef="Inventory" formRef="gbz_get_inventory" fieldRef="storageLocation" colRef="storage_location" >storage_location</column>-->
             </columns>
             <extendedProperties></extendedProperties>
           </actions>
@@ -373,9 +423,6 @@
               <separator>127</separator>
             </parameters>
             <columns>
-              <!--<column link="true" moduleRef="Inventory" formRef="gbz_get_inventory" fieldRef="intrid" colRef="inventory_number_part1" >accession_number</column>
-              <column link="true" moduleRef="Inventory" formRef="gbz_get_inventory" fieldRef="inventoryNumber" colRef="inventory_number" >inventory_number</column>
-              <column link="true" moduleRef="Inventory" formRef="gbz_get_inventory" fieldRef="storageLocation" colRef="storage_location" >storage_location</column>-->
             </columns>
             <extendedProperties></extendedProperties>
           </actions>

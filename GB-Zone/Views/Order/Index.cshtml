@@ -1,5 +1,5 @@
-﻿<!--######################## views/Order  ###########-->
-@model System.Data.DataTable
+﻿<!-- views/Order -->
+@model System.Data.DataSet
 
 @{
     ViewBag.ViewTitle = "| " + ViewData["moduleId"];
@@ -7,7 +7,8 @@
 
 @section scriptsHeader {
     <script type="text/javascript">
-        const CHECK_LIST_COLUMN_NAME = @Html.Raw(Json.Encode(ViewData["CheckListColumName"]));
+        const SYSTEM_COLUMNNAME_CHECK_LIST = @Html.Raw(Json.Encode(ViewData["systemCheckListColumName"]));
+        const SYSTEM_COLUMNNAME_CHECK_TO_SAVE_ACTION = @Html.Raw(Json.Encode(ViewData["systemCheckToSaveAction"]));
         const LI_TRAFIC_LIGHT = "iTrafficLight";
         const INPUT_TEXT_QR = "textBoxCheck_I";
         const SPAN_LAST_CHECK_ITEM = "spanCheck_Item";
@@ -16,65 +17,127 @@
         const KEY_ENTER = 13;
         const COLOR_SUCCESS =  "forestgreen";
         const COLOR_ERROR =  "red";
-        var regreso = "";
-        var rows = 0;
-        var rowsSuccess = 0;
-        var checkList = new Array();
-        var findList = new Array();
+        const COLOR_NEUTRO = "white"
+
+        var remainigElementToCheckCount = @Html.Raw(Json.Encode(ViewData["remainigElementToCheckCount"]));
+        var itemsWithCheck = new Array();
+        var itemsWithOutCheck = new Array();
+        var ALL_ITEMS = new Array();
+        var rowNumAllToStopModal = 0;
+        var rowNumGetToSotpoModal = 0;
+        $( document ).ready(function() {
+            Init();
+        });
 
         function Init(){
+            hiddenColumn();
+            remainingItems(0);//$("#"+SPAN_FIND_ITEM).html((ALL_ITEMS.length ) + "/" + (ALL_ITEMS.length));
+        }
 
+        function hiddenColumn(){
+            var columnes = '.id_'+SYSTEM_COLUMNNAME_CHECK_TO_SAVE_ACTION;
+            $(columnes).css('display','none');
+        }
+
+        function saveAll(){
+            InitArray();
+            remainigElementToCheckCount = gvSearch.cpDataActionCheckCount;
+            Init();
         }
 
         function KeyPressTexBCheck(s, e) {
             if (e.htmlEvent.keyCode == KEY_ENTER) {
-                var texto = $("#"+INPUT_TEXT_QR).val().trim();
-                var index = checkList.indexOf(texto);
-                if(index != -1){
-                    $("#"+LI_TRAFIC_LIGHT).css({'color':COLOR_SUCCESS});
-                    CheckRow(index);
-                    FindItem(checkList[index]);
-                    $("#audioSuccess")[0].play();
-                }else{
-                    $("#"+LI_TRAFIC_LIGHT).css({'color':COLOR_ERROR});
-                    $("#audioError")[0].play();
-                }
+                var text = $("#"+INPUT_TEXT_QR).val().trim();
+                CheckElement(text);
                 $("#"+SPAN_LAST_CHECK_ITEM).html("<b>"+$("#"+INPUT_TEXT_QR).val()+"</b>");
                 $("#"+INPUT_TEXT_QR).val('');
             }
         }
 
-        function CheckRow(index){
-            var row = gvSearch.GetRow(index);
-            var id = $(row).attr("id");
-            $("#"+id).css({'background-color':COLOR_SUCCESS});
+        function CheckElement(text){
+            var indice = ALL_ITEMS.indexOf(text);
+            if(indice != -1){
+                $("#"+LI_TRAFIC_LIGHT).css({'color':COLOR_SUCCESS});
+                indice = itemsWithOutCheck.indexOf(text);
+                if(indice != -1){
+                    if(itemsWithOutCheck.indexOf(text) != -1){
+                        remainingItems(1);
+                    }
+                    itemsWithCheck.push(itemsWithOutCheck[indice]);
+                    itemsWithOutCheck.pop(indice);
+                    Color();
+                }
+            }
+            else{
+                $("#"+LI_TRAFIC_LIGHT).css({'color':COLOR_ERROR});
+                $("#audioError")[0].play();
+            }
+            hiddenColumn();
+        }
+
+        function Color(){
+            var itemTemp = itemsWithCheck;
+            var indexDelete = -1;
+            var indexCellColor = 0;
+            for(var i=0; i<ALL_ITEMS.length; i++){
+                var row_now = gvSearch.GetRow(i);
+                var id = $(row_now).attr("id");
+                $("#"+id).css({'background-color':COLOR_NEUTRO});
+            }
+            for(var i=0; i<ALL_ITEMS.length; i++){
+                var row_now = gvSearch.GetRow(i);
+                indexDelete = -1;
+                for(var j=0; j<=itemTemp.length; j++){
+                    if($(row_now).text().indexOf(itemTemp[j])!=-1){
+                        indexDelete = j;
+                        indexCellColor++;
+                        var id = $(row_now).attr("id");
+                        $("#"+id).css({'background-color':COLOR_SUCCESS});
+                        var key = parseInt(id.replace("gvSearch_DXDataRow", ""),10);
+                        gvSearch.batchEditApi.SetCellValue(key, SYSTEM_COLUMNNAME_CHECK_TO_SAVE_ACTION, true);
+                    }
+                }
+            }
+            hiddenColumn();
+        }
+
+        function ColorCallback(){
+            setTimeout(function() {
+                Color();
+            }, 1000);
         }
 
         function InitArray(){
+            //itemsWithCheck = new Array();
+            itemsWithOutCheck = new Array();
+            ALL_ITEMS = new Array();
+            rowNumAllToStopModal = 0;
+            rowNumGetToSotpoModal = 0;
             ModalLoad();
-            rows = gvSearch.GetVisibleRowsOnPage();
-            findItems = rows;
             var data = gvSearch.cpModelData;
+            rowNumAllToStopModal = Object.keys(data).length;
             if (data) {
-                for (var i = 0; i < rows; i++) {
-                    console.log(data[i].trim());
-                    checkList.push(data[i].trim());//replace("\b\b","\b") 
-                    rowsSuccess++;
+                for (var i = 0; i < rowNumAllToStopModal; i++) {
+                    ALL_ITEMS.push(data[i].trim());
+                    itemsWithOutCheck.push(data[i].trim());
+                    rowNumGetToSotpoModal++;
                 }
             }
+            remainingItems(0);
             ModalClose();
+            $("#labelChceck").text("Scan QR: ["+gvSearch.cpCaptionSearch+"]");
         }
 
         function ModalLoad(){
             $("#"+DIV_LOAD_MODAL).modal({
-                backdrop: "static", 
-                keyboard: false, 
-                show: true 
+                backdrop: "static",
+                keyboard: false,
+                show: true
             });
         }
 
         function ModalClose(){
-            if(rowsSuccess < rows){
+            if(rowNumGetToSotpoModal < rowNumAllToStopModal){
                 setTimeout(function() {
                     ModalClose();
                 }, 1000);
@@ -83,17 +146,15 @@
             }
         }
 
-        function FindItem(element){
-            
-            if(findList.indexOf(element)== -1){
-                findList.push(element);
-                $("#"+SPAN_FIND_ITEM).html(checkList.length - findList.length);
+        function remainingItems(indexCellColor){
+            if(ALL_ITEMS.length != 0){
+                var total = (indexCellColor + remainigElementToCheckCount );
+                if(total > ALL_ITEMS.length){
+                    total = ALL_ITEMS.length;
+                }
+                $("#"+SPAN_FIND_ITEM).html((total) + "/" + (ALL_ITEMS.length));
             }
         }
-
-        $( document ).ready(function() {
-            Init();
-        });
     </script>
 }
 
@@ -101,17 +162,10 @@
 
 @if (ViewData["parameters"] != null)
 {
-    Html.RenderPartial("_HeaderGridView");
     Html.RenderPartial("_CheckList");
+    Html.RenderPartial("_HeaderGridView");
+
 }
-<div class="row">
-    <div class="col-lg-12">
-            @if (ViewData["parameters"] != null)
-            {
-                Html.RenderPartial("_GridViewSearch", Model, new ViewDataDictionary { { "parameters", ViewData["parameters"] }, { "server", ViewData["server"] }, { "moduleId", ViewData["moduleId"] }, { "formId", ViewData["formId"] }, { "CheckListColumName", ViewData["CheckListColumName"] } });
-            }
-    </div>
-</div>
 <audio controls id="audioSuccess" hidden="hidden">
     <source src="@Url.Content("Content/audio/Success.mp3")" type="audio/mpeg">
 </audio>

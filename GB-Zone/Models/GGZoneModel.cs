@@ -20,61 +20,53 @@ namespace GrinGlobal.Zone.Models
             EndpointAddress address = null;
             Helpers.ProxyServer proxy = new Helpers.ProxyServer();
             proxy.SetClientEndpoints(url, ref bid, ref address);
-            //get user info
-            string userName = HttpContext.Current.Session["username"].ToString();
+            string userName = HttpContext.Current.Session["username"].ToString();//get user info
             string password = HttpContext.Current.Session["userkey"].ToString();
             using (var client = new GUISoapClient(bid, address))
             {
-
                 DataSet ds = client.GetData(suppressExceptions, userName, password, dataviewName, delimitedParameterList, offset, limit, options);
-
                 return ds;
             }
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="suppressExceptions"></param>
+        /// <param name="dataviewName"></param>
+        /// <returns></returns>
         public DataSet GetParameters(string url, bool suppressExceptions, string dataviewName)
         {
             BasicHttpBinding bid = null;
             EndpointAddress address = null;
             Helpers.ProxyServer proxy = new Helpers.ProxyServer();
             proxy.SetClientEndpoints(url, ref bid, ref address);
-            //get user info
-            string userName = HttpContext.Current.Session["username"].ToString();
+            string userName = HttpContext.Current.Session["username"].ToString();//get user info
             string password = HttpContext.Current.Session["userkey"].ToString();
             using (var client = new GUISoapClient(bid, address))
             {
-
                 DataSet ds = client.GetDataParameterTemplate(suppressExceptions, userName, password, dataviewName);
-
                 return ds;
             }
         }
 
         public DataSet SaveData(string url, bool suppressExceptions, DataSet ds, string options)
         {
-
             BasicHttpBinding bid = null;
             EndpointAddress address = null;
             Helpers.ProxyServer proxy = new Helpers.ProxyServer();
             proxy.SetClientEndpoints(url, ref bid, ref address);
-
-            //get user info
-            string userName = HttpContext.Current.Session["username"].ToString();
+            string userName = HttpContext.Current.Session["username"].ToString();//get user info
             string password = HttpContext.Current.Session["userkey"].ToString();
-
             using (var client = new GUISoapClient(bid, address))
             {
-
                 DataSet result = client.SaveData(suppressExceptions, userName, password, ds, options);
-
                 return result;
             }
         }
 
         public IList<InventoryItem> GetInventoryItems() {
-
             var model = new List<InventoryItem>();
-
             return model;
         }
     }

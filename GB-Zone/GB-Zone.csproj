@@ -699,6 +699,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\GridViewHelp.cs" />
     <Compile Include="Helpers\GrinGlobalSoapHelp.cs" />
     <Compile Include="Helpers\HMTLHelperExtensions.cs" />
     <Compile Include="Helpers\ProxyServer.cs" />
@@ -754,7 +755,6 @@
     <Content Include="Scripts\umd\popper-utils.min.js" />
     <Content Include="Scripts\umd\popper.js" />
     <Content Include="Scripts\umd\popper.min.js" />
-    <Content Include="SettingAction.xml" />
     <Content Include="Vendor\pe-icon-7-stroke\css\helper.css" />
     <Content Include="Vendor\pe-icon-7-stroke\css\pe-icon-7-stroke.css" />
     <Content Include="Vendor\pe-icon-7-stroke\fonts\Pe-icon-7-stroke.svg" />
