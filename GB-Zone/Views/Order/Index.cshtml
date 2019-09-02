@@ -7,8 +7,9 @@
 
 @section scriptsHeader {
     <script type="text/javascript">
-        const SYSTEM_COLUMNNAME_CHECK_LIST = @Html.Raw(Json.Encode(ViewData["systemCheckListColumName"]));
-        const SYSTEM_COLUMNNAME_CHECK_TO_SAVE_ACTION = @Html.Raw(Json.Encode(ViewData["systemCheckToSaveAction"]));
+        var SYSTEM_COLUMNNAME_CHECK_LIST = "";
+        var SYSTEM_COLUMNNAME_CHECK_TO_SAVE_ACTION = "";
+        var SYSTEM_CHECK_BEFORE = "";
         const LI_TRAFIC_LIGHT = "iTrafficLight";
         const INPUT_TEXT_QR = "textBoxCheck_I";
         const SPAN_LAST_CHECK_ITEM = "spanCheck_Item";
@@ -19,7 +20,6 @@
         const COLOR_ERROR =  "red";
         const COLOR_NEUTRO = "white"
 
-        var remainigElementToCheckCount = @Html.Raw(Json.Encode(ViewData["remainigElementToCheckCount"]));
         var itemsWithCheck = new Array();
         var itemsWithOutCheck = new Array();
         var ALL_ITEMS = new Array();
@@ -32,23 +32,27 @@
 
         function Init(){
             hiddenColumn();
-            remainingItems(0);//$("#"+SPAN_FIND_ITEM).html((ALL_ITEMS.length ) + "/" + (ALL_ITEMS.length));
+            missingItems(0);
         }
 
         function hiddenColumn(){
-            var columnes = '.id_'+SYSTEM_COLUMNNAME_CHECK_TO_SAVE_ACTION;
+            let columnes = '.id_'+SYSTEM_COLUMNNAME_CHECK_TO_SAVE_ACTION;
             $(columnes).css('display','none');
         }
 
-        function saveAll(){
-            InitArray();
-            remainigElementToCheckCount = gvSearch.cpDataActionCheckCount;
-            Init();
+        function saveAll() {
+            console.log("nueva carga");
+            setTimeout(function () {
+                InitArray();
+            }, 1000);
+            hiddenColumn();//Init();
+            $("#"+LI_TRAFIC_LIGHT).css({'color':COLOR_NEUTRO});
+            $("#"+SPAN_LAST_CHECK_ITEM).html("");
         }
 
         function KeyPressTexBCheck(s, e) {
             if (e.htmlEvent.keyCode == KEY_ENTER) {
-                var text = $("#"+INPUT_TEXT_QR).val().trim();
+                let text = $("#"+INPUT_TEXT_QR).val().trim();
                 CheckElement(text);
                 $("#"+SPAN_LAST_CHECK_ITEM).html("<b>"+$("#"+INPUT_TEXT_QR).val()+"</b>");
                 $("#"+INPUT_TEXT_QR).val('');
@@ -56,14 +60,14 @@
         }
 
         function CheckElement(text){
-            var indice = ALL_ITEMS.indexOf(text);
+            let indice = ALL_ITEMS.indexOf(text);
             if(indice != -1){
                 $("#"+LI_TRAFIC_LIGHT).css({'color':COLOR_SUCCESS});
                 indice = itemsWithOutCheck.indexOf(text);
                 if(indice != -1){
                     itemsWithCheck.push(itemsWithOutCheck[indice]);
-                    remainingItems(itemsWithCheck.length);
-                    itemsWithOutCheck.pop(indice);
+                    itemsWithOutCheck.splice(indice,1);
+                    missingItems(itemsWithCheck.length);
                     Color();
                 }
             }
@@ -75,24 +79,24 @@
         }
 
         function Color(){
-            var itemTemp = itemsWithCheck;
-            var indexDelete = -1;
-            var indexCellColor = 0;
-            for(var i=0; i<ALL_ITEMS.length; i++){
-                var row_now = gvSearch.GetRow(i);
-                var id = $(row_now).attr("id");
+            let itemTemp = itemsWithCheck;
+            let indexDelete = -1;
+            let indexCellColor = 0;
+            for(let i=0; i<ALL_ITEMS.length; i++){
+                let row_now = gvSearch.GetRow(i);
+                let id = $(row_now).attr("id");
                 $("#"+id).css({'background-color':COLOR_NEUTRO});
             }
-            for(var i=0; i<ALL_ITEMS.length; i++){
-                var row_now = gvSearch.GetRow(i);
+            for(let i=0; i<ALL_ITEMS.length; i++){
+                let row_now = gvSearch.GetRow(i);
                 indexDelete = -1;
-                for(var j=0; j<=itemTemp.length; j++){
+                for(let j=0; j<=itemTemp.length; j++){
                     if($(row_now).text().indexOf(itemTemp[j])!=-1){
                         indexDelete = j;
                         indexCellColor++;
-                        var id = $(row_now).attr("id");
+                        let id = $(row_now).attr("id");
                         $("#"+id).css({'background-color':COLOR_SUCCESS});
-                        var key = parseInt(id.replace("gvSearch_DXDataRow", ""),10);
+                        let key = parseInt(id.replace("gvSearch_DXDataRow", ""),10);
                         gvSearch.batchEditApi.SetCellValue(key, SYSTEM_COLUMNNAME_CHECK_TO_SAVE_ACTION, true);
                     }
                 }
@@ -107,24 +111,31 @@
         }
 
         function InitArray(){
-            //itemsWithCheck = new Array();
             itemsWithOutCheck = new Array();
+            itemPreviewCheck = new Array();
+            itemsWithCheck = new Array();
+            let jsonData = $.parseJSON(gvSearch.cpModelData);
+            SYSTEM_COLUMNNAME_CHECK_LIST = gvSearch.cpSystemCheckListColumName;
+            SYSTEM_COLUMNNAME_CHECK_TO_SAVE_ACTION = gvSearch.cpSystemCheckToSaveAction;
+            SYSTEM_CHECK_BEFORE = gvSearch.cpSystemCheckBefore;
             ALL_ITEMS = new Array();
             rowNumAllToStopModal = 0;
             rowNumGetToSotpoModal = 0;
             ModalLoad();
-            var data = gvSearch.cpModelData;
-            rowNumAllToStopModal = Object.keys(data).length;
-            if (data) {
-                for (var i = 0; i < rowNumAllToStopModal; i++) {
-                    ALL_ITEMS.push(data[i].trim());
-                    itemsWithOutCheck.push(data[i].trim());
-                    rowNumGetToSotpoModal++;
+            rowNumAllToStopModal = Object.keys(jsonData).length;
+            jsonData.forEach(function (item) {
+                ALL_ITEMS.push(item[SYSTEM_COLUMNNAME_CHECK_LIST]);
+                itemsWithOutCheck.push(item[SYSTEM_COLUMNNAME_CHECK_LIST]);
+                if (item[SYSTEM_CHECK_BEFORE] == true) {
+                    itemPreviewCheck.push(item[SYSTEM_COLUMNNAME_CHECK_LIST]);
                 }
-            }
-            remainingItems(0);
+                rowNumGetToSotpoModal++;
+            });
+            console.log(itemPreviewCheck.length + "items with check las session")
+            missingItems(0);
             ModalClose();
-            $("#labelChceck").text("Scan QR: ["+gvSearch.cpCaptionSearch+"]");
+            $("#labelChceck").text("Scan QR: [" + gvSearch.cpCaptionSearch + "]");
+            hiddenColumn();
         }
 
         function ModalLoad(){
@@ -145,9 +156,13 @@
             }
         }
 
-        function remainingItems(indexCellColor){
-            if(ALL_ITEMS.length != 0){
-                var total = (indexCellColor);//+ remainigElementToCheckCount );
+        function missingItems(indexCellColor) {
+            let setA = new Set(itemsWithCheck);
+            let setB = new Set(itemPreviewCheck);
+            let setC = new Set([...setA].filter(x => setB.has(x)));
+            if (ALL_ITEMS.length != 0) {
+                console.log(indexCellColor+" + "+ (setB.size - setC.size))
+                let total = (indexCellColor + (setB.size - setC.size));
                 if(total > ALL_ITEMS.length){
                     total = ALL_ITEMS.length;
                 }

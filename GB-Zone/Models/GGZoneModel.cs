@@ -8,12 +8,22 @@ using System.Collections.Generic;
 namespace GrinGlobal.Zone.Models
 {
     /// <summary>
-    /// Return the data information from JSON webservices of GrinGlobal 
+    /// Return the data information from Json of GrinGlobal 
     /// </summary>
     public class GGZoneModel
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(GGZoneModel));
-
+        /// <summary>
+        /// Get all data from the specific dataview
+        /// </summary>
+        /// <param name="url">service url</param>
+        /// <param name="suppressExceptions">allow show error</param>
+        /// <param name="dataviewName">Name of dataview</param>
+        /// <param name="delimitedParameterList">char to separte the parameters</param>
+        /// <param name="offset"></param>
+        /// <param name="limit"></param>
+        /// <param name="options"></param>
+        /// <returns></returns>
         public DataSet GetData(string url, bool suppressExceptions, string dataviewName, string delimitedParameterList, int offset, int limit, string options)
         {
             BasicHttpBinding bid = null;
@@ -29,12 +39,12 @@ namespace GrinGlobal.Zone.Models
             }
         }
         /// <summary>
-        /// 
+        /// Get all the parameters of an already defined dataview
         /// </summary>
-        /// <param name="url"></param>
-        /// <param name="suppressExceptions"></param>
-        /// <param name="dataviewName"></param>
-        /// <returns></returns>
+        /// <param name="url">service url</param>
+        /// <param name="suppressExceptions">allow show error</param>
+        /// <param name="dataviewName"> name of dataview</param>
+        /// <returns>Dataset with dataview parameter information</returns>
         public DataSet GetParameters(string url, bool suppressExceptions, string dataviewName)
         {
             BasicHttpBinding bid = null;
@@ -49,7 +59,14 @@ namespace GrinGlobal.Zone.Models
                 return ds;
             }
         }
-
+        /// <summary>
+        /// Save data modified by external application
+        /// </summary>
+        /// <param name="url">service url</param>
+        /// <param name="suppressExceptions">allow show error</param>
+        /// <param name="ds">DataSet with value modification</param>
+        /// <param name="options"></param>
+        /// <returns>Data set with save status information</returns>
         public DataSet SaveData(string url, bool suppressExceptions, DataSet ds, string options)
         {
             BasicHttpBinding bid = null;

@@ -8,6 +8,7 @@
                 <div class="panel-tools">
                     <a class="showhide"><i class="fa fa-chevron-up"></i></a>
                 </div>
+                @ViewData["titleComplement"]
                 @Model.Tables[ViewData["dataViewName"].ToString()].ExtendedProperties["title"].ToString()
             </div>
 

@@ -48,9 +48,9 @@ namespace GrinGlobal.Zone.Helpers
         public Dictionary<string, string> GetParameters(FormCollection dataform)
         {
             Dictionary<string, string> dic = new Dictionary<string, string>();
-            string urlService = setH.Server.Attribute("url").Value.ToString();
-            string dataViewName = setH.Parameter.Element("dataviewName").Value;
-            bool suppressExceptions = bool.Parse(setH.Parameter.Element("suppressExceptions").Value);
+            string urlService = setH.Server.Attribute(setH.SETTING_NAME_URL).Value.ToString();
+            string dataViewName = setH.Parameter.Element(setH.SETTING_NAME_DATAVIEW).Value;
+            bool suppressExceptions = bool.Parse(setH.Parameter.Element(setH.SETTING_NAME_SUPPRESSEXCEPTIONS).Value);
             DataTable dtTable = InitParametersFromGrinGlobal(urlService, dataViewName, suppressExceptions).Tables[PARAMETER_DATA_TABLE_NAME];
             foreach (DataRow dtRow in dtTable.Rows)
             {
@@ -71,8 +71,8 @@ namespace GrinGlobal.Zone.Helpers
         public Dictionary<string, string> ParametersStringToDictionary(string parameters)
         {
             Dictionary<string, string> dat = new Dictionary<string, string>();
-            Char separator = (char)Convert.ToInt32(setH.Parameter.Element("separator").Value);
-            Char assignment = (char)Convert.ToInt32(setH.Parameter.Element("assignment").Value);
+            Char separator = (char)Convert.ToInt32(setH.Parameter.Element(setH.SETTING_NAME_SEPARATOR).Value);
+            Char assignment = (char)Convert.ToInt32(setH.Parameter.Element(setH.SETTING_NAME_ASSIGNMENT).Value);
             string[] datos = parameters.Split(separator);
             foreach(string dato in datos)
             {
@@ -95,12 +95,12 @@ namespace GrinGlobal.Zone.Helpers
         /// <returns>Dataset from SAOP GrinGlobal</returns>
         public DataSet GetData(string param)
         {
-            string urlService = setH.Server.Attribute("url").Value.ToString();//extract settings from Setting.xml
-            string dataviewName = setH.Parameter.Element(setH.SETTING_DATAVIEW_NAME).Value;
-            bool suppressExceptions = bool.Parse(setH.Parameter.Element("suppressExceptions").Value);
-            int offset = int.Parse(setH.Parameter.Element("offset").Value);
-            int limit = int.Parse(setH.Parameter.Element("limit").Value);
-            string options = setH.Parameter.Element("options").Value;
+            string urlService = setH.Server.Attribute(setH.SETTING_NAME_URL).Value.ToString();//extract settings from Setting.xml
+            string dataviewName = setH.Parameter.Element(setH.SETTING_NAME_DATAVIEW).Value;
+            bool suppressExceptions = bool.Parse(setH.Parameter.Element(setH.SETTING_NAME_SUPPRESSEXCEPTIONS).Value);
+            int offset = int.Parse(setH.Parameter.Element(setH.SETTING_NAME_OFFSET).Value);
+            int limit = int.Parse(setH.Parameter.Element(setH.SETTING_NAME_LIMIT).Value);
+            string options = setH.Parameter.Element(setH.SETTING_NAME_OPTIONS).Value;
             return _GetData(param, urlService, dataviewName, suppressExceptions, offset, limit, options);
         }
         /// <summary>
@@ -113,8 +113,8 @@ namespace GrinGlobal.Zone.Helpers
         public string GetStringParameter(Dictionary<string, string> dic)
         {
             string parameter = "";
-            Char separator = (char)Convert.ToInt32(setH.Parameter.Element("separator").Value);
-            Char assignment = (char)Convert.ToInt32(setH.Parameter.Element("assignment").Value);
+            Char separator = (char)Convert.ToInt32(setH.Parameter.Element(setH.SETTING_NAME_SEPARATOR).Value);
+            Char assignment = (char)Convert.ToInt32(setH.Parameter.Element(setH.SETTING_NAME_ASSIGNMENT).Value);
             foreach (KeyValuePair<string, string> entry in dic)
             {
                 parameter += entry.Key + assignment + entry.Value + separator;
@@ -133,12 +133,12 @@ namespace GrinGlobal.Zone.Helpers
             DataTable datos = new DataTable();
             XElement act = setH.GetNodeAction(idAction);
             XElement nodeParameter = act.Element(setH.SETTING_NAME_PARAMETERS);
-            string urlService = setH.Server.Attribute("url").Value.ToString();
-            string dataviewName = nodeParameter.Element(setH.SETTING_DATAVIEW_NAME).Value;
-            bool suppressExceptions = bool.Parse(nodeParameter.Element("suppressExceptions").Value);
-            int offset = int.Parse(nodeParameter.Element("offset").Value);
-            int limit = int.Parse(nodeParameter.Element("limit").Value);
-            string options = nodeParameter.Element("options").Value;
+            string urlService = setH.Server.Attribute(setH.SETTING_NAME_URL).Value.ToString();
+            string dataviewName = nodeParameter.Element(setH.SETTING_NAME_DATAVIEW).Value;
+            bool suppressExceptions = bool.Parse(nodeParameter.Element(setH.SETTING_NAME_SUPPRESSEXCEPTIONS).Value);
+            int offset = int.Parse(nodeParameter.Element(setH.SETTING_NAME_OFFSET).Value);
+            int limit = int.Parse(nodeParameter.Element(setH.SETTING_NAME_LIMIT).Value);
+            string options = nodeParameter.Element(setH.SETTING_NAME_OPTIONS).Value;
             string parameters = MergeParameterAction(originalParameter, newParameter, urlService, dataviewName, suppressExceptions);
             return  _GetData(parameters, urlService, dataviewName, suppressExceptions, offset, limit, options).Tables[dataviewName].Copy();
         }
@@ -150,12 +150,12 @@ namespace GrinGlobal.Zone.Helpers
         /// <returns>DataSet result from service SOAP in GrinGlobal</returns>
         public DataSet SaveData(string parameters, DataTable newDataTable)
         {
-            string urlService = setH.Server.Attribute("url").Value.ToString();//extract settings from Setting.xml
-            string dataviewName = setH.Parameter.Element(setH.SETTING_DATAVIEW_NAME).Value;
-            bool suppressExceptions = bool.Parse(setH.Parameter.Element("suppressExceptions").Value);
-            int offset = int.Parse(setH.Parameter.Element("offset").Value);
-            int limit = int.Parse(setH.Parameter.Element("limit").Value);
-            string options = setH.Parameter.Element("options").Value;
+            string urlService = setH.Server.Attribute(setH.SETTING_NAME_URL).Value.ToString();//extract settings from Setting.xml
+            string dataviewName = setH.Parameter.Element(setH.SETTING_NAME_DATAVIEW).Value;
+            bool suppressExceptions = bool.Parse(setH.Parameter.Element(setH.SETTING_NAME_SUPPRESSEXCEPTIONS).Value);
+            int offset = int.Parse(setH.Parameter.Element(setH.SETTING_NAME_OFFSET).Value);
+            int limit = int.Parse(setH.Parameter.Element(setH.SETTING_NAME_LIMIT).Value);
+            string options = setH.Parameter.Element(setH.SETTING_NAME_OPTIONS).Value;
             return _SaveData(parameters, urlService, dataviewName, suppressExceptions, offset, limit, options, newDataTable);
         }
         /// <summary>
@@ -168,14 +168,14 @@ namespace GrinGlobal.Zone.Helpers
         /// <returns>DataSet result from service SOAP in GrinGlobal</returns>
         public DataSet SaveDataAction(string originalParameter, Dictionary<string, string> newParameter, string idAction ,DataTable newDataTable)
         {
-            string urlService = setH.Server.Attribute("url").Value.ToString();
+            string urlService = setH.Server.Attribute(setH.SETTING_NAME_URL).Value.ToString();
             XElement nodeAction = setH.GetNodeAction(idAction);
             XElement nodeParameter = nodeAction.Element(setH.SETTING_NAME_PARAMETERS);
-            string dataviewName = nodeParameter.Element(setH.SETTING_DATAVIEW_NAME).Value;
-            bool suppressExceptions = bool.Parse(nodeParameter.Element("suppressExceptions").Value);
-            int offset = int.Parse(nodeParameter.Element("offset").Value);
-            int limit = int.Parse(nodeParameter.Element("limit").Value);
-            string options = nodeParameter.Element("options").Value;
+            string dataviewName = nodeParameter.Element(setH.SETTING_NAME_DATAVIEW).Value;
+            bool suppressExceptions = bool.Parse(nodeParameter.Element(setH.SETTING_NAME_SUPPRESSEXCEPTIONS).Value);
+            int offset = int.Parse(nodeParameter.Element(setH.SETTING_NAME_OFFSET).Value);
+            int limit = int.Parse(nodeParameter.Element(setH.SETTING_NAME_LIMIT).Value);
+            string options = nodeParameter.Element(setH.SETTING_NAME_OPTIONS).Value;
             string parameters = MergeParameterAction(originalParameter, newParameter, urlService, dataviewName, suppressExceptions);
             return _SaveData(parameters, urlService, dataviewName, suppressExceptions, offset, limit, options, newDataTable);
         }
@@ -185,20 +185,20 @@ namespace GrinGlobal.Zone.Helpers
         {
             foreach (XElement act in setH.DataViewAction)
             {
-                ds.Tables.Add(GetDataActionOBO(act, parameters));
+                ds.Tables.Add(GetDataActionOneByOne(act, parameters));
             }
             return ds;
         }
 
-        private DataTable GetDataActionOBO(XElement actX, string parameters)
+        private DataTable GetDataActionOneByOne(XElement actX, string parameters)
         {
-            string urlService = setH.Server.Attribute("url").Value.ToString();
+            string urlService = setH.Server.Attribute(setH.SETTING_NAME_URL).Value.ToString();
             XElement nodeParameter = actX.Element(setH.SETTING_NAME_PARAMETERS);
-            string dataviewName = nodeParameter.Element(setH.SETTING_DATAVIEW_NAME).Value;
-            bool suppressExceptions = bool.Parse(nodeParameter.Element("suppressExceptions").Value);
-            int offset = int.Parse(nodeParameter.Element("offset").Value);
-            int limit = int.Parse(nodeParameter.Element("limit").Value);
-            string options = nodeParameter.Element("options").Value;
+            string dataviewName = nodeParameter.Element(setH.SETTING_NAME_DATAVIEW).Value;
+            bool suppressExceptions = bool.Parse(nodeParameter.Element(setH.SETTING_NAME_SUPPRESSEXCEPTIONS).Value);
+            int offset = int.Parse(nodeParameter.Element(setH.SETTING_NAME_OFFSET).Value);
+            int limit = int.Parse(nodeParameter.Element(setH.SETTING_NAME_LIMIT).Value);
+            string options = nodeParameter.Element(setH.SETTING_NAME_OPTIONS).Value;
             return _GetData(parameters, urlService, dataviewName, suppressExceptions, offset, limit, options).Tables[dataviewName].Copy();
         }
 

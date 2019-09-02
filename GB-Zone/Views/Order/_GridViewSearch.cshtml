@@ -1,5 +1,4 @@
 ﻿@model System.Data.DataSet
-
 @{
     string captionSearch = "";
     var grid = Html.DevExpress().GridView(st =>
@@ -28,13 +27,11 @@
         st.SettingsAdaptivity.AdaptiveDetailColumnCount = 1;
         st.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = false;
         st.SettingsAdaptivity.HideDataCellsAtWindowInnerWidth = 0;
-        //st.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCells;
         st.CommandColumn.ShowNewButtonInHeader = false;
-
         st.SettingsPager.Visible = true;
         st.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords;
         st.ClientSideEvents.Init = "InitArray";
-        st.ClientSideEvents.EndCallback = "saveAll";
+        st.ClientSideEvents.BatchEditChangesSaving = "saveAll";
         st.ClientSideEvents.ColumnSorting = "ColorCallback";
         st.ClientSideEvents.BatchEditConfirmShowing = "function(s, e){ e.cancel = true;}";// remove the alert to change the order or cancel button
         st.CallbackRouteValues = new { Controller = "Order", Action = "GridView", serverId = ViewData["server"].ToString(), moduleId = ViewData["moduleId"].ToString(), formId = ViewData["formId"].ToString(), parameters = ViewData["parameters"].ToString()};
@@ -82,14 +79,11 @@
         st.CustomJSProperties = (s, e) =>
         {
             MVCxGridView g = s as MVCxGridView;
-            Dictionary<int, object> dict = new Dictionary<int, object>();
-            for (int i = 0; i < Model.Tables[ViewData["dataViewName"].ToString()].Rows.Count; i++)
-            {
-                dict[i] = g.GetRowValues(i, ViewData["systemCheckListColumName"].ToString());
-            }
-            e.Properties.Add("cpModelData", dict);
-            e.Properties.Add("cpDataActionCheckCount", ViewData["remainigElementToCheckCount"]);
+            e.Properties.Add("cpModelData", ViewData["jsonCheckLastSeccionItems"]);
             e.Properties.Add("cpCaptionSearch", captionSearch);
+            e.Properties.Add("cpSystemCheckListColumName", ViewData["systemCheckListColumName"]);
+            e.Properties.Add("cpSystemCheckToSaveAction", ViewData["systemCheckToSaveAction"]);
+            e.Properties.Add("cpSystemCheckBefore", ViewData["systemCheckBefore"]);
         };
     });
     if (ViewData["EditError"] != null)

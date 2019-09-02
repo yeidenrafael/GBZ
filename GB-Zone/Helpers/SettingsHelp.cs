@@ -80,22 +80,31 @@ namespace GrinGlobal.Zone.Helpers
         public string SYSTEM_ACTION_DATAVIEW { get { return "systemActionDataview"; } }
         public string SYSTEM_ACTION_DATAVIEW_VALUE { get { return "systemActionDataviewValue"; } }
         public string SYSTEM_COLUMN { get { return "systemColumn"; } }
-        public string SETTING_DATAVIEW_NAME { get { return "dataviewName"; } }
-        public string SETTING_GENERIC_ID { get { return "id"; } }
-        public string SETTING_ACTIONVALUE { get { return "actionValue"; } }
-        public string SETTING_ACTIONVALUE_NAME { get { return "name"; } }
-        public string SETTING_ACTIONVALUE_VALUE { get { return "value"; } }
-        public string SETTING_ACTIONVALUE_TYPE { get { return "type"; } }
-        public string SETTING_ACTIONDATAVIEW { get { return "actionDataview"; } }
+        public string SETTING_NAME_DATAVIEW { get { return "dataviewName"; } }
+        public string SETTING_NAME_GENERIC_ID { get { return "id"; } }
+        public string SETTING_NAME_ACTIONVALUE { get { return "actionValue"; } }
+        public string SETTING_NAME_ACTIONVALUE_NAME { get { return "name"; } }
+        public string SETTING_NAME_ACTIONVALUE_VALUE { get { return "value"; } }
+        public string SETTING_NAME_ACTIONVALUE_TYPE { get { return "type"; } }
+        public string SETTING_NAME_ACTIONDATAVIEW { get { return "actionDataview"; } }
         public string SETTING_NAME_SERVER { get { return "server"; } }
         public string SETTING_NAME_MODULE { get { return "module"; } }
         public string SETTING_NAME_FORM { get { return "form"; } }
         public string SETTING_NAME_FIELD { get { return "field"; } }
         public string SETTING_NAME_ACTIONS { get { return "actions"; } }
+        public string SETTING_NAME_URL { get { return "url"; } }
         public string SETTING_NAME_PARAMETERS { get { return "parameters"; } }
         public string SETTING_NAME_COLUMN { get { return "column"; } }
         public string SETTING_NAME_COLUMNS { get { return "columns"; } }
-        public string SETTING_NAME_EXTENDED_PROPERTIES { get { return "extendedProperties"; } }
+        public string SETTING_NAME_EXTENDEDPROPERTIES { get { return "extendedProperties"; } }
+        public string SETTING_NAME_SUPPRESSEXCEPTIONS{ get { return "suppressExceptions"; } }
+        public string SETTING_NAME_OFFSET { get { return "offset"; } }
+        public string SETTING_NAME_LIMIT { get { return "limit"; } }
+        public string SETTING_NAME_OPTIONS { get { return "options"; } }
+        public string SETTING_NAME_SEPARATOR { get { return "separator"; } }
+        public string SETTING_NAME_ASSIGNMENT { get { return "assignment"; } }
+        
+
         #endregion
         #endregion
         #region private Attribute
@@ -132,21 +141,21 @@ namespace GrinGlobal.Zone.Helpers
         private void GetXElement(string serverId, string moduleId, string formId)
         {
             server = xmlElement.Elements(SETTING_NAME_SERVER)
-                                          .Where(w => (string)w.Attribute(SETTING_GENERIC_ID) == serverId)
+                                          .Where(w => (string)w.Attribute(SETTING_NAME_GENERIC_ID) == serverId)
                                           .SingleOrDefault();
             module = (from el in server.Elements(SETTING_NAME_MODULE)
-                               where (string)el.Attribute(SETTING_GENERIC_ID) == moduleId
+                               where (string)el.Attribute(SETTING_NAME_GENERIC_ID) == moduleId
                                select el).SingleOrDefault();
             form = (from el in module.Elements(SETTING_NAME_FORM)
-                             where (string)el.Attribute(SETTING_GENERIC_ID) == formId
+                             where (string)el.Attribute(SETTING_NAME_GENERIC_ID) == formId
                              select el).SingleOrDefault();
             fields = from fi in form.Descendants(SETTING_NAME_FIELD) select fi;
             XElement action = form.Elements(SETTING_NAME_ACTIONS).SingleOrDefault();
             parameter = action.Elements(SETTING_NAME_PARAMETERS).SingleOrDefault();
             column = action.Elements(SETTING_NAME_COLUMNS).SingleOrDefault();
-            extendedPropertie = action.Elements(SETTING_NAME_EXTENDED_PROPERTIES).SingleOrDefault();
-            dataViewName = parameter.Element(SETTING_DATAVIEW_NAME).Value;
-            dataViewAction = from el in extendedPropertie.Descendants(SETTING_ACTIONDATAVIEW) select el;
+            extendedPropertie = action.Elements(SETTING_NAME_EXTENDEDPROPERTIES).SingleOrDefault();
+            dataViewName = parameter.Element(SETTING_NAME_DATAVIEW).Value;
+            dataViewAction = from el in extendedPropertie.Descendants(SETTING_NAME_ACTIONDATAVIEW) select el;
         }
 
         private void LoadColumnVariable()
@@ -210,15 +219,15 @@ namespace GrinGlobal.Zone.Helpers
         {
             foreach (XElement act in dataViewAction)
             {
-                string id = (act.Attribute(SETTING_GENERIC_ID) != null) ? act.Attribute(SETTING_GENERIC_ID).Value.ToString().Trim() : "";
+                string id = (act.Attribute(SETTING_NAME_GENERIC_ID) != null) ? act.Attribute(SETTING_NAME_GENERIC_ID).Value.ToString().Trim() : "";
                 if (idDataViewAction == id)
                 {
-                    IEnumerable<XElement> values = from el in act.Descendants(SETTING_ACTIONVALUE) select el;
+                    IEnumerable<XElement> values = from el in act.Descendants(SETTING_NAME_ACTIONVALUE) select el;
                     foreach (XElement val in values)
                     {
-                        string key = val.Attribute(SETTING_ACTIONVALUE_NAME).Value.ToString().Trim();
-                        string value = val.Attribute(SETTING_ACTIONVALUE_VALUE).Value.ToString().Trim();
-                        string type = val.Attribute(SETTING_ACTIONVALUE_TYPE).Value.ToString().Trim();
+                        string key = val.Attribute(SETTING_NAME_ACTIONVALUE_NAME).Value.ToString().Trim();
+                        string value = val.Attribute(SETTING_NAME_ACTIONVALUE_VALUE).Value.ToString().Trim();
+                        string type = val.Attribute(SETTING_NAME_ACTIONVALUE_TYPE).Value.ToString().Trim();
                         dr = _GetElement(dr, key, value, type);
                     }
                 }
@@ -267,7 +276,7 @@ namespace GrinGlobal.Zone.Helpers
             XElement node = null;
             foreach (XElement act in dataViewAction)
             {
-                string value = (act.Attribute(SETTING_GENERIC_ID) != null) ? act.Attribute(SETTING_GENERIC_ID).Value.ToString().Trim() : "";
+                string value = (act.Attribute(SETTING_NAME_GENERIC_ID) != null) ? act.Attribute(SETTING_NAME_GENERIC_ID).Value.ToString().Trim() : "";
                 if (idAction == value)
                 {
                     node = act;
@@ -285,7 +294,7 @@ namespace GrinGlobal.Zone.Helpers
             XElement node = null;
             foreach (XElement act in dataViewAction)
             {
-                IEnumerable<XElement> nodes = from var in act.Elements(SETTING_ACTIONVALUE)
+                IEnumerable<XElement> nodes = from var in act.Elements(SETTING_NAME_ACTIONVALUE)
                                               where (string)var.Attribute(SYSTEM_ACTION_DATAVIEW_VALUE) == idSystemDataviewValue
                                               select var;
                 if((nodes.Count() > 0))

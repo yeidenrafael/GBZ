@@ -21,6 +21,7 @@ namespace GrinGlobal.Zone.Controllers
         private GrinGlobalSoapHelp sopH;
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(SearchController));
         private int remainigElementToCheckCount = 0;
+        private GridViewHelp gvH = new GridViewHelp();
 
         public ActionResult Index(string moduleId, string formId)
         {
@@ -48,12 +49,13 @@ namespace GrinGlobal.Zone.Controllers
             ViewData["formId"] = formId;
             ViewData["dataViewName"] = sopH.SetH.DataViewName;
             ViewData["parameters"] = sopH.GetStringParameter(parameter);
+            ViewData["titleComplement"] = parameter.ContainsKey(":orderrequestid") ? " [" + parameter[":orderrequestid"] + "]" : "";
             ViewData[SYSTEM_COLUMNNAME_CHECK_LIST] = sopH.SetH.GetColumnVariable(SYSTEM_COLUMNNAME_CHECK_LIST);
             ViewData[SYSTEM_COLUMNNAME_CHECK_TO_SAVE_DATAVIEW] = sopH.SetH.GetColumnVariable(SYSTEM_COLUMNNAME_CHECK_TO_SAVE_DATAVIEW);
             ViewData[SYSTEM_COLUMNNAME_CHECK_BEFORE] = sopH.SetH.GetColumnVariable(SYSTEM_COLUMNNAME_CHECK_BEFORE);
             DataSet datS = GetDataSetAction(ViewData["parameters"].ToString());
             datS = AddHistoryAction(datS);
-            ViewData["remainigElementToCheckCount"] = remainigElementToCheckCount;
+            ViewData["jsonCheckLastSeccionItems"] = gvH.DataTableToJSONWithJavaScriptSerializer(datS.Tables[sopH.SetH.DataViewName]);
             return View(datS);
         }
 
@@ -65,12 +67,13 @@ namespace GrinGlobal.Zone.Controllers
             ViewData["formId"] = formId;
             ViewData["parameters"] = parameters;
             ViewData["dataViewName"] = sopH.SetH.DataViewName;
+
             ViewData[SYSTEM_COLUMNNAME_CHECK_LIST] = sopH.SetH.GetColumnVariable(SYSTEM_COLUMNNAME_CHECK_LIST);
             ViewData[SYSTEM_COLUMNNAME_CHECK_TO_SAVE_DATAVIEW] = sopH.SetH.GetColumnVariable(SYSTEM_COLUMNNAME_CHECK_TO_SAVE_DATAVIEW);
             ViewData[SYSTEM_COLUMNNAME_CHECK_BEFORE] = sopH.SetH.GetColumnVariable(SYSTEM_COLUMNNAME_CHECK_BEFORE);
             DataSet datS = GetDataSetAction(ViewData["parameters"].ToString());
             datS = AddHistoryAction(datS);
-            ViewData["remainigElementToCheckCount"] = remainigElementToCheckCount;
+            ViewData["jsonCheckLastSeccionItems"] = gvH.DataTableToJSONWithJavaScriptSerializer(datS.Tables[sopH.SetH.DataViewName]);
             return PartialView("_GridViewSearch", datS);
         }
 
@@ -90,17 +93,9 @@ namespace GrinGlobal.Zone.Controllers
             DataTable dt = datS.Tables[sopH.SetH.DataViewName];
             try
             {
-                string columnKey = "";
+                string columnKey = dt.PrimaryKey[0].ColumnName;
                 foreach (DataColumn column in dt.Columns)
                 {
-                    if (column.ExtendedProperties["is_primary_key"].ToString() == "Y")
-                    {
-                        columnKey = column.ColumnName;
-                    }
-                }
-                foreach (DataColumn column in dt.Columns)
-                {
-                    GridViewHelp gvH = new GridViewHelp();
                     if(column.ReadOnly == false)
                     {
                         var newValues = GridViewExtension.GetBatchUpdateValues<string, string>(column.ColumnName); // S is key field type, T is the column type
@@ -124,8 +119,8 @@ namespace GrinGlobal.Zone.Controllers
                     }
                 }
                 XElement nodeAction = sopH.SetH.GetNodeAction(sopH.SetH.SYSTEM_ACTION_DATAVIEW, SYSTEM_DATAVIEWACTIONNAME_ORDER_REQUEST_ITEM_ACTION);
-                string idAction = nodeAction.Attribute(sopH.SetH.SETTING_GENERIC_ID).Value != null ? nodeAction.Attribute(sopH.SetH.SETTING_GENERIC_ID).Value.ToString() : "";
-                string dataViewName = nodeAction.Element(sopH.SetH.SETTING_NAME_PARAMETERS).Element(sopH.SetH.SETTING_DATAVIEW_NAME).Value!= null? nodeAction.Element(sopH.SetH.SETTING_NAME_PARAMETERS).Element(sopH.SetH.SETTING_DATAVIEW_NAME).Value.ToString(): "";
+                string idAction = nodeAction.Attribute(sopH.SetH.SETTING_NAME_GENERIC_ID).Value != null ? nodeAction.Attribute(sopH.SetH.SETTING_NAME_GENERIC_ID).Value.ToString() : "";
+                string dataViewName = nodeAction.Element(sopH.SetH.SETTING_NAME_PARAMETERS).Element(sopH.SetH.SETTING_NAME_DATAVIEW).Value!= null? nodeAction.Element(sopH.SetH.SETTING_NAME_PARAMETERS).Element(sopH.SetH.SETTING_NAME_DATAVIEW).Value.ToString(): "";
                 if (!string.IsNullOrEmpty(dataViewName))
                 {
                     int ii = -1;
@@ -157,7 +152,7 @@ namespace GrinGlobal.Zone.Controllers
             }
             DataSet newDatS = GetDataSetAction(ViewData["parameters"].ToString());
             newDatS = AddHistoryAction(newDatS);
-            ViewData["remainigElementToCheckCount"] = remainigElementToCheckCount;
+            ViewData["jsonCheckLastSeccionItems"] = gvH.DataTableToJSONWithJavaScriptSerializer(newDatS.Tables[sopH.SetH.DataViewName]);
             return PartialView("_GridViewSearch", newDatS);
         }
 
@@ -166,15 +161,15 @@ namespace GrinGlobal.Zone.Controllers
             remainigElementToCheckCount = 0;
             string keyColumn = datS.Tables[sopH.SetH.DataViewName].PrimaryKey[0].ColumnName;
             XElement nodeAction = sopH.SetH.GetNodeAction(sopH.SetH.SYSTEM_ACTION_DATAVIEW, SYSTEM_DATAVIEWACTIONNAME_ORDER_REQUEST_ITEM_ACTION);
-            string idAction = nodeAction.Attribute(sopH.SetH.SETTING_GENERIC_ID).Value != null ? nodeAction.Attribute(sopH.SetH.SETTING_GENERIC_ID).Value.ToString() : "";
-            string dataViewName = nodeAction.Element(sopH.SetH.SETTING_NAME_PARAMETERS).Element(sopH.SetH.SETTING_DATAVIEW_NAME).Value != null ? nodeAction.Element(sopH.SetH.SETTING_NAME_PARAMETERS).Element(sopH.SetH.SETTING_DATAVIEW_NAME).Value.ToString() : "";
+            string idAction = nodeAction.Attribute(sopH.SetH.SETTING_NAME_GENERIC_ID).Value != null ? nodeAction.Attribute(sopH.SetH.SETTING_NAME_GENERIC_ID).Value.ToString() : "";
+            string dataViewName = nodeAction.Element(sopH.SetH.SETTING_NAME_PARAMETERS).Element(sopH.SetH.SETTING_NAME_DATAVIEW).Value != null ? nodeAction.Element(sopH.SetH.SETTING_NAME_PARAMETERS).Element(sopH.SetH.SETTING_NAME_DATAVIEW).Value.ToString() : "";
             XElement dataviewActionvalue = sopH.SetH.GetDataviewValueVariable(SYSTEM_DATAVIEWACTIONVALUE_CHECK_HISTORY_ACTION);
-            string field = dataviewActionvalue.Attribute(sopH.SetH.SETTING_ACTIONVALUE_NAME).Value.ToString(); //action_name_code
-            string value = dataviewActionvalue.Attribute(sopH.SetH.SETTING_ACTIONVALUE_VALUE).Value.ToString();
+            string field = dataviewActionvalue.Attribute(sopH.SetH.SETTING_NAME_ACTIONVALUE_NAME).Value.ToString(); //action_name_code
+            string value = dataviewActionvalue.Attribute(sopH.SetH.SETTING_NAME_ACTIONVALUE_VALUE).Value.ToString();
             var query = from order in datS.Tables[dataViewName].AsEnumerable()
                         where order.Field<string>(field) == value
                         select order;
-
+            int max= 1;
             if (query.Count() > 0)
             {
                 for (int i = 0; i < datS.Tables[sopH.SetH.DataViewName].Rows.Count; i++)
@@ -185,6 +180,7 @@ namespace GrinGlobal.Zone.Controllers
                     {
                         datS.Tables[sopH.SetH.DataViewName].Rows[i][sopH.SetH.GetColumnVariable(SYSTEM_COLUMNNAME_CHECK_BEFORE)] = true;
                         remainigElementToCheckCount++;
+                        max++;
                     }
                 }
             }
@@ -196,12 +192,10 @@ namespace GrinGlobal.Zone.Controllers
         {
             DataSet datS = sopH.GetData(parameter);
             XElement nodeAction = sopH.SetH.GetNodeAction(sopH.SetH.SYSTEM_ACTION_DATAVIEW, SYSTEM_DATAVIEWACTIONNAME_ORDER_REQUEST_ITEM_ACTION);
-            string idAction = nodeAction.Attribute(sopH.SetH.SETTING_GENERIC_ID).Value != null ? nodeAction.Attribute(sopH.SetH.SETTING_GENERIC_ID).Value.ToString() : "";
+            string idAction = nodeAction.Attribute(sopH.SetH.SETTING_NAME_GENERIC_ID).Value != null ? nodeAction.Attribute(sopH.SetH.SETTING_NAME_GENERIC_ID).Value.ToString() : "";
             datS.Tables.Add(sopH.GetDataActionOne(parameter, new Dictionary<string, string>(), idAction));
             datS = AddHistoryAction(datS);
             return datS;
         }
-
-
     }
 }
