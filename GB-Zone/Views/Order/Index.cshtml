@@ -19,6 +19,7 @@
         const COLOR_SUCCESS =  "forestgreen";
         const COLOR_ERROR =  "red";
         const COLOR_NEUTRO = "white"
+        const SPAN_COMPLETE = "spanComplete";
 
         var itemsWithCheck = new Array();
         var itemsWithOutCheck = new Array();
@@ -41,7 +42,6 @@
         }
 
         function saveAll() {
-            console.log("nueva carga");
             setTimeout(function () {
                 InitArray();
             }, 1000);
@@ -68,6 +68,7 @@
                     itemsWithCheck.push(itemsWithOutCheck[indice]);
                     itemsWithOutCheck.splice(indice,1);
                     missingItems(itemsWithCheck.length);
+                    $("#audioSuccess")[0].play();
                     Color();
                 }
             }
@@ -110,7 +111,7 @@
             }, 1000);
         }
 
-        function InitArray(){
+        function InitArray() {
             itemsWithOutCheck = new Array();
             itemPreviewCheck = new Array();
             itemsWithCheck = new Array();
@@ -131,7 +132,6 @@
                 }
                 rowNumGetToSotpoModal++;
             });
-            console.log(itemPreviewCheck.length + "items with check las session")
             missingItems(0);
             ModalClose();
             $("#labelChceck").text("Scan QR: [" + gvSearch.cpCaptionSearch + "]");
@@ -163,8 +163,12 @@
             if (ALL_ITEMS.length != 0) {
                 console.log(indexCellColor+" + "+ (setB.size - setC.size))
                 let total = (indexCellColor + (setB.size - setC.size));
-                if(total > ALL_ITEMS.length){
+                if(total >= ALL_ITEMS.length){
                     total = ALL_ITEMS.length;
+                    $("#" + SPAN_COMPLETE).html("<b> Order completed </b>");
+                }
+                else {
+                    $("#" + SPAN_COMPLETE).html("");
                 }
                 $("#"+SPAN_FIND_ITEM).html((total) + "/" + (ALL_ITEMS.length));
             }
