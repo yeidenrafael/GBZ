@@ -1,5 +1,5 @@
 @using System.Data
-
+@using GrinGlobal.Zone.Controllers
 
 @{
     var grid = Html.DevExpress().GridView(settings =>
@@ -16,6 +16,13 @@
         settings.CommandColumn.Visible = true;
         settings.ClientSideEvents.BatchEditRowInserting = "AddNewItem";
         settings.ClientSideEvents.EndCallback = "EndSave";
+        settings.CustomJSProperties = (s, e) =>
+        {
+            if (ViewData[BoxController.EditErrorKey] != null)
+            {
+                e.Properties["cpMessageError"] = ViewData[BoxController.EditErrorKey].ToString();
+            }
+        };
         foreach (System.Data.DataColumn dc in Model.Columns)
         {
             if (dc.ExtendedProperties["is_primary_key"].ToString() == "Y")
@@ -44,13 +51,14 @@
             {
                 ASPxEditBase editor = e.Editor as ASPxEditBase;
                 editor.SetClientSideEventHandler("KeyDown", "NewItem");
+
             }
         };
     });
     if (ViewData["EditError"] != null)
     {
 
-        grid.SetEditErrorText((string)ViewData["EditError"]);
+        //grid.SetEditErrorText((string)ViewData["EditError"]);
     }
 }
 @grid.Bind(Model).GetHtml()

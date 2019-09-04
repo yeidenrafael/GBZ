@@ -33,7 +33,13 @@
 
         function EndSave(s, e) {
             var rows = gvSearch.GetVisibleRowsOnPage();
-            SetTotal(rows-1);
+            SetTotal(rows);
+            if (s.cpMessageError) {
+                $("#pModalError").text(s.cpMessageError);
+                $("#resutlModal").modal({
+                    show: true
+                });
+            }
         }
 
         function AddNewItem(s, e) {
@@ -66,3 +72,23 @@
 {
     Html.RenderPartial("_HeaderGridView");
 }
+
+  <!-- Modal -->
+<div class="modal fade" id="resutlModal" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Gb Zone information</h4>
+            </div>
+            <div class="modal-body">
+                <p id="pModalError"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>

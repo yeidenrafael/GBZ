@@ -14,6 +14,7 @@ namespace GrinGlobal.Zone.Controllers
     {
         private string SETTING_COLUMN_DISABLE_READ_ONLY = "inventory_number"; // get by setting 
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(SearchController));
+        public const string EditErrorKey = "EditError";
         // GET: Search
         public ActionResult Index(string moduleId, string formId)
         {
@@ -103,12 +104,29 @@ namespace GrinGlobal.Zone.Controllers
             {
                 Guid d = Guid.NewGuid();
                 log.Fatal(Guid.NewGuid(), e);
-
-                ViewData["EditError"] = String.Format(e.Message);
+                string[] spearator = { ":line", "--->" };
+                string[] lineas = e.Message.Split(spearator, StringSplitOptions.RemoveEmptyEntries);
+                string error = "";
+                if (lineas.Count() > 1)
+                {
+                    error = lineas[1];
+                }
+                if(string.IsNullOrEmpty(error))
+                {
+                    error = String.Format(e.Message); 
+                }
+                ViewData["EditError"] = error;
             }
             DataTable ds = search.GetData(serverId, moduleId, formId, fieldId, "-" + value);
             ds.Columns[SETTING_COLUMN_DISABLE_READ_ONLY].ReadOnly = false;
-            return RedirectToAction("Index2", "Search", new { serverId, moduleId, formId = "gbz_get_inventory", fieldId = "storageLocation", value = value }); // This is going back to another page after the info is updated
+            if (string.IsNullOrEmpty(ViewData["EditError"].ToString()))
+            {
+                return RedirectToAction("Index2", "Search", new { serverId, moduleId, formId = "gbz_get_inventory", fieldId = "storageLocation", value = value }); // This is going back to another page after the info is updated
+            }else
+            {
+                return PartialView("_GridViewSearch", ds);
+            }
+            
         }
 
         private DataTable InsertRows(List<string> keysToInsert, DataTable ds )
