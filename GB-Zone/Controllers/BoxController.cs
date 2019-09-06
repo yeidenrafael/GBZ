@@ -7,6 +7,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Data;
+using GrinGlobal.Zone.Helpers;
 
 namespace GrinGlobal.Zone.Controllers
 {
@@ -15,6 +16,7 @@ namespace GrinGlobal.Zone.Controllers
         private string SETTING_COLUMN_DISABLE_READ_ONLY = "inventory_number"; // get by setting 
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(SearchController));
         public const string EditErrorKey = "EditError";
+        private GridViewHelp gvH = new GridViewHelp();
         // GET: Search
         public ActionResult Index(string moduleId, string formId)
         {
@@ -67,13 +69,13 @@ namespace GrinGlobal.Zone.Controllers
             try
             {
                 string columnKey = "";
-                dt = search.GetData(serverId, moduleId, formId, fieldId, "-"+value);
+                dt = search.GetData(serverId, moduleId, formId, fieldId, "-" + value);
                 dt.Columns[SETTING_COLUMN_DISABLE_READ_ONLY].ReadOnly = false;// change for automatic in getData
                 foreach (DataColumn column in dt.Columns)
                 {
                     if (column.ExtendedProperties["is_primary_key"].ToString() == "Y")
                     {
-                        columnKey = column.ColumnName; 
+                        columnKey = column.ColumnName;
                     }
                 }
                 foreach (DataColumn column in dt.Columns)
@@ -83,19 +85,18 @@ namespace GrinGlobal.Zone.Controllers
                     {
                         foreach (var item in newValues)
                         {
-                            dt = AddRow(column.ColumnName, columnKey, item.Key, item.Value, dt);
+                            dt = gvH.AddRow(column.ColumnName, columnKey, item.Key, item.Value, dt);
                         }
                     }
                     List<string> insertValues = GridViewExtension.GetBatchInsertValues<string>(column.ColumnName);
-                    if (insertValues != null && insertValues.Count>0)
+                    if (insertValues != null && insertValues.Count > 0)
                     {
                         int index = -1;
                         foreach (string insertV in insertValues.Where(s => !string.IsNullOrEmpty(s)).ToList())
                         {
-                            dt = AddRow(column.ColumnName,columnKey, index.ToString(), insertV, dt);
+                            dt = gvH.AddRow(column.ColumnName, columnKey, index.ToString(), insertV, dt);
                             index--;
                         }
-                        
                     }
                 }
                 search.BoxBatchSave(serverId, moduleId, formId, fieldId, dt, value);
@@ -111,57 +112,22 @@ namespace GrinGlobal.Zone.Controllers
                 {
                     error = lineas[1];
                 }
-                if(string.IsNullOrEmpty(error))
+                if (string.IsNullOrEmpty(error))
                 {
-                    error = String.Format(e.Message); 
+                    error = String.Format(e.Message);
                 }
-                ViewData["EditError"] = error;
+                ViewData[EditErrorKey] = error;
             }
-            DataTable ds = search.GetData(serverId, moduleId, formId, fieldId, "-" + value);
-            ds.Columns[SETTING_COLUMN_DISABLE_READ_ONLY].ReadOnly = false;
-            if (string.IsNullOrEmpty(ViewData["EditError"].ToString()))
+            if (ViewData[EditErrorKey] == null)
             {
                 return RedirectToAction("Index2", "Search", new { serverId, moduleId, formId = "gbz_get_inventory", fieldId = "storageLocation", value = value }); // This is going back to another page after the info is updated
-            }else
+            }
+            else
             {
+                DataTable ds = search.GetData(serverId, moduleId, formId, fieldId, "-" + value);
+                ds.Columns[SETTING_COLUMN_DISABLE_READ_ONLY].ReadOnly = false;
                 return PartialView("_GridViewSearch", ds);
             }
-            
-        }
-
-        private DataTable InsertRows(List<string> keysToInsert, DataTable ds )
-        {
-            foreach (string key in keysToInsert)
-            {
-                ds.Rows.Add(key);
-            }
-            return ds;
-        }
-
-        private DataTable UpdateColumn(string columnName, Dictionary<string, string> newValues, DataTable ds)
-        {
-            foreach (string item in newValues.Keys)
-            {
-                var row = ds.Rows.Find(item);
-                row[columnName] = newValues[item];
-            }
-            return ds;
-        }
-        private DataTable AddRow(string columnName,string columnKey , string index, string newValue, DataTable dt)
-        {
-            DataRow dr = dt.Select(columnKey + "= " + index).DefaultIfEmpty(null).FirstOrDefault();
-            if(dr != null)//Update value existe
-            {
-                dr[columnName] = newValue;
-            }
-            else// Add new row
-            {
-                dr = dt.NewRow();
-                dr[columnKey] = index;
-                dr[columnName] = newValue;
-                dt.Rows.Add(dr);
-            }
-            return dt;
         }
     }
 }

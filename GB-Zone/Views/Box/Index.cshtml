@@ -12,7 +12,7 @@
         var COLUMN_BOX = "storage_location_part3";
         var COLUMN_PAQ = "storage_location_part4";
 
-        function NewItem(s, e) {
+        function KeyDown(s, e) {
             if (e.htmlEvent.keyCode == 13) {
                 ASPxClientUtils.PreventEventAndBubble(e.htmlEvent);
                 gvSearch.AddNewRow();
@@ -31,7 +31,7 @@
             return values;
         }
 
-        function EndSave(s, e) {
+        function EndCallback(s, e) {
             var rows = gvSearch.GetVisibleRowsOnPage();
             SetTotal(rows);
             if (s.cpMessageError) {
@@ -42,7 +42,7 @@
             }
         }
 
-        function AddNewItem(s, e) {
+        function BatchEditRowInserting(s, e) {
             var rows = gvSearch.GetVisibleRowsOnPage();
             SetTotal(rows);
             var rowInsertNew = gvSearch.batchEditHelper.GetEditState().insertedRowValues;

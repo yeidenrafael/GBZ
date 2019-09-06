@@ -399,6 +399,10 @@ namespace GrinGlobal.Zone.Classes
             DataSet oldds = ggZoneModel.GetData(urlService, suppressExceptions, dataviewName, delimitedParams, offset, limit, options);// search by DataSet de all bolsitas
             DataTable model = oldds.Tables[dataviewName];
             int iColum_PAQ = 1;
+            if(insert.Rows.Count != model.Rows.Count)
+            {
+                throw new System.ArgumentOutOfRangeException("The values ​​you want to insert do not exist in the system", COLUMN_INVENTORY_NUMBER);
+            }
             foreach (DataRow inventoryItem in insert.Rows)
             {
                 if (inventoryItem[COLUMN_INVENTORY_NUMBER] != null)
@@ -407,9 +411,10 @@ namespace GrinGlobal.Zone.Classes
                     dr[0][COLUMN_CAR] = boxPart[0];
                     dr[0][COLUMN_SEC] = boxPart[1];
                     dr[0][COLUMN_BOX] = boxPart[2];
-                    dr[0][COLUMN_PAQ] = string.IsNullOrEmpty(inventoryItem[COLUMN_PAQ].ToString())?iColum_PAQ.ToString(): inventoryItem[COLUMN_PAQ];
+                    dr[0][COLUMN_PAQ] = string.IsNullOrEmpty(inventoryItem[COLUMN_PAQ].ToString())? String.Format("{0:D3}", iColum_PAQ) : inventoryItem[COLUMN_PAQ];
+                    iColum_PAQ++;
                 }
-                iColum_PAQ++;
+                
             }
             ggZoneModel.SaveData(urlService, suppressExceptions, oldds, options);
         }
