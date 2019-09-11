@@ -55,7 +55,7 @@ namespace GrinGlobal.Zone.Controllers
             ViewData[SYSTEM_COLUMNNAME_CHECK_BEFORE] = sopH.SetH.GetColumnVariable(SYSTEM_COLUMNNAME_CHECK_BEFORE);
             DataSet datS = GetDataSetAction(ViewData["parameters"].ToString());
             datS = AddHistoryAction(datS);
-            ViewData["jsonCheckLastSeccionItems"] = gvH.DataTableToJSONWithJavaScriptSerializer(datS.Tables[sopH.SetH.DataViewName]);
+            ViewData["jsonCheckLastSeccionItems"] = gvH.DataTableToJSONWithJavaScriptSerializer(datS.Tables[sopH.SetH.DataViewName], sopH.SetH.GlobalMaxJsonLength);
             return View(datS);
         }
 
@@ -73,7 +73,7 @@ namespace GrinGlobal.Zone.Controllers
             ViewData[SYSTEM_COLUMNNAME_CHECK_BEFORE] = sopH.SetH.GetColumnVariable(SYSTEM_COLUMNNAME_CHECK_BEFORE);
             DataSet datS = GetDataSetAction(ViewData["parameters"].ToString());
             datS = AddHistoryAction(datS);
-            ViewData["jsonCheckLastSeccionItems"] = gvH.DataTableToJSONWithJavaScriptSerializer(datS.Tables[sopH.SetH.DataViewName]);
+            ViewData["jsonCheckLastSeccionItems"] = gvH.DataTableToJSONWithJavaScriptSerializer(datS.Tables[sopH.SetH.DataViewName], sopH.SetH.GlobalMaxJsonLength);
             return PartialView("_GridViewSearch", datS);
         }
 
@@ -152,7 +152,7 @@ namespace GrinGlobal.Zone.Controllers
             }
             DataSet newDatS = GetDataSetAction(ViewData["parameters"].ToString());
             newDatS = AddHistoryAction(newDatS);
-            ViewData["jsonCheckLastSeccionItems"] = gvH.DataTableToJSONWithJavaScriptSerializer(newDatS.Tables[sopH.SetH.DataViewName]);
+            ViewData["jsonCheckLastSeccionItems"] = gvH.DataTableToJSONWithJavaScriptSerializer(newDatS.Tables[sopH.SetH.DataViewName], sopH.SetH.GlobalMaxJsonLength);
             return PartialView("_GridViewSearch", newDatS);
         }
 

@@ -20,34 +20,44 @@
         const COLOR_ERROR =  "red";
         const COLOR_NEUTRO = "white"
         const SPAN_COMPLETE = "spanComplete";
-
         var itemsWithCheck = new Array();
         var itemsWithOutCheck = new Array();
         var ALL_ITEMS = new Array();
         var rowNumAllToStopModal = 0;
         var rowNumGetToSotpoModal = 0;
         var itemPreviewCheck = new Array();
+
         $( document ).ready(function() {
-            Init();
+            InitJQuery();
         });
 
-        function Init(){
+        function InitJQuery() {
             hiddenColumn();
             missingItems(0);
         }
 
         function hiddenColumn(){
-            let columnes = '.id_'+SYSTEM_COLUMNNAME_CHECK_TO_SAVE_ACTION;
-            $(columnes).css('display','none');
+            let columnes = '.id_' + SYSTEM_COLUMNNAME_CHECK_TO_SAVE_ACTION;
+            $(columnes).css('display', 'none');
+            setTimeout(function () {
+                $(columnes).css('display', 'none');
+            }, 2000);
+            setTimeout(function () {
+                $(columnes).css('display', 'none');
+            }, 6000);
+            setTimeout(function () {
+                $(columnes).css('display', 'none');
+            }, 10000);
         }
 
-        function saveAll() {
+        function BatchEditChangesSaving() {
             setTimeout(function () {
-                InitArray();
+                Init();
             }, 1000);
             hiddenColumn();//Init();
             $("#"+LI_TRAFIC_LIGHT).css({'color':COLOR_NEUTRO});
-            $("#"+SPAN_LAST_CHECK_ITEM).html("");
+            $("#" + SPAN_LAST_CHECK_ITEM).html("");
+            $("#" + INPUT_TEXT_QR).focus();
         }
 
         function KeyPressTexBCheck(s, e) {
@@ -105,13 +115,13 @@
             hiddenColumn();
         }
 
-        function ColorCallback(){
+        function ColumnSorting() {
             setTimeout(function() {
                 Color();
             }, 1000);
         }
 
-        function InitArray() {
+        function Init() {
             itemsWithOutCheck = new Array();
             itemPreviewCheck = new Array();
             itemsWithCheck = new Array();
@@ -136,6 +146,7 @@
             ModalClose();
             $("#labelChceck").text("Scan QR: [" + gvSearch.cpCaptionSearch + "]");
             hiddenColumn();
+            $("#" + INPUT_TEXT_QR).focus();
         }
 
         function ModalLoad(){
@@ -161,7 +172,6 @@
             let setB = new Set(itemPreviewCheck);
             let setC = new Set([...setA].filter(x => setB.has(x)));
             if (ALL_ITEMS.length != 0) {
-                console.log(indexCellColor+" + "+ (setB.size - setC.size))
                 let total = (indexCellColor + (setB.size - setC.size));
                 if(total >= ALL_ITEMS.length){
                     total = ALL_ITEMS.length;

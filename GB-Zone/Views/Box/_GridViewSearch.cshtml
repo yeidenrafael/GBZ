@@ -1,11 +1,10 @@
 @using System.Data
-
+@using GrinGlobal.Zone.Controllers
 
 @{
     var grid = Html.DevExpress().GridView(settings =>
     {
         settings.Name = "gvSearch";
-        settings.KeyFieldName = "InventoryId";
         settings.CallbackRouteValues = new { Controller = "Box", Action = "GridView", serverId = ViewData["server"].ToString(), moduleId = ViewData["moduleId"].ToString(), formId = ViewData["formId"].ToString(), value = ViewData["value"].ToString(), viewName = "_GridViewSearch" };
         settings.SettingsEditing.BatchUpdateRouteValues = new { Controller = "Box", Action = "BatchUpdateAction", serverId = ViewData["server"].ToString(), moduleId = ViewData["moduleId"].ToString(), formId = ViewData["formId"].ToString(), fieldId = ViewData["viewName"].ToString(), value = ViewData["value"].ToString(), viewName = "_GridViewSearch" };
         settings.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords;
@@ -14,8 +13,15 @@
         settings.SettingsEditing.BatchEditSettings.HighlightDeletedRows = true;
         settings.SettingsEditing.NewItemRowPosition = GridViewNewItemRowPosition.Bottom;
         settings.CommandColumn.Visible = true;
-        settings.ClientSideEvents.BatchEditRowInserting = "AddNewItem";
-        settings.ClientSideEvents.EndCallback = "EndSave";
+        settings.ClientSideEvents.BatchEditRowInserting = "BatchEditRowInserting";
+        settings.ClientSideEvents.EndCallback = "EndCallback";
+        settings.CustomJSProperties = (s, e) =>
+        {
+            if (ViewData[BoxController.EditErrorKey] != null)
+            {
+                e.Properties["cpMessageError"] = ViewData[BoxController.EditErrorKey].ToString();
+            }
+        };
         foreach (System.Data.DataColumn dc in Model.Columns)
         {
             if (dc.ExtendedProperties["is_primary_key"].ToString() == "Y")
@@ -43,14 +49,14 @@
             if (e.Column.Index == (e.Column.Collection.Count - 1))
             {
                 ASPxEditBase editor = e.Editor as ASPxEditBase;
-                editor.SetClientSideEventHandler("KeyDown", "NewItem");
+                editor.SetClientSideEventHandler("KeyDown", "KeyDown");
+
             }
         };
     });
     if (ViewData["EditError"] != null)
     {
-
-        grid.SetEditErrorText((string)ViewData["EditError"]);
+       grid.SetEditErrorText((string)ViewData["EditError"]);
     }
 }
 @grid.Bind(Model).GetHtml()

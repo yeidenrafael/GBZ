@@ -76,6 +76,7 @@ namespace GrinGlobal.Zone.Helpers
         /// Get IEnumerable<XElement> from Dataview Action defined in the settings
         /// </returns>
         public IEnumerable<XElement> DataViewAction { get { return dataViewAction; } }
+        public DataTable DataTableAllServer { get { return dataTableAllServer; } }
         #region static 
         public string SYSTEM_ACTION_DATAVIEW { get { return "systemActionDataview"; } }
         public string SYSTEM_ACTION_DATAVIEW_VALUE { get { return "systemActionDataviewValue"; } }
@@ -103,15 +104,24 @@ namespace GrinGlobal.Zone.Helpers
         public string SETTING_NAME_OPTIONS { get { return "options"; } }
         public string SETTING_NAME_SEPARATOR { get { return "separator"; } }
         public string SETTING_NAME_ASSIGNMENT { get { return "assignment"; } }
-        
+        public string SETTING_NAME_GLOBAL { get { return "global"; } }
+        public string SETTING_NAME_CATALOGUES { get { return "catalogues"; } }
+        public string SETTING_NAME_GROUPNAME { get { return "groupName"; } }
+        public string SETTING_NAME_JAVASCRIPT { get { return "javascript"; } }
+        public string SETTING_NAME_MAXJSONLENGTH { get { return "maxJsonLength"; } }
+        public string GRINGLOBAL_PROPERTIES_NAME_ISVISIBLE { get { return "is_visible"; } }
+
+
+
+        public XElement GlobalCatalogue { get { return globalCatalogue; } }
+        public XElement GlobalParameter { get { return globalParameter; } }
+        public int GlobalMaxJsonLength  { get { return globalMaxJsonLength; } }
 
         #endregion
         #endregion
         #region private Attribute
         private string fileXnml { get { return System.IO.Path.Combine(HttpContext.Current.Server.MapPath("~"), "Setting.xml"); } }
         private XElement xmlElement { get { return XElement.Load(fileXnml); } }
-        
-        
         private IEnumerable<XElement> fields;
         private XElement server;
         private XElement module;
@@ -122,6 +132,10 @@ namespace GrinGlobal.Zone.Helpers
         private IEnumerable<XElement> dataViewAction;
         private string dataViewName;
         private Dictionary<string, string> columnVariables;
+        private XElement globalCatalogue;
+        private XElement globalParameter;
+        private int globalMaxJsonLength;
+        private DataTable dataTableAllServer;
         #endregion
         #region Constructor
         /// <summary>
@@ -132,8 +146,14 @@ namespace GrinGlobal.Zone.Helpers
         /// <param name="formId">String that identifies the form for the aplication</param>
         public SettingsHelp(string serverId, string moduleId, string formId)
         {
+            LoadServerCombo();
             GetXElement(serverId, moduleId, formId);
             LoadColumnVariable();
+        }
+
+        public SettingsHelp()
+        {
+            LoadServerCombo();
         }
         #endregion
         #region private Methods 
@@ -143,6 +163,8 @@ namespace GrinGlobal.Zone.Helpers
             server = xmlElement.Elements(SETTING_NAME_SERVER)
                                           .Where(w => (string)w.Attribute(SETTING_NAME_GENERIC_ID) == serverId)
                                           .SingleOrDefault();
+            XElement global = server.Elements(SETTING_NAME_GLOBAL).SingleOrDefault();
+            XElement javaS = global.Elements(SETTING_NAME_JAVASCRIPT).SingleOrDefault();
             module = (from el in server.Elements(SETTING_NAME_MODULE)
                                where (string)el.Attribute(SETTING_NAME_GENERIC_ID) == moduleId
                                select el).SingleOrDefault();
@@ -156,6 +178,10 @@ namespace GrinGlobal.Zone.Helpers
             extendedPropertie = action.Elements(SETTING_NAME_EXTENDEDPROPERTIES).SingleOrDefault();
             dataViewName = parameter.Element(SETTING_NAME_DATAVIEW).Value;
             dataViewAction = from el in extendedPropertie.Descendants(SETTING_NAME_ACTIONDATAVIEW) select el;
+            globalCatalogue = global.Elements(SETTING_NAME_CATALOGUES).FirstOrDefault();
+            globalParameter = global.Elements(SETTING_NAME_PARAMETERS).FirstOrDefault();
+            string maxjson = javaS.Elements(SETTING_NAME_MAXJSONLENGTH).FirstOrDefault().Value.ToString();
+            globalMaxJsonLength = string.IsNullOrEmpty(maxjson)?int.MaxValue:int.Parse(maxjson);
         }
 
         private void LoadColumnVariable()
@@ -181,6 +207,21 @@ namespace GrinGlobal.Zone.Helpers
             return dr;
         }
         #endregion
+
+        private void LoadServerCombo()
+        {
+            dataTableAllServer = new DataTable();
+            dataTableAllServer.Columns.Add("id", typeof(int));
+            dataTableAllServer.Columns.Add("name", typeof(string));
+            List<XElement> servers = xmlElement.Elements(SETTING_NAME_SERVER).ToList();
+            foreach (XElement serv in servers)
+            {
+                DataRow dat = dataTableAllServer.NewRow();
+                dat["id"] = Int32.Parse(serv.Attribute("id").Value);
+                dat["name"] = serv.Attribute("name").Value;
+                dataTableAllServer.Rows.Add(dat);
+            }
+        }
         #endregion
         #region public methods
         /// <summary>
