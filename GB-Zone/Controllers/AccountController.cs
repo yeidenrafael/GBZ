@@ -29,7 +29,7 @@ namespace GrinGlobal.Zone.Controllers
         public ActionResult Login()
         {
             SettingsHelp setH = new SettingsHelp();
-            return View(setH.DataTableAllServer);
+            return View();
         }
 
         /// <summary>

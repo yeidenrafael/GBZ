@@ -55,7 +55,6 @@ namespace GrinGlobal.Zone.Controllers
             ViewData[SYSTEM_COLUMNNAME_CHECK_BEFORE] = sopH.SetH.GetColumnVariable(SYSTEM_COLUMNNAME_CHECK_BEFORE);
             DataSet datS = GetDataSetAction(ViewData["parameters"].ToString());
             datS = AddHistoryAction(datS);
-            datS.Tables.Add(sopH.GetCategories("COOPERATOR_CATEGORY").Copy());
             ViewData["jsonCheckLastSeccionItems"] = gvH.DataTableToJSONWithJavaScriptSerializer(datS.Tables[sopH.SetH.DataViewName], sopH.SetH.GlobalMaxJsonLength);
             return View(datS);
         }
