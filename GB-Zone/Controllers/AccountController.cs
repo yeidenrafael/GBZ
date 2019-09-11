@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using GrinGlobal.Zone.Models;
 using System.Data;
 using System.Web.Security;
+using GrinGlobal.Zone.Helpers;
 
 namespace GrinGlobal.Zone.Controllers
 {
@@ -26,8 +27,9 @@ namespace GrinGlobal.Zone.Controllers
         [AllowAnonymous]
         [HttpGet]
         public ActionResult Login()
-        {   
-            return View();
+        {
+            SettingsHelp setH = new SettingsHelp();
+            return View(setH.DataTableAllServer);
         }
 
         /// <summary>

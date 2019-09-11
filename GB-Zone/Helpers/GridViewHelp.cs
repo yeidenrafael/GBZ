@@ -45,9 +45,10 @@ namespace GrinGlobal.Zone.Helpers
             }
             return dt;
         }
-        public string DataTableToJSONWithJavaScriptSerializer(DataTable table)
+        public string DataTableToJSONWithJavaScriptSerializer(DataTable table, int maxJsonLength)
         {
             JavaScriptSerializer jsSerializer = new JavaScriptSerializer();
+            jsSerializer.MaxJsonLength = maxJsonLength;
             List<Dictionary<string, object>> parentRow = new List<Dictionary<string, object>>();
             Dictionary<string, object> childRow;
             foreach (DataRow row in table.Rows)

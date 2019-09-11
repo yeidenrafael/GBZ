@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Web;
 using System.Xml.Linq;
+using System.Collections;
 
 namespace GrinGlobal.Zone.Helpers
 {
@@ -45,7 +46,7 @@ namespace GrinGlobal.Zone.Helpers
         /// <returns>
         /// Dictionary with key = name of parameter in GrinGlobal, value = value in form with the same name that parameter in GrinGlobal
         /// </returns>
-        public Dictionary<string, string> GetParameters(FormCollection dataform)
+        public Dictionary<string, string> GetParameters( FormCollection dataform )
         {
             Dictionary<string, string> dic = new Dictionary<string, string>();
             string urlService = setH.Server.Attribute(setH.SETTING_NAME_URL).Value.ToString();
@@ -57,9 +58,25 @@ namespace GrinGlobal.Zone.Helpers
                 string field = dtRow[PARAMETER_COLUMN_NAME].ToString();
                 if (!string.IsNullOrEmpty(field))
                 {
-                    string value = dataform[field] == null ? "" : dataform[field];
+                    string value = "";
+                    if (dataform != null)
+                    {
+                        value = dataform[field] == null ? "" : dataform[field];
+                    }
                     dic.Add(field,value );
                 }
+            }
+            return dic;
+        }
+        public Dictionary<string, string> GetParameters(string dataviewName)
+        {
+            Dictionary<string, string> dic = new Dictionary<string, string>();
+            string urlService = setH.Server.Attribute(setH.SETTING_NAME_URL).Value.ToString();
+            bool suppressExceptions = bool.Parse(setH.Parameter.Element(setH.SETTING_NAME_SUPPRESSEXCEPTIONS).Value);
+            DataTable dtTable = InitParametersFromGrinGlobal(urlService, dataviewName, suppressExceptions).Tables[PARAMETER_DATA_TABLE_NAME];
+            foreach (DataRow dtRow in dtTable.Rows)
+            {
+                dic.Add(dtRow[0].ToString(), "");
             }
             return dic;
         }
@@ -179,6 +196,29 @@ namespace GrinGlobal.Zone.Helpers
             string parameters = MergeParameterAction(originalParameter, newParameter, urlService, dataviewName, suppressExceptions);
             return _SaveData(parameters, urlService, dataviewName, suppressExceptions, offset, limit, options, newDataTable);
         }
+
+        public DataTable GetCategories(string groupName)
+        {
+            string dataviewName = setH.GlobalCatalogue.Element(setH.SETTING_NAME_DATAVIEW).Value;
+            string urlService = setH.Server.Attribute(setH.SETTING_NAME_URL).Value.ToString();//extract settings from Setting.xml
+            bool suppressExceptions = bool.Parse(setH.Parameter.Element(setH.SETTING_NAME_SUPPRESSEXCEPTIONS).Value);
+            int offset = int.Parse(setH.Parameter.Element(setH.SETTING_NAME_OFFSET).Value);
+            int limit = int.Parse(setH.Parameter.Element(setH.SETTING_NAME_LIMIT).Value);
+            string options = setH.Parameter.Element(setH.SETTING_NAME_OPTIONS).Value;
+            Dictionary<string, string> parm = GetParameters(dataviewName);
+            XElement parametersX = setH.GlobalCatalogue.Element(setH.SETTING_NAME_PARAMETERS);
+            string parameterGroup = parametersX.Element(setH.SETTING_NAME_GROUPNAME).Value;
+            if (parm.ContainsKey(parameterGroup))
+            {
+                parm[parameterGroup] = groupName;
+            }
+            string delimitedParams = GetStringParameter(parm);
+            DataSet ds = _GetData(delimitedParams, urlService, dataviewName, suppressExceptions, offset, limit, options);
+            DataTable dataTableName = ds.Tables[dataviewName];
+            dataTableName.TableName = groupName;
+            return dataTableName;
+        }
+
         #endregion
         #region private methods
         private DataSet _GetDataAction(string parameters, DataSet ds)

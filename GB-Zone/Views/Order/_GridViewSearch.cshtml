@@ -55,11 +55,26 @@
                     {
                         col.Visible = false;
                     }
-                    if(dc.DataType == typeof(Boolean))
-                    {
+
+                    if (dc.ExtendedProperties["gui_hint"].ToString() == "DATE_CONTROL")
+                        col.ColumnType = MVCxGridViewColumnType.DateEdit;
+                    else if (dc.ExtendedProperties["gui_hint"].ToString() == "INTEGER_CONTROL")
+                        col.ColumnType = MVCxGridViewColumnType.SpinEdit;
+                    else if (dc.ExtendedProperties["gui_hint"].ToString() == "TEXT_CONTROL")
+                        col.ColumnType = MVCxGridViewColumnType.TextBox;
+                    else if (dc.ExtendedProperties["gui_hint"].ToString() == "TOGGLE_CONTROL")
                         col.ColumnType = MVCxGridViewColumnType.CheckBox;
+                    else if (dc.ExtendedProperties["gui_hint"].ToString() == "SMALL_SINGLE_SELECT_CONTROL")
+                    {
+                        col.EditorProperties().ComboBox(p =>
+                        {
+                            p.DataSource = Model.Tables[dc.ExtendedProperties["group_name"].ToString()];
+                            p.TextField = "title";
+                            p.ValueField = "value";
+                            p.ValueType = typeof(string);
+                        });
                     }
-                    if(dc.ColumnName == ViewData["systemCheckToSaveAction"].ToString())
+                    if (dc.ColumnName == ViewData["systemCheckToSaveAction"].ToString())
                     {
                         col.CellStyle.CssClass = "id_" + ViewData["systemCheckToSaveAction"].ToString();
                         col.HeaderStyle.CssClass = "id_" + ViewData["systemCheckToSaveAction"].ToString();

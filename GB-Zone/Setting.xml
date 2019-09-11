@@ -1,6 +1,24 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Settings>
-  <server id="01" name="Wheat" url="http://itu-dev-srv-01:80/gringlobal/gui.asmx">
+  <server id="01" name="Wheat" url="http://itu-dev-srv-01:80/gringlobal/gui.asmx" >
+    <global>
+      <parameters>
+        <offset>0</offset><!--Global offset parameter-->
+        <limit>0</limit><!--Global limit parameter-->
+        <options>1</options><!--Global option parameter-->
+        <separator>59</separator><!--Character to separate the parameter to send SOAP to GrinGlobal-->
+        <assignment>61</assignment><!--Character to match the parameter to send SOAP to GrinGlobal-->
+      </parameters>
+      <catalogues>
+        <dataviewName>get_code_value_list</dataviewName><!--Dataview generic data for catalogs in GrinGlobal-->
+        <parameters>
+          <groupName>groupname</groupName><!--Parameter from dataview-->
+        </parameters>
+      </catalogues>
+      <javascript>
+        <maxJsonLength>31457280</maxJsonLength><!--Max byte to create json-->
+      </javascript>
+    </global>
     <module id="Inventory" title="Inventory" description="You can search and update information about Inventory items" icon="pe-7s-note2">
       <form id="gbz_get_inventory" title="Inventory items" layout="vertical" cssClass="form-group" action="Index" controller="Search">
         <field id="storageLocation" type="text" placeholder="CAR-SEC-BOX" visible="true">
@@ -215,8 +233,8 @@
         </fields>
         <actions>
           <parameters>
-            <suppressExceptions>false</suppressExceptions>
             <dataviewName>gbz_get_order_check_list</dataviewName>
+            <suppressExceptions>false</suppressExceptions>
             <offset>0</offset>
             <limit>0</limit>
             <options>1</options>
@@ -252,6 +270,24 @@
   </server>
 
   <server id="02" name="Maize" url="http://itu-dev-srv-01:81/gringlobal/gui.asmx">
+    <global>
+      <parameters>
+        <offset>0</offset><!--Global offset parameter-->
+        <limit>0</limit><!--Global limit parameter-->
+        <options>1</options><!--Global option parameter-->
+        <separator>59</separator><!--Character to separate the parameter to send SOAP to GrinGlobal-->
+        <assignment>61</assignment><!--Character to match the parameter to send SOAP to GrinGlobal-->
+      </parameters>
+      <catalogues>
+        <dataviewName>get_code_value_list</dataviewName><!--Dataview generic data for catalogs in GrinGlobal-->
+        <parameters>
+          <groupName>groupname</groupName><!--Parameter from dataview-->
+        </parameters>
+      </catalogues>
+      <javascript>
+        <maxJsonLength>31457280</maxJsonLength><!--Maxbyte to create json-->
+      </javascript>
+    </global>
     <module id="Orders" title="Orders" description="You can search and update information about Order items" icon="pe-7s-box1">
       <form id="gbz_get_order_request_item" title="Order items" layout="vertical" cssClass="form-group" action="Index" controller="Search">
         <field id="orderrequestid" type="number" placeholder="Order Number" visible="true">
@@ -307,8 +343,8 @@
                 <actionValue name="created_date" type="dateTimeNow" value="" />
                 <actionValue name="owned_date" type="dateTimeNow" value="" />
                 <parameters>
-                  <suppressExceptions>false</suppressExceptions>
                   <dataviewName>get_order_request_item_action</dataviewName>
+                  <suppressExceptions>false</suppressExceptions>
                   <offset>0</offset>
                   <limit>0</limit>
                   <options>1</options>
