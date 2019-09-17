@@ -118,7 +118,15 @@ namespace GrinGlobal.Zone.Helpers
             int offset = int.Parse(setH.Parameter.Element(setH.SETTING_NAME_OFFSET).Value);
             int limit = int.Parse(setH.Parameter.Element(setH.SETTING_NAME_LIMIT).Value);
             string options = setH.Parameter.Element(setH.SETTING_NAME_OPTIONS).Value;
-            return _GetData(param, urlService, dataviewName, suppressExceptions, offset, limit, options);
+            string dataviewHead = setH.ExtendedPropertie.Element("head") == null ? "" : setH.ExtendedPropertie.Element("head").Element(setH.SETTING_NAME_DATAVIEW).Value.ToString();
+            DataSet dat = _GetData(param, urlService, dataviewName, suppressExceptions, offset, limit, options);
+            if (!string.IsNullOrEmpty(dataviewHead))
+            {
+                DataSet datH = _GetData(param, urlService, dataviewHead, suppressExceptions, offset, limit, options);
+                dat.Tables.Add(datH.Tables[dataviewHead].Copy());
+                dat.Tables[dataviewHead].TableName = "head";
+            }
+            return dat;
         }
         /// <summary>
         /// Convert the Dictionary in string to insert in SOAP GrinGlobal service

@@ -741,6 +741,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\img\profile.png" />
+    <Content Include="Requirement.xml" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\esm\popper-utils.js" />
@@ -779,6 +780,18 @@
     <Content Include="fonts\fontawesome-webfont.eot" />
     <Content Include="Content\Dataviews\wgb\gbz_get_box.dataviewxml" />
     <Content Include="Content\Dataviews\wgb\gbz_get_order_check_list.dataviewxml" />
+    <Content Include="Content\Dataviews\02-Maize\order\gbz_get_order_check_list_2.0.dataviewxml" />
+    <Content Include="Content\Dataviews\02-Maize\order\gbz_get_order_check_list_head_2.0.dataviewxml" />
+    <Content Include="Content\Dataviews\02-Maize\order\get_order_request_item_action_2.0.dataviewxml" />
+    <Content Include="Content\Dataviews\02-Maize\order\order_request_item_lookup_2.0.dataviewxml" />
+    <Content Include="Content\Dataviews\02-Maize\order\order_request_lookup_2.0.dataviewxml" />
+    <Content Include="Content\Dataviews\01-Wheat\order\gbz_get_order_check_list_2.0.dataviewxml" />
+    <Content Include="Content\Dataviews\01-Wheat\order\gbz_get_order_check_list_head_2.0.dataviewxml" />
+    <Content Include="Content\Dataviews\01-Wheat\order\get_order_request_item_action_2.0.dataviewxml" />
+    <Content Include="Content\Dataviews\01-Wheat\order\order_request_item_lookup_2.0.dataviewxml" />
+    <Content Include="Content\Dataviews\01-Wheat\order\order_request_lookup_2.0.dataviewxml" />
+    <Content Include="Content\Dataviews\01-Wheat\inventory\gbz_get_box_20190725.dataviewxml" />
+    <Content Include="Content\Dataviews\00-System\get_code_value_list_2.0.dataviewxml" />
     <None Include="Properties\PublishProfiles\CIM-GG-STG-SRV.pubxml" />
     <None Include="Properties\PublishProfiles\Default.pubxml" />
     <None Include="Properties\PublishProfiles\Dev Azure.pubxml" />

@@ -247,6 +247,9 @@
               <column readOnly="false" systemColumn="systemCheckToSaveAction">data_view_action</column>
           </columns>
           <extendedProperties>
+            <head>
+              <dataviewName>gbz_get_order_check_list_head</dataviewName>
+            </head>
             <actionDataviews>
               <actionDataview id="get_order_request_item_action" systemActionDataview="systemOrderRequestItemAction">
                 <actionValue name="action_name_code" type="const" value="ORIA_VER_SHIP" systemActionDataviewValue="systemCheckHistoryAction" />

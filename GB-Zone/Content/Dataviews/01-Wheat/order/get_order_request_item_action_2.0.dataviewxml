@@ -1,0 +1,326 @@
+<SecureDataDataSet>
+  <sys_dataview>
+    <dataview_name>get_order_request_item_action</dataview_name>
+    <is_enabled>Y</is_enabled>
+    <is_readonly>N</is_readonly>
+    <category_code>Client</category_code>
+    <database_area_code>Order</database_area_code>
+    <database_area_code_sort_order>0</database_area_code_sort_order>
+    <is_transform>N</is_transform>
+    <transform_field_for_names />
+    <transform_field_for_captions />
+    <transform_field_for_values />
+    <configuration_options />
+    <created_date>2018-12-10T23:08:17-06:00</created_date>
+    <modified_date>2019-08-20T18:49:35.3202238-05:00</modified_date>
+  </sys_dataview>
+  <sys_dataview_lang>
+    <sys_lang_id>1</sys_lang_id>
+    <title>Get Order Request Item Action</title>
+    <description>Get Order Request Item Action</description>
+    <iso_639_3_tag>ENG</iso_639_3_tag>
+    <ietf_tag>en-us</ietf_tag>
+    <dataview_name>get_order_request_item_action</dataview_name>
+  </sys_dataview_lang>
+  <sys_dataview_lang>
+    <sys_lang_id>9</sys_lang_id>
+    <title>Get Order Request Item Action</title>
+    <description>Get Order Request Item Action</description>
+    <iso_639_3_tag>ENG</iso_639_3_tag>
+    <ietf_tag>x-en-CODE</ietf_tag>
+    <dataview_name>get_order_request_item_action</dataview_name>
+  </sys_dataview_lang>
+  <sys_dataview_sql>
+    <dataview_name>get_order_request_item_action</dataview_name>
+    <database_engine_tag>sqlserver</database_engine_tag>
+    <sql_statement>SELECT
+  oria.order_request_item_action_id,
+  oria.order_request_item_id,
+  oria.action_name_code,
+  oria.started_date_code,
+  oria.started_date,
+  oria.completed_date_code,
+  oria.completed_date,
+  oria.action_information,
+  oria.action_cost,
+  oria.cooperator_id,
+  oria.note,
+  oria.created_date,
+  oria.created_by,
+  oria.modified_date,
+  oria.modified_by,
+  oria.owned_date,
+  oria.owned_by
+FROM
+    order_request_item_action oria
+    INNER JOIN (
+	SELECT order_request_item_action_id FROM order_request_item_action
+            WHERE order_request_item_action_id in (:orderrequestitemactionid)
+
+	UNION SELECT order_request_item_action_id FROM order_request_item_action
+            WHERE order_request_item_id in (:orderrequestitemid)
+
+	UNION SELECT order_request_item_action_id FROM order_request_item_action
+            WHERE cooperator_id in (:cooperatorid)
+
+	UNION SELECT order_request_item_action_id FROM order_request_item_action
+	    INNER JOIN order_request_item ON order_request_item.order_request_item_id = order_request_item_action.order_request_item_id
+            WHERE order_request_id in (:orderrequestid)
+
+	UNION SELECT order_request_item_action_id FROM order_request_item_action
+	    INNER JOIN order_request_item ON order_request_item.order_request_item_id = order_request_item_action.order_request_item_id
+            WHERE inventory_id in (:inventoryid)
+
+	UNION SELECT order_request_item_action_id FROM order_request_item_action
+	    INNER JOIN order_request_item ON order_request_item.order_request_item_id = order_request_item_action.order_request_item_id
+            INNER JOIN inventory ON order_request_item.inventory_id = inventory.inventory_id
+            WHERE accession_id in (:accessionid)
+
+    ) list ON oria.order_request_item_action_id = list.order_request_item_action_id</sql_statement>
+  </sys_dataview_sql>
+  <sys_dataview_param>
+    <dataview_name>get_order_request_item_action</dataview_name>
+    <param_name>:orderrequestitemactionid</param_name>
+    <param_type>INTEGERCOLLECTION</param_type>
+    <sort_order>0</sort_order>
+  </sys_dataview_param>
+  <sys_dataview_param>
+    <dataview_name>get_order_request_item_action</dataview_name>
+    <param_name>:orderrequestitemid</param_name>
+    <param_type>INTEGERCOLLECTION</param_type>
+    <sort_order>1</sort_order>
+  </sys_dataview_param>
+  <sys_dataview_param>
+    <dataview_name>get_order_request_item_action</dataview_name>
+    <param_name>:cooperatorid</param_name>
+    <param_type>INTEGERCOLLECTION</param_type>
+    <sort_order>2</sort_order>
+  </sys_dataview_param>
+  <sys_dataview_param>
+    <dataview_name>get_order_request_item_action</dataview_name>
+    <param_name>:orderrequestid</param_name>
+    <param_type>INTEGERCOLLECTION</param_type>
+    <sort_order>3</sort_order>
+  </sys_dataview_param>
+  <sys_dataview_param>
+    <dataview_name>get_order_request_item_action</dataview_name>
+    <param_name>:inventoryid</param_name>
+    <param_type>INTEGERCOLLECTION</param_type>
+    <sort_order>4</sort_order>
+  </sys_dataview_param>
+  <sys_dataview_param>
+    <dataview_name>get_order_request_item_action</dataview_name>
+    <param_name>:accessionid</param_name>
+    <param_type>INTEGERCOLLECTION</param_type>
+    <sort_order>5</sort_order>
+  </sys_dataview_param>
+  <sys_dataview_field>
+    <dataview_name>get_order_request_item_action</dataview_name>
+    <field_name>order_request_item_action_id</field_name>
+    <table_name>order_request_item_action</table_name>
+    <table_field_name>order_request_item_action_id</table_field_name>
+    <is_readonly>Y</is_readonly>
+    <is_primary_key>Y</is_primary_key>
+    <is_transform>N</is_transform>
+    <sort_order>0</sort_order>
+    <table_alias_name>oria</table_alias_name>
+    <is_visible>Y</is_visible>
+  </sys_dataview_field>
+  <sys_dataview_field>
+    <dataview_name>get_order_request_item_action</dataview_name>
+    <field_name>order_request_item_id</field_name>
+    <table_name>order_request_item_action</table_name>
+    <table_field_name>order_request_item_id</table_field_name>
+    <is_readonly>N</is_readonly>
+    <is_primary_key>N</is_primary_key>
+    <is_transform>N</is_transform>
+    <sort_order>1</sort_order>
+    <foreign_key_dataview_name>order_request_item_lookup</foreign_key_dataview_name>
+    <table_alias_name>oria</table_alias_name>
+    <is_visible>Y</is_visible>
+  </sys_dataview_field>
+  <sys_dataview_field>
+    <dataview_name>get_order_request_item_action</dataview_name>
+    <field_name>action_name_code</field_name>
+    <table_name>order_request_item_action</table_name>
+    <table_field_name>action_name_code</table_field_name>
+    <is_readonly>N</is_readonly>
+    <is_primary_key>N</is_primary_key>
+    <is_transform>N</is_transform>
+    <sort_order>2</sort_order>
+    <group_name>ORDER_REQUEST_ITEM_ACTION</group_name>
+    <table_alias_name>oria</table_alias_name>
+    <is_visible>Y</is_visible>
+  </sys_dataview_field>
+  <sys_dataview_field>
+    <dataview_name>get_order_request_item_action</dataview_name>
+    <field_name>started_date_code</field_name>
+    <table_name>order_request_item_action</table_name>
+    <table_field_name>started_date_code</table_field_name>
+    <is_readonly>N</is_readonly>
+    <is_primary_key>N</is_primary_key>
+    <is_transform>N</is_transform>
+    <sort_order>3</sort_order>
+    <group_name>DATE_FORMAT</group_name>
+    <table_alias_name>oria</table_alias_name>
+    <is_visible>Y</is_visible>
+  </sys_dataview_field>
+  <sys_dataview_field>
+    <dataview_name>get_order_request_item_action</dataview_name>
+    <field_name>started_date</field_name>
+    <table_name>order_request_item_action</table_name>
+    <table_field_name>started_date</table_field_name>
+    <is_readonly>N</is_readonly>
+    <is_primary_key>N</is_primary_key>
+    <is_transform>N</is_transform>
+    <sort_order>4</sort_order>
+    <table_alias_name>oria</table_alias_name>
+    <is_visible>Y</is_visible>
+  </sys_dataview_field>
+  <sys_dataview_field>
+    <dataview_name>get_order_request_item_action</dataview_name>
+    <field_name>completed_date_code</field_name>
+    <table_name>order_request_item_action</table_name>
+    <table_field_name>completed_date_code</table_field_name>
+    <is_readonly>N</is_readonly>
+    <is_primary_key>N</is_primary_key>
+    <is_transform>N</is_transform>
+    <sort_order>5</sort_order>
+    <group_name>DATE_FORMAT</group_name>
+    <table_alias_name>oria</table_alias_name>
+    <is_visible>Y</is_visible>
+  </sys_dataview_field>
+  <sys_dataview_field>
+    <dataview_name>get_order_request_item_action</dataview_name>
+    <field_name>completed_date</field_name>
+    <table_name>order_request_item_action</table_name>
+    <table_field_name>completed_date</table_field_name>
+    <is_readonly>N</is_readonly>
+    <is_primary_key>N</is_primary_key>
+    <is_transform>N</is_transform>
+    <sort_order>6</sort_order>
+    <table_alias_name>oria</table_alias_name>
+    <is_visible>Y</is_visible>
+  </sys_dataview_field>
+  <sys_dataview_field>
+    <dataview_name>get_order_request_item_action</dataview_name>
+    <field_name>action_information</field_name>
+    <table_name>order_request_item_action</table_name>
+    <table_field_name>action_information</table_field_name>
+    <is_readonly>N</is_readonly>
+    <is_primary_key>N</is_primary_key>
+    <is_transform>N</is_transform>
+    <sort_order>7</sort_order>
+    <table_alias_name>oria</table_alias_name>
+    <is_visible>Y</is_visible>
+  </sys_dataview_field>
+  <sys_dataview_field>
+    <dataview_name>get_order_request_item_action</dataview_name>
+    <field_name>action_cost</field_name>
+    <table_name>order_request_item_action</table_name>
+    <table_field_name>action_cost</table_field_name>
+    <is_readonly>N</is_readonly>
+    <is_primary_key>N</is_primary_key>
+    <is_transform>N</is_transform>
+    <sort_order>8</sort_order>
+    <table_alias_name>oria</table_alias_name>
+    <is_visible>Y</is_visible>
+  </sys_dataview_field>
+  <sys_dataview_field>
+    <dataview_name>get_order_request_item_action</dataview_name>
+    <field_name>cooperator_id</field_name>
+    <table_name>order_request_item_action</table_name>
+    <table_field_name>cooperator_id</table_field_name>
+    <is_readonly>N</is_readonly>
+    <is_primary_key>N</is_primary_key>
+    <is_transform>N</is_transform>
+    <sort_order>9</sort_order>
+    <foreign_key_dataview_name>cooperator_lookup</foreign_key_dataview_name>
+    <table_alias_name>oria</table_alias_name>
+    <is_visible>Y</is_visible>
+  </sys_dataview_field>
+  <sys_dataview_field>
+    <dataview_name>get_order_request_item_action</dataview_name>
+    <field_name>note</field_name>
+    <table_name>order_request_item_action</table_name>
+    <table_field_name>note</table_field_name>
+    <is_readonly>N</is_readonly>
+    <is_primary_key>N</is_primary_key>
+    <is_transform>N</is_transform>
+    <sort_order>10</sort_order>
+    <table_alias_name>oria</table_alias_name>
+    <is_visible>Y</is_visible>
+  </sys_dataview_field>
+  <sys_dataview_field>
+    <dataview_name>get_order_request_item_action</dataview_name>
+    <field_name>created_date</field_name>
+    <table_name>order_request_item_action</table_name>
+    <table_field_name>created_date</table_field_name>
+    <is_readonly>Y</is_readonly>
+    <is_primary_key>N</is_primary_key>
+    <is_transform>N</is_transform>
+    <sort_order>11</sort_order>
+    <table_alias_name>oria</table_alias_name>
+    <is_visible>Y</is_visible>
+  </sys_dataview_field>
+  <sys_dataview_field>
+    <dataview_name>get_order_request_item_action</dataview_name>
+    <field_name>created_by</field_name>
+    <table_name>order_request_item_action</table_name>
+    <table_field_name>created_by</table_field_name>
+    <is_readonly>Y</is_readonly>
+    <is_primary_key>N</is_primary_key>
+    <is_transform>N</is_transform>
+    <sort_order>12</sort_order>
+    <table_alias_name>oria</table_alias_name>
+    <is_visible>Y</is_visible>
+  </sys_dataview_field>
+  <sys_dataview_field>
+    <dataview_name>get_order_request_item_action</dataview_name>
+    <field_name>modified_date</field_name>
+    <table_name>order_request_item_action</table_name>
+    <table_field_name>modified_date</table_field_name>
+    <is_readonly>Y</is_readonly>
+    <is_primary_key>N</is_primary_key>
+    <is_transform>N</is_transform>
+    <sort_order>13</sort_order>
+    <table_alias_name>oria</table_alias_name>
+    <is_visible>Y</is_visible>
+  </sys_dataview_field>
+  <sys_dataview_field>
+    <dataview_name>get_order_request_item_action</dataview_name>
+    <field_name>modified_by</field_name>
+    <table_name>order_request_item_action</table_name>
+    <table_field_name>modified_by</table_field_name>
+    <is_readonly>Y</is_readonly>
+    <is_primary_key>N</is_primary_key>
+    <is_transform>N</is_transform>
+    <sort_order>14</sort_order>
+    <table_alias_name>oria</table_alias_name>
+    <is_visible>Y</is_visible>
+  </sys_dataview_field>
+  <sys_dataview_field>
+    <dataview_name>get_order_request_item_action</dataview_name>
+    <field_name>owned_date</field_name>
+    <table_name>order_request_item_action</table_name>
+    <table_field_name>owned_date</table_field_name>
+    <is_readonly>Y</is_readonly>
+    <is_primary_key>N</is_primary_key>
+    <is_transform>N</is_transform>
+    <sort_order>15</sort_order>
+    <table_alias_name>oria</table_alias_name>
+    <is_visible>Y</is_visible>
+  </sys_dataview_field>
+  <sys_dataview_field>
+    <dataview_name>get_order_request_item_action</dataview_name>
+    <field_name>owned_by</field_name>
+    <table_name>order_request_item_action</table_name>
+    <table_field_name>owned_by</table_field_name>
+    <is_readonly>Y</is_readonly>
+    <is_primary_key>N</is_primary_key>
+    <is_transform>N</is_transform>
+    <sort_order>16</sort_order>
+    <table_alias_name>oria</table_alias_name>
+    <is_visible>Y</is_visible>
+  </sys_dataview_field>
+</SecureDataDataSet>

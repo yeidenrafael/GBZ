@@ -1,0 +1,295 @@
+<SecureDataDataSet>
+  <sys_dataview>
+    <dataview_name>order_request_lookup</dataview_name>
+    <is_enabled>Y</is_enabled>
+    <is_readonly>N</is_readonly>
+    <category_code>Lookups</category_code>
+    <database_area_code>Lookup Table</database_area_code>
+    <database_area_code_sort_order>0</database_area_code_sort_order>
+    <is_transform>N</is_transform>
+    <created_date>2010-09-15T20:26:28-05:00</created_date>
+    <modified_date>2011-11-25T23:43:01-06:00</modified_date>
+  </sys_dataview>
+  <sys_dataview_lang>
+    <sys_lang_id>4</sys_lang_id>
+    <title>أجل طلب بحث</title>
+    <description>أجل طلب بحث</description>
+    <iso_639_3_tag>ARA</iso_639_3_tag>
+    <ietf_tag>ar</ietf_tag>
+    <dataview_name>order_request_lookup</dataview_name>
+  </sys_dataview_lang>
+  <sys_dataview_lang>
+    <sys_lang_id>1</sys_lang_id>
+    <title>Order Request Lookup</title>
+    <description>Order Request Lookup</description>
+    <iso_639_3_tag>ENG</iso_639_3_tag>
+    <ietf_tag>en-us</ietf_tag>
+    <dataview_name>order_request_lookup</dataview_name>
+  </sys_dataview_lang>
+  <sys_dataview_lang>
+    <sys_lang_id>2</sys_lang_id>
+    <title>Búsqueda Pedido de Germoplasma</title>
+    <description>Búsqueda Pedido de Germoplasma</description>
+    <iso_639_3_tag>SPA</iso_639_3_tag>
+    <ietf_tag>es-419</ietf_tag>
+    <dataview_name>order_request_lookup</dataview_name>
+  </sys_dataview_lang>
+  <sys_dataview_lang>
+    <sys_lang_id>3</sys_lang_id>
+    <title>Demande de Recherche de commande</title>
+    <description>Demande de Recherche de commande</description>
+    <iso_639_3_tag>FRA</iso_639_3_tag>
+    <ietf_tag>fr-FR</ietf_tag>
+    <dataview_name>order_request_lookup</dataview_name>
+  </sys_dataview_lang>
+  <sys_dataview_lang>
+    <sys_lang_id>6</sys_lang_id>
+    <title>Order Request Lookup</title>
+    <description>Order Request Lookup</description>
+    <iso_639_3_tag>POR</iso_639_3_tag>
+    <ietf_tag>pt-BR</ietf_tag>
+    <dataview_name>order_request_lookup</dataview_name>
+  </sys_dataview_lang>
+  <sys_dataview_lang>
+    <sys_lang_id>5</sys_lang_id>
+    <title>Заказ Запрос Поиск</title>
+    <description>Заказ Запрос Поиск</description>
+    <iso_639_3_tag>RUS</iso_639_3_tag>
+    <ietf_tag>ru-RU</ietf_tag>
+    <dataview_name>order_request_lookup</dataview_name>
+  </sys_dataview_lang>
+  <sys_dataview_lang>
+    <sys_lang_id>9</sys_lang_id>
+    <title>Order Request Lookup</title>
+    <description>Order Request Lookup</description>
+    <iso_639_3_tag>ENG</iso_639_3_tag>
+    <ietf_tag>x-en-CODE</ietf_tag>
+    <dataview_name>order_request_lookup</dataview_name>
+  </sys_dataview_lang>
+  <sys_dataview_sql>
+    <dataview_name>order_request_lookup</dataview_name>
+    <database_engine_tag>mysql</database_engine_tag>
+    <sql_statement>SELECT
+  oreq.order_request_id AS value_member,
+  COALESCE(CONVERT(oreq.order_request_id, char),'') || ' - ' || COALESCE(c.last_name,'') || ', ' || COALESCE(c.first_name,'') || ', ' || COALESCE(c.organization,'') as display_member
+FROM
+    order_request AS oreq
+	LEFT JOIN cooperator c ON oreq.final_recipient_cooperator_id = c.cooperator_id
+where
+  ((oreq.created_date &gt; COALESCE(:createddate, '1753-01-01'))
+    OR (oreq.modified_date &gt; COALESCE(:modifieddate, '1753-01-01'))
+    OR (oreq.order_request_id IN (:valuemember))
+    OR (oreq.order_request_id BETWEEN :startpkey AND :stoppkey)
+    OR (c.created_date &gt; COALESCE(:createddate, '1753-01-01'))
+    OR (c.modified_date &gt; COALESCE(:modifieddate, '1753-01-01'))
+  )
+
+
+
+
+</sql_statement>
+  </sys_dataview_sql>
+  <sys_dataview_sql>
+    <dataview_name>order_request_lookup</dataview_name>
+    <database_engine_tag>oracle</database_engine_tag>
+    <sql_statement>SELECT
+  oreq.order_request_id AS value_member,
+  to_char(COALESCE( to_char(oreq.order_request_id),'')) || ' - ' || COALESCE(c.last_name,'') || ', ' || COALESCE(c.first_name,'') || ', ' || COALESCE(c.organization,'') AS display_member
+FROM
+    order_request oreq
+    LEFT JOIN cooperator c
+      ON  oreq.final_recipient_cooperator_id = c.cooperator_id 
+
+WHERE
+  ((oreq.created_date &gt; COALESCE(:createddate, to_date('1753-01-01','YYYY-MM-DD')))
+    OR (oreq.modified_date &gt; COALESCE(:modifieddate, to_date('1753-01-01','YYYY-MM-DD')))
+    OR (oreq.order_request_id IN (:valuemember))
+    OR (oreq.order_request_id BETWEEN :startpkey AND :stoppkey)
+    OR (c.created_date &gt; COALESCE(:createddate, to_date('1753-01-01','YYYY-MM-DD')))
+    OR (c.modified_date &gt; COALESCE(:modifieddate, to_date('1753-01-01','YYYY-MM-DD')))
+  )
+</sql_statement>
+  </sys_dataview_sql>
+  <sys_dataview_sql>
+    <dataview_name>order_request_lookup</dataview_name>
+    <database_engine_tag>postgresql</database_engine_tag>
+    <sql_statement>SELECT
+  oreq.order_request_id AS value_member,
+  COALESCE(CAST(oreq.order_request_id AS VARCHAR),'') || ' - ' || COALESCE(c.last_name,'') || ', ' || COALESCE(c.first_name,'') || ', ' || COALESCE(c.organization,'') as display_member
+FROM
+    order_request AS oreq
+	LEFT JOIN cooperator c ON oreq.final_recipient_cooperator_id = c.cooperator_id
+where
+  ((oreq.created_date &gt; COALESCE(:createddate, '1753-01-01'))
+    OR (oreq.modified_date &gt; COALESCE(:modifieddate, '1753-01-01'))
+    OR (oreq.order_request_id IN (:valuemember))
+    OR (oreq.order_request_id BETWEEN :startpkey AND :stoppkey)
+    OR (c.created_date &gt; COALESCE(:createddate, '1753-01-01'))
+    OR (c.modified_date &gt; COALESCE(:modifieddate, '1753-01-01'))
+  )
+
+
+
+
+</sql_statement>
+  </sys_dataview_sql>
+  <sys_dataview_sql>
+    <dataview_name>order_request_lookup</dataview_name>
+    <database_engine_tag>sqlserver</database_engine_tag>
+    <sql_statement>SELECT
+  oreq.order_request_id AS value_member,
+  COALESCE(CONVERT(NVARCHAR, oreq.order_request_id),'') + ' - ' + COALESCE(c.last_name,'') + ', ' + COALESCE(c.first_name,'') + ', ' + COALESCE(c.organization,'') as display_member
+FROM
+    order_request AS oreq
+	LEFT JOIN cooperator c ON oreq.final_recipient_cooperator_id = c.cooperator_id
+where
+  ((oreq.created_date &gt; COALESCE(:createddate, '1753-01-01'))
+    OR (oreq.modified_date &gt; COALESCE(:modifieddate, '1753-01-01'))
+    OR (oreq.order_request_id IN (:valuemember))
+    OR (oreq.order_request_id BETWEEN :startpkey AND :stoppkey)
+    OR (c.created_date &gt; COALESCE(:createddate, '1753-01-01'))
+    OR (c.modified_date &gt; COALESCE(:modifieddate, '1753-01-01'))
+  )
+
+
+
+
+</sql_statement>
+  </sys_dataview_sql>
+  <sys_dataview_param>
+    <dataview_name>order_request_lookup</dataview_name>
+    <param_name>:createddate</param_name>
+    <param_type>DATETIME</param_type>
+    <sort_order>0</sort_order>
+  </sys_dataview_param>
+  <sys_dataview_param>
+    <dataview_name>order_request_lookup</dataview_name>
+    <param_name>:modifieddate</param_name>
+    <param_type>DATETIME</param_type>
+    <sort_order>1</sort_order>
+  </sys_dataview_param>
+  <sys_dataview_param>
+    <dataview_name>order_request_lookup</dataview_name>
+    <param_name>:valuemember</param_name>
+    <param_type>INTEGER</param_type>
+    <sort_order>2</sort_order>
+  </sys_dataview_param>
+  <sys_dataview_param>
+    <dataview_name>order_request_lookup</dataview_name>
+    <param_name>:startpkey</param_name>
+    <param_type>INTEGER</param_type>
+    <sort_order>3</sort_order>
+  </sys_dataview_param>
+  <sys_dataview_param>
+    <dataview_name>order_request_lookup</dataview_name>
+    <param_name>:stoppkey</param_name>
+    <param_type>INTEGER</param_type>
+    <sort_order>4</sort_order>
+  </sys_dataview_param>
+  <sys_dataview_field>
+    <dataview_name>order_request_lookup</dataview_name>
+    <field_name>value_member</field_name>
+    <table_name>order_request</table_name>
+    <table_field_name>order_request_id</table_field_name>
+    <is_readonly>Y</is_readonly>
+    <is_primary_key>Y</is_primary_key>
+    <is_transform>N</is_transform>
+    <sort_order>0</sort_order>
+    <table_alias_name>oreq</table_alias_name>
+    <is_visible>Y</is_visible>
+  </sys_dataview_field>
+  <sys_dataview_field>
+    <dataview_name>order_request_lookup</dataview_name>
+    <field_name>display_member</field_name>
+    <is_readonly>Y</is_readonly>
+    <is_primary_key>N</is_primary_key>
+    <is_transform>N</is_transform>
+    <sort_order>1</sort_order>
+    <gui_hint>TEXT_CONTROL</gui_hint>
+    <is_visible>Y</is_visible>
+  </sys_dataview_field>
+  <sys_dataview_field_lang>
+    <dataview_name>order_request_lookup</dataview_name>
+    <field_name>display_member</field_name>
+    <iso_639_3_tag>ARA</iso_639_3_tag>
+    <ietf_tag>ar</ietf_tag>
+    <title>إظهار العضو</title>
+  </sys_dataview_field_lang>
+  <sys_dataview_field_lang>
+    <dataview_name>order_request_lookup</dataview_name>
+    <field_name>display_member</field_name>
+    <iso_639_3_tag>ENG</iso_639_3_tag>
+    <ietf_tag>en-us</ietf_tag>
+    <title>Display Member</title>
+  </sys_dataview_field_lang>
+  <sys_dataview_field_lang>
+    <dataview_name>order_request_lookup</dataview_name>
+    <field_name>display_member</field_name>
+    <iso_639_3_tag>SPA</iso_639_3_tag>
+    <ietf_tag>es-419</ietf_tag>
+    <title>Miebro desplegado</title>
+  </sys_dataview_field_lang>
+  <sys_dataview_field_lang>
+    <dataview_name>order_request_lookup</dataview_name>
+    <field_name>display_member</field_name>
+    <iso_639_3_tag>FRA</iso_639_3_tag>
+    <ietf_tag>fr-FR</ietf_tag>
+    <title>Élément affiché</title>
+  </sys_dataview_field_lang>
+  <sys_dataview_field_lang>
+    <dataview_name>order_request_lookup</dataview_name>
+    <field_name>display_member</field_name>
+    <iso_639_3_tag>RUS</iso_639_3_tag>
+    <ietf_tag>ru-RU</ietf_tag>
+    <title>Показать член</title>
+  </sys_dataview_field_lang>
+  <sys_dataview_field_lang>
+    <dataview_name>order_request_lookup</dataview_name>
+    <field_name>display_member</field_name>
+    <iso_639_3_tag>ENG</iso_639_3_tag>
+    <ietf_tag>x-en-CODE</ietf_tag>
+    <title>Display Member</title>
+  </sys_dataview_field_lang>
+  <sys_dataview_field_lang>
+    <dataview_name>order_request_lookup</dataview_name>
+    <field_name>value_member</field_name>
+    <iso_639_3_tag>ARA</iso_639_3_tag>
+    <ietf_tag>ar</ietf_tag>
+    <title>تحديد قيمة العضو</title>
+  </sys_dataview_field_lang>
+  <sys_dataview_field_lang>
+    <dataview_name>order_request_lookup</dataview_name>
+    <field_name>value_member</field_name>
+    <iso_639_3_tag>ENG</iso_639_3_tag>
+    <ietf_tag>en-us</ietf_tag>
+    <title>Value Member</title>
+  </sys_dataview_field_lang>
+  <sys_dataview_field_lang>
+    <dataview_name>order_request_lookup</dataview_name>
+    <field_name>value_member</field_name>
+    <iso_639_3_tag>SPA</iso_639_3_tag>
+    <ietf_tag>es-419</ietf_tag>
+    <title>Pedido de germoplasma</title>
+  </sys_dataview_field_lang>
+  <sys_dataview_field_lang>
+    <dataview_name>order_request_lookup</dataview_name>
+    <field_name>value_member</field_name>
+    <iso_639_3_tag>FRA</iso_639_3_tag>
+    <ietf_tag>fr-FR</ietf_tag>
+    <title>Élément retourné</title>
+  </sys_dataview_field_lang>
+  <sys_dataview_field_lang>
+    <dataview_name>order_request_lookup</dataview_name>
+    <field_name>value_member</field_name>
+    <iso_639_3_tag>RUS</iso_639_3_tag>
+    <ietf_tag>ru-RU</ietf_tag>
+    <title>Значение члена</title>
+  </sys_dataview_field_lang>
+  <sys_dataview_field_lang>
+    <dataview_name>order_request_lookup</dataview_name>
+    <field_name>value_member</field_name>
+    <iso_639_3_tag>ENG</iso_639_3_tag>
+    <ietf_tag>x-en-CODE</ietf_tag>
+    <title>Value Member</title>
+  </sys_dataview_field_lang>
+</SecureDataDataSet>

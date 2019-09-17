@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<requirement>
+  <server id="00" name="System">
+    <module id="System">
+      <dataviews>
+        <dataview>get_code_value_list_2.0</dataview>
+      </dataviews>
+    </module>
+  </server>
+  <server id="01" name="Wheat">
+    <module id="Orders">
+      <form id="gbz_get_order_request_item">
+        <dataviews>
+          <dataview>gbz_get_order_check_list_2.0</dataview>
+          <dataview>gbz_get_order_check_list_head_2.0</dataview>
+          <dataview>get_code_value_list_2.0</dataview>
+          <dataview>get_order_request_item_action_2.0</dataview>
+          <dataview>order_request_item_lookup_2.0</dataview>
+          <dataview>order_request_lookup_2.0</dataview>
+        </dataviews>
+        <codegroups>
+          <codegroup>
+            <name>ORDER_REQUEST_ITEM_ACTION</name>
+            <value>ORIA_VER_SHIP</value>
+            <title>Verify Item List</title>
+          </codegroup>
+        </codegroups>
+      </form>
+    </module>  
+  </server>
+  <server id="02" name="Maize">
+    <module id="Orders">
+      <form id="gbz_get_order_request_item">
+        <dataviews>
+          <dataview>gbz_get_order_check_list_2.0</dataview>
+          <dataview>gbz_get_order_check_list_head_2.0</dataview>
+          <dataview>get_code_value_list_2.0</dataview>
+          <dataview>get_order_request_item_action_2.0</dataview>
+          <dataview>order_request_item_lookup_2.0</dataview>
+          <dataview>order_request_lookup_2.0</dataview>
+        </dataviews>
+        <codegroups>
+          <codegroup>
+            <name>ORDER_REQUEST_ITEM_ACTION</name>
+            <value>ORIA_VER_SHIP</value>
+            <title>Verify Item List</title>
+          </codegroup>
+        </codegroups>
+      </form>
+    </module>
+  </server>
+</requirement>

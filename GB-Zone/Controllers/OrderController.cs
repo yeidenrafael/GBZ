@@ -49,7 +49,6 @@ namespace GrinGlobal.Zone.Controllers
             ViewData["formId"] = formId;
             ViewData["dataViewName"] = sopH.SetH.DataViewName;
             ViewData["parameters"] = sopH.GetStringParameter(parameter);
-            ViewData["titleComplement"] = parameter.ContainsKey(":orderrequestid") ? " [" + parameter[":orderrequestid"] + "]" : "";
             ViewData[SYSTEM_COLUMNNAME_CHECK_LIST] = sopH.SetH.GetColumnVariable(SYSTEM_COLUMNNAME_CHECK_LIST);
             ViewData[SYSTEM_COLUMNNAME_CHECK_TO_SAVE_DATAVIEW] = sopH.SetH.GetColumnVariable(SYSTEM_COLUMNNAME_CHECK_TO_SAVE_DATAVIEW);
             ViewData[SYSTEM_COLUMNNAME_CHECK_BEFORE] = sopH.SetH.GetColumnVariable(SYSTEM_COLUMNNAME_CHECK_BEFORE);
@@ -67,7 +66,6 @@ namespace GrinGlobal.Zone.Controllers
             ViewData["formId"] = formId;
             ViewData["parameters"] = parameters;
             ViewData["dataViewName"] = sopH.SetH.DataViewName;
-
             ViewData[SYSTEM_COLUMNNAME_CHECK_LIST] = sopH.SetH.GetColumnVariable(SYSTEM_COLUMNNAME_CHECK_LIST);
             ViewData[SYSTEM_COLUMNNAME_CHECK_TO_SAVE_DATAVIEW] = sopH.SetH.GetColumnVariable(SYSTEM_COLUMNNAME_CHECK_TO_SAVE_DATAVIEW);
             ViewData[SYSTEM_COLUMNNAME_CHECK_BEFORE] = sopH.SetH.GetColumnVariable(SYSTEM_COLUMNNAME_CHECK_BEFORE);

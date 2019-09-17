@@ -20,6 +20,7 @@
         const COLOR_ERROR =  "red";
         const COLOR_NEUTRO = "white"
         const SPAN_COMPLETE = "spanComplete";
+        const SPAN_SAVE = "spanSave";
         var itemsWithCheck = new Array();
         var itemsWithOutCheck = new Array();
         var ALL_ITEMS = new Array();
@@ -58,6 +59,7 @@
             $("#"+LI_TRAFIC_LIGHT).css({'color':COLOR_NEUTRO});
             $("#" + SPAN_LAST_CHECK_ITEM).html("");
             $("#" + INPUT_TEXT_QR).focus();
+            $("#" + SPAN_SAVE).html("<b> Save in Database </b>");
         }
 
         function KeyPressTexBCheck(s, e) {
@@ -69,7 +71,8 @@
             }
         }
 
-        function CheckElement(text){
+        function CheckElement(text) {
+            $("#" + SPAN_SAVE).html("");
             let indice = ALL_ITEMS.indexOf(text);
             if(indice != -1){
                 $("#"+LI_TRAFIC_LIGHT).css({'color':COLOR_SUCCESS});
@@ -182,6 +185,14 @@
                 }
                 $("#"+SPAN_FIND_ITEM).html((total) + "/" + (ALL_ITEMS.length));
             }
+        }
+        function BatchEditChangesCanceling() {
+            itemsWithCheck = new Array();
+            itemsWithOutCheck = ALL_ITEMS.slice();
+            Color();
+            $("#" + LI_TRAFIC_LIGHT).css({ 'color': COLOR_NEUTRO });
+            $("#" + SPAN_LAST_CHECK_ITEM).html("");
+            missingItems(0);
         }
     </script>
 }

@@ -1,0 +1,188 @@
+<SecureDataDataSet>
+  <sys_dataview>
+    <dataview_name>gbz_get_order_check_list_head</dataview_name>
+    <is_enabled>Y</is_enabled>
+    <is_readonly>N</is_readonly>
+    <category_code>Orders</category_code>
+    <database_area_code>Order</database_area_code>
+    <database_area_code_sort_order>0</database_area_code_sort_order>
+    <is_transform>N</is_transform>
+    <transform_field_for_names />
+    <transform_field_for_captions />
+    <transform_field_for_values />
+    <configuration_options />
+    <created_date>2018-02-21T22:52:15.0020015-06:00</created_date>
+    <modified_date>2019-09-11T21:01:37.0436668-05:00</modified_date>
+  </sys_dataview>
+  <sys_dataview_lang>
+    <sys_lang_id>1</sys_lang_id>
+    <title>Seed request</title>
+    <description />
+    <iso_639_3_tag>ENG</iso_639_3_tag>
+    <ietf_tag>en-us</ietf_tag>
+    <dataview_name>gbz_get_order_check_list_head</dataview_name>
+  </sys_dataview_lang>
+  <sys_dataview_lang>
+    <sys_lang_id>2</sys_lang_id>
+    <title>Solicitud de semilla</title>
+    <description />
+    <iso_639_3_tag>SPA</iso_639_3_tag>
+    <ietf_tag>es-419</ietf_tag>
+    <dataview_name>gbz_get_order_check_list_head</dataview_name>
+  </sys_dataview_lang>
+  <sys_dataview_sql>
+    <dataview_name>gbz_get_order_check_list_head</dataview_name>
+    <database_engine_tag>sqlserver</database_engine_tag>
+    <sql_statement>SELECT
+  oreq.order_request_id,
+  oreq.local_number,
+  oreq.web_order_request_id,
+  (SELECT
+    title
+  FROM code_value cv
+  INNER JOIN code_value_lang cvl
+    ON cv.code_value_id = cvl.code_value_id
+    AND cv.value = oreq.order_type_code
+    AND sys_lang_id = 1
+    AND group_name LIKE 'ORDER_REQUEST_TYPE')
+  AS order_type,
+  c.last_name + ' ' + c.first_name AS cooperator_name,
+  c.organization,
+  (SELECT
+    title
+  FROM code_value cv
+  INNER JOIN code_value_lang cvl
+    ON cv.code_value_id = cvl.code_value_id
+    AND cv.value = g.country_code
+    AND sys_lang_id = 1
+    AND group_name LIKE 'GEOGRAPHY_COUNTRY_CODE')
+  AS final_country
+  FROM order_request oreq
+LEFT JOIN cooperator c
+  ON oreq.final_recipient_cooperator_id = c.cooperator_id
+LEFT JOIN geography g
+  ON c.geography_id = g.geography_id
+WHERE oreq.order_request_id = :orderrequestid
+ORDER BY oreq.order_request_id</sql_statement>
+  </sys_dataview_sql>
+  <sys_dataview_param>
+    <dataview_name>gbz_get_order_check_list_head</dataview_name>
+    <param_name>:orderrequestid</param_name>
+    <param_type>INTEGER</param_type>
+    <sort_order>0</sort_order>
+  </sys_dataview_param>
+  <sys_dataview_field>
+    <dataview_name>gbz_get_order_check_list_head</dataview_name>
+    <field_name>order_request_id</field_name>
+    <table_name>order_request</table_name>
+    <table_field_name>order_request_id</table_field_name>
+    <is_readonly>Y</is_readonly>
+    <is_primary_key>N</is_primary_key>
+    <is_transform>N</is_transform>
+    <sort_order>0</sort_order>
+    <gui_hint>LARGE_SINGLE_SELECT_CONTROL</gui_hint>
+    <foreign_key_dataview_name>order_request_lookup</foreign_key_dataview_name>
+    <table_alias_name>oreq</table_alias_name>
+    <is_visible>Y</is_visible>
+  </sys_dataview_field>
+  <sys_dataview_field>
+    <dataview_name>gbz_get_order_check_list_head</dataview_name>
+    <field_name>local_number</field_name>
+    <table_name>order_request</table_name>
+    <table_field_name>local_number</table_field_name>
+    <is_readonly>N</is_readonly>
+    <is_primary_key>N</is_primary_key>
+    <is_transform>N</is_transform>
+    <sort_order>1</sort_order>
+    <table_alias_name>oreq</table_alias_name>
+    <is_visible>Y</is_visible>
+  </sys_dataview_field>
+  <sys_dataview_field>
+    <dataview_name>gbz_get_order_check_list_head</dataview_name>
+    <field_name>web_order_request_id</field_name>
+    <table_name>order_request</table_name>
+    <table_field_name>web_order_request_id</table_field_name>
+    <is_readonly>N</is_readonly>
+    <is_primary_key>N</is_primary_key>
+    <is_transform>N</is_transform>
+    <sort_order>2</sort_order>
+    <table_alias_name>oreq</table_alias_name>
+    <is_visible>Y</is_visible>
+  </sys_dataview_field>
+  <sys_dataview_field>
+    <dataview_name>gbz_get_order_check_list_head</dataview_name>
+    <field_name>order_type</field_name>
+    <is_readonly>Y</is_readonly>
+    <is_primary_key>N</is_primary_key>
+    <is_transform>N</is_transform>
+    <sort_order>3</sort_order>
+    <is_visible>Y</is_visible>
+  </sys_dataview_field>
+  <sys_dataview_field>
+    <dataview_name>gbz_get_order_check_list_head</dataview_name>
+    <field_name>cooperator_name</field_name>
+    <table_name>cooperator</table_name>
+    <table_field_name>last_name</table_field_name>
+    <is_readonly>N</is_readonly>
+    <is_primary_key>N</is_primary_key>
+    <is_transform>N</is_transform>
+    <sort_order>4</sort_order>
+    <table_alias_name>c</table_alias_name>
+    <is_visible>Y</is_visible>
+    <configuration_options>join_children=oreq.final_recipient_cooperator_id;</configuration_options>
+  </sys_dataview_field>
+  <sys_dataview_field>
+    <dataview_name>gbz_get_order_check_list_head</dataview_name>
+    <field_name>organization</field_name>
+    <table_name>cooperator</table_name>
+    <table_field_name>organization</table_field_name>
+    <is_readonly>N</is_readonly>
+    <is_primary_key>N</is_primary_key>
+    <is_transform>N</is_transform>
+    <sort_order>5</sort_order>
+    <table_alias_name>c</table_alias_name>
+    <is_visible>Y</is_visible>
+    <configuration_options>join_children=oreq.final_recipient_cooperator_id;</configuration_options>
+  </sys_dataview_field>
+  <sys_dataview_field>
+    <dataview_name>gbz_get_order_check_list_head</dataview_name>
+    <field_name>final_country</field_name>
+    <is_readonly>Y</is_readonly>
+    <is_primary_key>N</is_primary_key>
+    <is_transform>N</is_transform>
+    <sort_order>6</sort_order>
+    <is_visible>Y</is_visible>
+  </sys_dataview_field>
+  <sys_dataview_field_lang>
+    <dataview_name>gbz_get_order_check_list_head</dataview_name>
+    <field_name>order_request_id</field_name>
+    <iso_639_3_tag>ARA</iso_639_3_tag>
+    <ietf_tag>ar</ietf_tag>
+    <title>تقديم الطلب</title>
+    <description />
+  </sys_dataview_field_lang>
+  <sys_dataview_field_lang>
+    <dataview_name>gbz_get_order_check_list_head</dataview_name>
+    <field_name>order_request_id</field_name>
+    <iso_639_3_tag>ENG</iso_639_3_tag>
+    <ietf_tag>en-us</ietf_tag>
+    <title>Order Number</title>
+    <description />
+  </sys_dataview_field_lang>
+  <sys_dataview_field_lang>
+    <dataview_name>gbz_get_order_check_list_head</dataview_name>
+    <field_name>order_request_id</field_name>
+    <iso_639_3_tag>SPA</iso_639_3_tag>
+    <ietf_tag>es-419</ietf_tag>
+    <title>Número del pedido de germoplasma</title>
+    <description />
+  </sys_dataview_field_lang>
+  <sys_dataview_field_lang>
+    <dataview_name>gbz_get_order_check_list_head</dataview_name>
+    <field_name>order_request_id</field_name>
+    <iso_639_3_tag>ENG</iso_639_3_tag>
+    <ietf_tag>x-en-CODE</ietf_tag>
+    <title>Order Number</title>
+    <description />
+  </sys_dataview_field_lang>
+</SecureDataDataSet>

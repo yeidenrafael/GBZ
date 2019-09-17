@@ -33,6 +33,7 @@
         st.ClientSideEvents.Init = "Init";
         st.ClientSideEvents.BatchEditChangesSaving = "BatchEditChangesSaving";
         st.ClientSideEvents.ColumnSorting = "ColumnSorting";
+        st.ClientSideEvents.BatchEditChangesCanceling = "BatchEditChangesCanceling";
         st.ClientSideEvents.BatchEditConfirmShowing = "function(s, e){ e.cancel = true;}";// remove the alert to change the order or cancel button
         st.CallbackRouteValues = new { Controller = "Order", Action = "GridView", serverId = ViewData["server"].ToString(), moduleId = ViewData["moduleId"].ToString(), formId = ViewData["formId"].ToString(), parameters = ViewData["parameters"].ToString()};
         st.SettingsEditing.BatchUpdateRouteValues = new { Controller = "Order", Action = "BatchUpdateAction", serverId = ViewData["server"].ToString(), moduleId = ViewData["moduleId"].ToString(), formId = ViewData["formId"].ToString(), parameters = ViewData["parameters"].ToString() };

@@ -1,0 +1,56 @@
+<SecureDataDataSet>
+  <sys_dataview>
+    <dataview_name>get_code_value_list</dataview_name>
+    <is_enabled>Y</is_enabled>
+    <is_readonly>Y</is_readonly>
+    <category_code>System</category_code>
+    <database_area_code>Code</database_area_code>
+    <database_area_code_sort_order>0</database_area_code_sort_order>
+    <is_transform>N</is_transform>
+    <created_date>2019-01-21T19:53:43.6875678-06:00</created_date>
+    <modified_date>2019-03-29T21:53:48.0397747-06:00</modified_date>
+  </sys_dataview>
+  <sys_dataview_sql>
+    <dataview_name>get_code_value_list</dataview_name>
+    <database_engine_tag>sqlserver</database_engine_tag>
+    <sql_statement>SELECT
+    cv.value,
+    ''+COALESCE(cvl.title, cv.value) title
+  FROM code_value cv
+  LEFT JOIN code_value_lang cvl
+    ON cvl.code_value_id = cv.code_value_id
+    AND cvl.sys_lang_id = __LANGUAGEID__
+  WHERE cv.group_name = :groupname
+</sql_statement>
+  </sys_dataview_sql>
+  <sys_dataview_param>
+    <dataview_name>get_code_value_list</dataview_name>
+    <param_name>:groupname</param_name>
+    <param_type>STRING</param_type>
+    <sort_order>0</sort_order>
+  </sys_dataview_param>
+  <sys_dataview_field>
+    <dataview_name>get_code_value_list</dataview_name>
+    <field_name>value</field_name>
+    <table_name>code_value</table_name>
+    <table_field_name>value</table_field_name>
+    <is_readonly>Y</is_readonly>
+    <is_primary_key>N</is_primary_key>
+    <is_transform>N</is_transform>
+    <sort_order>0</sort_order>
+    <table_alias_name>cv</table_alias_name>
+    <is_visible>Y</is_visible>
+    <configuration_options>join_children=cvl.code_value_id;</configuration_options>
+  </sys_dataview_field>
+  <sys_dataview_field>
+    <dataview_name>get_code_value_list</dataview_name>
+    <field_name>title</field_name>
+    <table_name>code_value_lang</table_name>
+    <table_field_name>title</table_field_name>
+    <is_readonly>Y</is_readonly>
+    <is_primary_key>N</is_primary_key>
+    <is_transform>N</is_transform>
+    <sort_order>1</sort_order>
+    <is_visible>Y</is_visible>
+  </sys_dataview_field>
+</SecureDataDataSet>

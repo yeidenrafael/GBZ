@@ -8,23 +8,21 @@
                 <div class="panel-tools">
                     <a class="showhide"><i class="fa fa-chevron-up"></i></a>
                 </div>
-                @ViewData["titleComplement"]
                 @Model.Tables[ViewData["dataViewName"].ToString()].ExtendedProperties["title"].ToString()
             </div>
             <div class="panel-body">
                 <div class="row">
-
-                    @foreach (System.Data.DataColumn col in Model.Tables[ViewData["dataViewName"].ToString()].Columns)
+                    @if(Model.Tables.Contains("head"))
                     {
-                        if (col.ColumnMapping != System.Data.MappingType.Hidden && col.ExtendedProperties["is_header"] != null)
+                        foreach(System.Data.DataColumn col in Model.Tables["head"].Columns)
                         {
-                            if (col.ExtendedProperties["is_header"].Equals(true))
+                            if(col.ColumnMapping != System.Data.MappingType.Hidden )
                             {
                                 <div class="col-sm-3">
                                     <span class="font-extra-bold">@col.Caption: </span>
-                                    @if (Model.Tables[ViewData["dataViewName"].ToString()].Rows.Count > 0)
+                                    @if (Model.Tables["head"].Rows.Count > 0)
                                     {
-                                        @Model.Tables[ViewData["dataViewName"].ToString()].Rows[0][col].ToString().Trim()
+                                        @Model.Tables["head"].Rows[0][col].ToString().Trim()
                                     }
                                 </div>
                             }
@@ -35,6 +33,7 @@
                         @Model.Tables[ViewData["dataViewName"].ToString()].Rows.Count
                     </div>
                 </div>
+                <br />
                 <div class="row">
                     @Html.Partial("_GridViewSearch", Model, new ViewDataDictionary(ViewData))
                 </div>

@@ -1,0 +1,408 @@
+<SecureDataDataSet>
+  <sys_dataview>
+    <dataview_name>gbz_get_order_check_list</dataview_name>
+    <is_enabled>Y</is_enabled>
+    <is_readonly>N</is_readonly>
+    <category_code>Orders</category_code>
+    <database_area_code>Order</database_area_code>
+    <database_area_code_sort_order>0</database_area_code_sort_order>
+    <is_transform>N</is_transform>
+    <transform_field_for_names />
+    <transform_field_for_captions />
+    <transform_field_for_values />
+    <configuration_options />
+    <created_date>2018-02-21T22:52:15.0020015-06:00</created_date>
+    <modified_date>2019-09-03T13:53:24.9528484-05:00</modified_date>
+  </sys_dataview>
+  <sys_dataview_lang>
+    <sys_lang_id>1</sys_lang_id>
+    <title>Seed request</title>
+    <description />
+    <iso_639_3_tag>ENG</iso_639_3_tag>
+    <ietf_tag>en-us</ietf_tag>
+    <dataview_name>gbz_get_order_check_list</dataview_name>
+  </sys_dataview_lang>
+  <sys_dataview_lang>
+    <sys_lang_id>2</sys_lang_id>
+    <title>Solicitud de semilla</title>
+    <description />
+    <iso_639_3_tag>SPA</iso_639_3_tag>
+    <ietf_tag>es-419</ietf_tag>
+    <dataview_name>gbz_get_order_check_list</dataview_name>
+  </sys_dataview_lang>
+  <sys_dataview_sql>
+    <dataview_name>gbz_get_order_check_list</dataview_name>
+    <database_engine_tag>sqlserver</database_engine_tag>
+    <sql_statement>SELECT
+	ori.order_request_item_id
+	,ori.order_request_id
+	,ori.sequence_number
+	,COALESCE(a.accession_number_part1, '') + ' ' + COALESCE(CONVERT(nvarchar, a.accession_number_part2), '') + ' ' + COALESCE(a.accession_number_part3, '') AS accession_number
+	,RTRIM(RTRIM(i.inventory_number_part1) + ' ' + RTRIM(CAST(i.inventory_number_part2 AS nchar(6))) + ' ' + RTRIM(COALESCE(inventory_number_part3, ''))) AS inventory_number
+	,ori.quantity_shipped
+	,CASE
+		WHEN (
+			SELECT 
+				plant_name_rank
+			FROM 
+				accession_inv_name n0
+			WHERE 
+				n0.inventory_id = (
+					SELECT 
+						inventory_id
+					FROM 
+						inventory
+					WHERE 
+						accession_id = a.accession_id
+						AND form_type_code = '**'
+				)
+			AND category_code LIKE 'CULTIVAR'
+		)
+		IS NOT NULL THEN (
+			SELECT 
+				plant_name
+			FROM 
+				accession_inv_name an
+			WHERE 
+				an.inventory_id = (
+					SELECT 
+						inventory_id
+					FROM 
+						inventory
+					WHERE 
+						accession_id = a.accession_id
+						AND form_type_code = '**'
+				)
+				AND category_code LIKE 'CULTIVAR'
+		)
+		WHEN (
+			SELECT 
+				plant_name_rank
+			FROM 
+				accession_inv_name n0
+			WHERE 
+				n0.inventory_id = (
+					SELECT 
+						inventory_id
+					FROM 
+						inventory
+					WHERE 
+						accession_id = a.accession_id
+						AND form_type_code = '**'
+				)
+				AND category_code LIKE 'CROSS_NAME'
+		)
+		IS NOT NULL THEN (
+			SELECT 
+				plant_name
+			FROM 
+				accession_inv_name an
+			WHERE 
+				an.inventory_id = (
+					SELECT
+						inventory_id
+					FROM 
+						inventory
+					WHERE 
+						accession_id = a.accession_id
+						AND form_type_code = '**'
+				)
+				AND category_code LIKE 'CROSS_NAME'
+		)
+		WHEN (
+			SELECT
+				description
+			FROM 
+				accession_pedigree
+				WHERE accession_id = a.accession_id
+		)
+		IS NOT NULL THEN (
+			SELECT
+				description
+			FROM 
+				accession_pedigree
+			WHERE 
+				accession_id = a.accession_id
+		)
+		ELSE (
+			SELECT TOP 1
+			        plant_name
+			FROM 
+				accession_inv_name an
+				INNER JOIN inventory i2 ON i2.inventory_id = an.inventory_id
+			WHERE 
+				i.accession_id = i2.accession_id
+				AND an.plant_name_rank = (
+					SELECT
+						MIN(plant_name_rank)
+					FROM 
+						accession_inv_name n0
+						INNER JOIN inventory i0 ON i0.inventory_id = n0.inventory_id
+						AND i0.accession_id = i.accession_id
+				)
+		)
+	END AS plant_name
+	,CONVERT(bit, 0) as check_item
+	,CONVERT(bit, 0) as data_view_action
+FROM 
+	order_request_item ori
+	LEFT JOIN inventory i ON ori.inventory_id = i.inventory_id
+	LEFT JOIN order_request oreq ON ori.order_request_id = oreq.order_request_id
+	LEFT JOIN cooperator c ON oreq.final_recipient_cooperator_id = c.cooperator_id
+	LEFT JOIN geography g ON c.geography_id = g.geography_id
+	LEFT JOIN accession a ON i.accession_id = a.accession_id
+WHERE 
+	ori.order_request_id = :orderrequestid
+	OR ori.order_request_item_id = :orderrequestitemid
+	ORDER BY ori.sequence_number</sql_statement>
+  </sys_dataview_sql>
+  <sys_dataview_param>
+    <dataview_name>gbz_get_order_check_list</dataview_name>
+    <param_name>:orderrequestid</param_name>
+    <param_type>INTEGERCOLLECTION</param_type>
+    <sort_order>0</sort_order>
+  </sys_dataview_param>
+  <sys_dataview_param>
+    <dataview_name>gbz_get_order_check_list</dataview_name>
+    <param_name>:orderrequestitemid</param_name>
+    <param_type>INTEGERCOLLECTION</param_type>
+    <sort_order>1</sort_order>
+  </sys_dataview_param>
+  <sys_dataview_field>
+    <dataview_name>gbz_get_order_check_list</dataview_name>
+    <field_name>order_request_item_id</field_name>
+    <table_name>order_request_item</table_name>
+    <table_field_name>order_request_item_id</table_field_name>
+    <is_readonly>Y</is_readonly>
+    <is_primary_key>Y</is_primary_key>
+    <is_transform>N</is_transform>
+    <sort_order>0</sort_order>
+    <table_alias_name>ori</table_alias_name>
+    <is_visible>N</is_visible>
+  </sys_dataview_field>
+  <sys_dataview_field>
+    <dataview_name>gbz_get_order_check_list</dataview_name>
+    <field_name>order_request_id</field_name>
+    <table_name>order_request_item</table_name>
+    <table_field_name>order_request_id</table_field_name>
+    <is_readonly>Y</is_readonly>
+    <is_primary_key>N</is_primary_key>
+    <is_transform>N</is_transform>
+    <sort_order>1</sort_order>
+    <foreign_key_dataview_name>order_request_lookup</foreign_key_dataview_name>
+    <table_alias_name>ori</table_alias_name>
+    <is_visible>N</is_visible>
+  </sys_dataview_field>
+  <sys_dataview_field>
+    <dataview_name>gbz_get_order_check_list</dataview_name>
+    <field_name>sequence_number</field_name>
+    <table_name>order_request_item</table_name>
+    <table_field_name>sequence_number</table_field_name>
+    <is_readonly>Y</is_readonly>
+    <is_primary_key>N</is_primary_key>
+    <is_transform>N</is_transform>
+    <sort_order>2</sort_order>
+    <table_alias_name>ori</table_alias_name>
+    <is_visible>Y</is_visible>
+  </sys_dataview_field>
+  <sys_dataview_field>
+    <dataview_name>gbz_get_order_check_list</dataview_name>
+    <field_name>accession_number</field_name>
+    <table_name>accession</table_name>
+    <table_field_name>accession_number_part1</table_field_name>
+    <is_readonly>Y</is_readonly>
+    <is_primary_key>N</is_primary_key>
+    <is_transform>N</is_transform>
+    <sort_order>3</sort_order>
+    <table_alias_name>a</table_alias_name>
+    <is_visible>Y</is_visible>
+    <configuration_options>join_children=i.accession_id;</configuration_options>
+  </sys_dataview_field>
+  <sys_dataview_field>
+    <dataview_name>gbz_get_order_check_list</dataview_name>
+    <field_name>inventory_number</field_name>
+    <is_readonly>Y</is_readonly>
+    <is_primary_key>N</is_primary_key>
+    <is_transform>N</is_transform>
+    <sort_order>4</sort_order>
+    <gui_hint>TEXT_CONTROL</gui_hint>
+    <is_visible>Y</is_visible>
+  </sys_dataview_field>
+  <sys_dataview_field>
+    <dataview_name>gbz_get_order_check_list</dataview_name>
+    <field_name>quantity_shipped</field_name>
+    <table_name>order_request_item</table_name>
+    <table_field_name>quantity_shipped</table_field_name>
+    <is_readonly>Y</is_readonly>
+    <is_primary_key>N</is_primary_key>
+    <is_transform>N</is_transform>
+    <sort_order>5</sort_order>
+    <table_alias_name>ori</table_alias_name>
+    <is_visible>Y</is_visible>
+  </sys_dataview_field>
+  <sys_dataview_field>
+    <dataview_name>gbz_get_order_check_list</dataview_name>
+    <field_name>plant_name</field_name>
+    <is_readonly>Y</is_readonly>
+    <is_primary_key>N</is_primary_key>
+    <is_transform>N</is_transform>
+    <sort_order>6</sort_order>
+    <is_visible>Y</is_visible>
+  </sys_dataview_field>
+  <sys_dataview_field>
+    <dataview_name>gbz_get_order_check_list</dataview_name>
+    <field_name>check_item</field_name>
+    <is_readonly>Y</is_readonly>
+    <is_primary_key>N</is_primary_key>
+    <is_transform>N</is_transform>
+    <sort_order>7</sort_order>
+    <gui_hint>TOGGLE_CONTROL</gui_hint>
+    <is_visible>Y</is_visible>
+  </sys_dataview_field>
+  <sys_dataview_field>
+    <dataview_name>gbz_get_order_check_list</dataview_name>
+    <field_name>data_view_action</field_name>
+    <is_readonly>Y</is_readonly>
+    <is_primary_key>N</is_primary_key>
+    <is_transform>N</is_transform>
+    <sort_order>8</sort_order>
+    <gui_hint>TEXT_CONTROL</gui_hint>
+    <is_visible>Y</is_visible>
+  </sys_dataview_field>
+  <sys_dataview_field_lang>
+    <dataview_name>gbz_get_order_check_list</dataview_name>
+    <field_name>accession_number</field_name>
+    <iso_639_3_tag>ENG</iso_639_3_tag>
+    <ietf_tag>en-us</ietf_tag>
+    <title>Accession Number</title>
+    <description />
+  </sys_dataview_field_lang>
+  <sys_dataview_field_lang>
+    <dataview_name>gbz_get_order_check_list</dataview_name>
+    <field_name>accession_number</field_name>
+    <iso_639_3_tag>SPA</iso_639_3_tag>
+    <ietf_tag>es-419</ietf_tag>
+    <title>Numero de la accesión</title>
+    <description />
+  </sys_dataview_field_lang>
+  <sys_dataview_field_lang>
+    <dataview_name>gbz_get_order_check_list</dataview_name>
+    <field_name>accession_number</field_name>
+    <iso_639_3_tag>ENG</iso_639_3_tag>
+    <ietf_tag>x-en-CODE</ietf_tag>
+    <title>Accession Number</title>
+    <description />
+  </sys_dataview_field_lang>
+  <sys_dataview_field_lang>
+    <dataview_name>gbz_get_order_check_list</dataview_name>
+    <field_name>check_item</field_name>
+    <iso_639_3_tag>ENG</iso_639_3_tag>
+    <ietf_tag>en-us</ietf_tag>
+    <title>Check Item</title>
+    <description />
+  </sys_dataview_field_lang>
+  <sys_dataview_field_lang>
+    <dataview_name>gbz_get_order_check_list</dataview_name>
+    <field_name>check_item</field_name>
+    <iso_639_3_tag>ENG</iso_639_3_tag>
+    <ietf_tag>x-en-CODE</ietf_tag>
+    <title>Check Item</title>
+    <description />
+  </sys_dataview_field_lang>
+  <sys_dataview_field_lang>
+    <dataview_name>gbz_get_order_check_list</dataview_name>
+    <field_name>data_view_action</field_name>
+    <iso_639_3_tag>ENG</iso_639_3_tag>
+    <ietf_tag>en-us</ietf_tag>
+    <title>DataView Action</title>
+    <description />
+  </sys_dataview_field_lang>
+  <sys_dataview_field_lang>
+    <dataview_name>gbz_get_order_check_list</dataview_name>
+    <field_name>data_view_action</field_name>
+    <iso_639_3_tag>ENG</iso_639_3_tag>
+    <ietf_tag>x-en-CODE</ietf_tag>
+    <title>DataView Action</title>
+    <description />
+  </sys_dataview_field_lang>
+  <sys_dataview_field_lang>
+    <dataview_name>gbz_get_order_check_list</dataview_name>
+    <field_name>inventory_number</field_name>
+    <iso_639_3_tag>ARA</iso_639_3_tag>
+    <ietf_tag>ar</ietf_tag>
+    <title>سابقة الجرد</title>
+    <description />
+  </sys_dataview_field_lang>
+  <sys_dataview_field_lang>
+    <dataview_name>gbz_get_order_check_list</dataview_name>
+    <field_name>inventory_number</field_name>
+    <iso_639_3_tag>SYS</iso_639_3_tag>
+    <ietf_tag>en-SYS</ietf_tag>
+    <title>inventory_number_part1</title>
+    <description />
+  </sys_dataview_field_lang>
+  <sys_dataview_field_lang>
+    <dataview_name>gbz_get_order_check_list</dataview_name>
+    <field_name>inventory_number</field_name>
+    <iso_639_3_tag>ENG</iso_639_3_tag>
+    <ietf_tag>en-us</ietf_tag>
+    <title>Inventory Number</title>
+    <description />
+  </sys_dataview_field_lang>
+  <sys_dataview_field_lang>
+    <dataview_name>gbz_get_order_check_list</dataview_name>
+    <field_name>inventory_number</field_name>
+    <iso_639_3_tag>SPA</iso_639_3_tag>
+    <ietf_tag>es-419</ietf_tag>
+    <title>Número Inventario</title>
+    <description />
+  </sys_dataview_field_lang>
+  <sys_dataview_field_lang>
+    <dataview_name>gbz_get_order_check_list</dataview_name>
+    <field_name>inventory_number</field_name>
+    <iso_639_3_tag>FRA</iso_639_3_tag>
+    <ietf_tag>fr-FR</ietf_tag>
+    <title>Préfixe de l'inventaire</title>
+    <description />
+  </sys_dataview_field_lang>
+  <sys_dataview_field_lang>
+    <dataview_name>gbz_get_order_check_list</dataview_name>
+    <field_name>inventory_number</field_name>
+    <iso_639_3_tag>RUS</iso_639_3_tag>
+    <ietf_tag>ru-RU</ietf_tag>
+    <title>часть инвентарный номер 1</title>
+    <description />
+  </sys_dataview_field_lang>
+  <sys_dataview_field_lang>
+    <dataview_name>gbz_get_order_check_list</dataview_name>
+    <field_name>inventory_number</field_name>
+    <iso_639_3_tag>ENG</iso_639_3_tag>
+    <ietf_tag>x-en-CODE</ietf_tag>
+    <title>Inventory Number</title>
+    <description />
+  </sys_dataview_field_lang>
+  <sys_dataview_field_lang>
+    <dataview_name>gbz_get_order_check_list</dataview_name>
+    <field_name>plant_name</field_name>
+    <iso_639_3_tag>ENG</iso_639_3_tag>
+    <ietf_tag>en-us</ietf_tag>
+    <title>Plant Name</title>
+    <description />
+  </sys_dataview_field_lang>
+  <sys_dataview_field_lang>
+    <dataview_name>gbz_get_order_check_list</dataview_name>
+    <field_name>plant_name</field_name>
+    <iso_639_3_tag>SPA</iso_639_3_tag>
+    <ietf_tag>es-419</ietf_tag>
+    <title>Nombre de planta</title>
+    <description />
+  </sys_dataview_field_lang>
+  <sys_dataview_field_lang>
+    <dataview_name>gbz_get_order_check_list</dataview_name>
+    <field_name>plant_name</field_name>
+    <iso_639_3_tag>ENG</iso_639_3_tag>
+    <ietf_tag>x-en-CODE</ietf_tag>
+    <title>Plant Name</title>
+    <description />
+  </sys_dataview_field_lang>
+</SecureDataDataSet>
